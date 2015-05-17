@@ -1,0 +1,1334 @@
+<style>
+	body {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	.button.button-positive.button-outline {
+		border-color: {{themeColor}};
+		color: {{themeColor}};
+	}
+	.button.button-positive.button-outline.activated {
+		background-color: {{themeColor}};
+	}
+
+	.hidden {
+		display: none
+	}
+
+	.tab-item {
+		color: {{themeColor}};
+		border-color: {{themeColor}}
+	}
+
+	.tabs-striped.tabs-color-positive .tab-item {
+		color: {{themeColor}};
+		opacity: 0.2
+	}
+	.tabs-striped.tabs-color-positive .tab-item.active {
+		color: {{themeColor}};
+		border-color: {{themeColor}};
+		opacity: 1
+	}
+	.tabs-striped.tabs-color-positive .tab-item.active, .tabs-striped.tabs-color-positive .tab-item.activated {
+		color: {{themeColor}};
+		border-color: {{themeColor}};
+	}
+	.cropper-view-box {
+		outline-color: {{themeColor}};
+	}
+
+	.button.button-positive.button-clear {
+		color: {{themeColor}};
+	}
+
+	.spinner svg {
+
+		fill: {{themeColor}};
+	}
+
+	.ui-resizable-helper {
+		border-color: {{themeColor}};
+	}
+	.ion-ios-heart {
+		color: {{themeColor}};
+	}
+
+	.coloredImage {
+		background-color: {{themeColor}};
+	}
+
+	.ui-icon {
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 0 20px 20px;
+		border-color: transparent transparent {{themeColor}} transparent;
+	}
+
+	ul {
+		overflow: hidden;
+	}
+
+	ul.tagit {
+		margin: 0px
+	}
+
+	ul.tagit li.tagit-choice {
+		background-color: white;
+		border-color: {{themeColor}};
+		margin: 2px 3px
+	}
+
+	ul.tagit li.tagit-new {
+		padding: 0px;
+		margin: 0px 3px;
+		width: 100%;
+	}
+
+	.tagit-choice {
+		cursor: default;
+	}
+
+	.range.range-positive input::-webkit-slider-thumb:before {
+		background: {{themeColor}};
+	}
+
+	.jeloloNegyzet {
+		border-color: {{themeColor}};
+	}
+
+	.pink {
+		color: {{themeColor}};
+		border-color: {{themeColor}};
+	}
+
+	.select2-container-multi .select2-choices .select2-search-choice {
+		border-color: {{themeColor}};
+	}
+
+	.select2-results .select2-highlighted {
+		background: {{themeColor}};
+	}
+
+	ion-slide {
+		overflow: hidden;
+	}
+
+	.frame .slidee  li.filter {
+		max-height: 50px;
+		max-width: 50px;
+		margin: 0px 5px;
+		border: none;
+	}
+	.frame .slidee  li.activeFilter {
+		max-height: 50px;
+		max-width: 50px;
+		margin: 0px 0px;
+		border: 1px solid {{themeColor}};
+	}
+	strong {
+		color: {{themeColor}};
+	}
+
+	h2 {
+		color: {{themeColor}};
+	}
+
+	#idezet {
+		background-color: rgba(255, 255, 255, 0);
+		text-align: center;
+		text-shadow: 1px 1px 0 black;
+		padding: 0px;
+		overflow: visible;
+		color: {{editIdezet.edit.fontColor}};
+		font-family: {{editIdezet.edit.fontFamily}};
+		font-size: {{editIdezet.edit.fontSize            + 'px'
+	}};
+	line-height : {{editIdezet.edit.fontSize + 'px'	}};
+	}
+
+	#kitol {
+		background-color: rgba(255, 255, 255, 0);
+		text-align: center;
+		text-shadow: 1px 1px 0 black;
+		padding: 0px;
+		overflow: visible;
+		color: {{editIdezet.edit.fontColor}};
+		font-family: {{editIdezet.edit.fontFamily}};
+		font-size: {{editIdezet.edit.fontSize-5            + 'px'
+	}};
+	line-height : {{editIdezet.edit.fontSize-5 + 'px'}};
+	}
+
+	.editable-wrap {
+		white-space: normal;
+	}
+
+</style>
+
+<ion-side-menus>
+	<!-- Center content -->
+
+	<!-- Right menu -->
+	<ion-side-menu side="right" style="font-size:10px;text-align: center;padding-top : 47px">
+
+		<a class="item item-icon-left pink " ng-click="idezetSend()"  > <i class="icon ion-android-send pink"></i> Küldj be idézetet </a>
+		<a class="item item-icon-left pink " ng-click="openBlog()"  > <i class="icon ion-social-rss pink"></i> Blog </a>
+		<a class="item item-icon-left pink "  ng-click="themesShow()" > <i class="icon ion-paintbrush pink"></i> Alkalmazás színe </a>
+
+		<div id="themesDiv" style="text-align: center;margin : 5px">
+			<i ng-click="setTheme(t,$index)" ng-repeat="t in themeColors" class="icon ion-record " style="font-size: 40px;margin : 3px; color :	 {{t}}"></i>
+		</div>
+
+		<a class="item item-icon-left pink "  ng-click="nyitcsukMenu();setSlide(4)" > <i class="icon ion-help pink"></i> Segítség </a>
+		<!-- <a class="item item-icon-left pink " ng-click="nevjegyShow()"  > <i class="icon ion-card pink"></i> Névjegy </a> -->
+
+	</ion-side-menu>
+
+	<ion-side-menu-content drag-content="false" >
+
+		<div class="bar  bar-header  pink" style="height: 48px;margin-top: 0px;border:none;border-bottom: 2px solid;">
+			<!-- visszanyilak definiálása -->
+			<button ng-if="page==7"  ng-click="setSlide(6)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
+				<i class="icon ion-arrow-left-c "></i> Blog
+			</button>
+			<button ng-if="page==8"  ng-click="setSlide(6)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
+				<i class="icon ion-arrow-left-c "></i> Blog
+			</button>
+
+			<h1  class="title " style="height: 44px;margin-top: 0px;font-family: 'Courgette', cursive;" ><img class="coloredImage"  width="150em"  src="css/idezet_logo_ekezetteljes.png" /></h1>
+			<button  ng-click="toggleMenu()" class="button button-clear button-positive pink" >
+				<i class="icon ion-gear-a  "></i>
+			</button>
+		</div>
+		<div class="tabs-striped tabs-bottom tabs-color-positive hide-on-keyboard-open"  >
+			<div class="tabs"  >
+				<md-button  class="tab-item ion-search active transparent doubleTappSearch" style="font-size: 35px;padding-top: 0px" id='tab0' ng-click="setSlide(0)"  ></md-button>
+				<md-button  class="tab-item ion-ios-heart transparent" style="font-size: 35px;padding-top: 0px" id='tab1' ng-click="setSlide(1)"  ></md-button>
+				<md-button  class="tab-item ion-calendar transparent" style="font-size: 35px;padding-top: 0px" id='tab2' ng-click="setSlide(2)"    ></md-button>
+				<md-button  class="tab-item ion-image transparent" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="setSlide(3);"    ></md-button>
+			</div>
+		</div>
+		<div class="tabs-striped tabs-bottom  hide-on-keyboard-open" ng-if="page == 3 && editIdezet.idezet != ''"  >
+			<div class="tabs tabs-icon-top"  >
+				<a class="tab-item active" ng-click="setSlide(lastPage)"  style="border: none" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
+				<md-button  class="tab-item " ></md-button>
+				<md-button  class="tab-item " ></md-button>
+				<a class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']" style="border: none" ng-click="shareImage2();"  > <i class="icon ion-android-share-alt" style="font-size: 40px"></i></a>
+			</div>
+		</div>
+		<i ng-if="page == 0 && scrollTop > 400" ng-click="scrollToTop()" style="bottom: 50px;right: 20px;font-size: 60px;position: fixed;z-index: 800" class="icon ion-android-arrow-dropup-circle pink"></i>
+		<ion-slide-box   show-pager="false" style=" max-width: 600px;margin: 50px auto" on-slide-changed="slideHasChanged($index)" >
+			<ion-slide  data-ng-init="init()" >
+
+				<md-content id="idezetekLista"  style="height: 70em;" when-scrolled="loadMore()"    style="text-align: center">
+
+					<div style="margin-top: 10px">
+						<!--
+						<div class="channel" id="app-status-div">
+						<ul id="app-status-ul">
+						<li>
+						PushNotification próba
+						</li>
+						</ul>
+						</div>
+
+						<button ng-click="elkuldRegid()">Elküldöm a android regid-t</button>
+						<button ng-click="elkuldToken()">Elküldöm a ios token-t</button>
+						-->
+
+						<div ng-if="(focus == false || focus == undefined) && ( searchText.length == undefined || searchText.length == 0   )   "  class="  item item-text-wrap" style="border: none;margin-bottom: 0px;padding-bottom: 0px">
+							Az
+							<m class="pink ">
+								idézet.hu
+							</m>
+							küldetése, hogy összegyűjtse az Internetezők kedvenc idézeteit magyarul, hogy mindenki könnyen és gyorsan férjen hasznos tudáshoz.
+							<br />
+							<br />
+							Keress idézetet, helyezd hátterébe saját fotód és oszd meg ismerőseiddel!
+						</div>
+
+						<img class="coloredImage"  ng-if="(focus == false || focus == undefined) && ( searchText.length == undefined || searchText.length == 0  )"  width="100%" style="margin : 0px 0px" src="css/keresNyil.png" />
+
+						<form>
+
+							<div class="item item-input-inset pink"  style="margin: 0px 10px;padding : 0px;">
+								<label class="item-input-wrapper" style="padding: 0px;border: none;background-color: white">
+									<input id="keresInput" ng-focus='focus =  true' ng-blur='focus = false'  style="margin-left: 10px;border: 0px;width: 100%" type="text" placeholder="Adj meg egy szót (pl. barátság)" >
+								</label>
+
+								<button type="submit" class="button button-outline button-positive button-keres" ng-click="keres(searchText,$event);">
+									<i ng-if="!keresLoading" class="icon ion-search "></i>
+									<ion-spinner ng-if="keresLoading"  icon="bubbles" class="pink"/>
+								</button>
+							</div>
+						</form>
+						<div ng-if="(focus == false || focus == undefined) && ( searchText.length == undefined || searchText.length == 0  )   " style="text-align: center;font-size: 15px;margin-top: 10px">
+							<k class="pink">
+								Népszerű :
+							</k>
+							<k  ng-click="keres(t,$event,t);"  ng-repeat="t in nepszeruek">
+								{{t}}
+							</k>
+						</div>
+
+					</div>
+
+					<div class="pink" style="width: 100%;text-align: center;margin: 10px 0px" ng-if="talalatok != undefined">
+						{{talalatok}} találat
+					</div>
+					<md-list id='idezetekDiv' >
+						<ion-item   class="md-whiteframe-z2" style="margin: 10px;padding: 0px"  ng-repeat="i in filteredIdezetek | limitTo:limit" >
+
+							<ion-item  style="width: 100%;margin: 0px;paddig:0px;display: block;border: none" >
+								<div id="{{$index}}" class="doubleTapp item item-text-wrap" class="item item-text-wrap" style="border: none;margin: 0px;" ng-init="doubleTapListener()">
+									„{{i.idezet}}”
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									{{i.kitol}}
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									{{i.mibol}}
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									feltöltő : {{i.feltolto}}
+								</div>
+							</ion-item>
+							<div class="item tabs  tabs-icon-left" style="border: none">
+
+								<button  class="transparent tab-item idezetMenu" ng-class="[i.kedvenc ? 'ion-ios-heart' : 'ion-ios-heart-outline']" style="font-size: 35px;padding-top: 0px"  ng-click="kedvenc(i)" ></button>
+								<!--	<button  ng-click="i.isCollapsed = !i.isCollapsed"  class=" transparent tab-item idezetMenu" ng-class="[i.rate ? ' ion-ios-star' : ' ion-ios-star-outline']" style="font-size: 35px;padding-top: 0px" id='tab1'  ></button>
+								-->
+								<button  class="  ion-android-share-alt transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="socialShare(i)"    ></button>
+								<!--	<button  class="  ion-social-facebook-outline transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="facebookShare(i.id)"    ></button>
+								-->
+								<button  class="  ion-image transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px"  ng-click="szerkeszt(i)"    ></button>
+							</div>
+
+						</ion-item>
+
+					</md-list>
+					<div style="height: 50em;"></div>
+				</md-content>
+
+			</ion-slide>
+			<ion-slide  >
+				<md-content  style="height: 70em;width: 100%"  >
+					<div class="pink" style="width: 100%;text-align: center;font-size: 25px;margin: 20px 0" >
+						Kedvenc idézeteim
+					</div>
+
+					<md-list id='idezetekDiv'>
+						<ion-item   class="md-whiteframe-z2" style="margin: 10px;padding: 0px"  ng-repeat="i in kedvencek track by $index" >
+
+							<ion-item   style="width: 100%;margin: 0px;paddig:0px;display: block;border: none"   >
+								<div id="{{$index}}" class="doubleTapp item item-text-wrap" style="border: none;margin: 0px;" >
+									„{{i.idezet}}”
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									{{i.kitol}}
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									{{i.mibol}}
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									feltöltő : {{i.feltolto}}
+								</div>
+							</ion-item>
+							<div class="item tabs  tabs-icon-left" style="border: none">
+
+								<button  class="transparent tab-item idezetMenu" ng-class="[i.kedvenc ? 'ion-ios-heart' : 'ion-ios-heart-outline']" style="font-size: 35px;padding-top: 0px"  ng-click="kedvenc(i)" ></button>
+								<!--	<button  ng-click="i.isCollapsed = !i.isCollapsed"  class=" transparent tab-item idezetMenu" ng-class="[i.rate ? ' ion-ios-star' : ' ion-ios-star-outline']" style="font-size: 35px;padding-top: 0px" id='tab1'  ></button>
+								-->
+								<button  class="  ion-android-share-alt transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px"  ng-click="socialShare(i)"    ></button>
+								<!--	<button  class="  ion-social-facebook-outline transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="facebookShare(i.id)"    ></button>
+								-->
+								<button  class="  ion-image transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px"  ng-click="szerkeszt(i)"    ></button>
+
+							</div>
+
+						</ion-item>
+
+					</md-list>
+					<div style="height: 50em;"></div>
+				</md-content   >
+			</ion-slide>
+			<ion-slide  >
+
+				<md-content  style="height: 70em" >
+
+					<md-list id='ertesitesekDiv' >
+						<ion-item  ng-if="e.datum == today && compareTimes(e.idopont,now) == true" class="md-whiteframe-z2" style="margin: 10px;padding : 0px" ng-repeat="e in ertesitesek track by $index" >
+
+							<div class="item item-text-wrap" style="border-color : #ddd;border : 0px;margin: 0px;padding-bottom:5px;text-align: center">
+								<m ng-if="e.kat == 'Minden kategória'" class="pink">
+									Egy
+								</m>
+								<m ng-if="e.kat != 'Minden kategória'" class="pink">
+									{{e.kat}}
+								</m>
+								idézet minden nap
+								<m class="pink">
+									{{e.idopont}}
+								</m>
+								-kor.
+							</div>
+
+							<ion-item style="width: 100%;margin: 0px;paddig:0px;" >
+								<div ng-if="e.kat == 'Minden kategória'" class="item item-text-wrap pink" style="border: none;margin: 0px;padding : 0px;text-align: center">
+									Mai idézet
+								</div>
+								<div ng-if="e.kat != 'Minden kategória'" class="item item-text-wrap pink" style="border: none;margin: 0px;padding : 0px; text-align: center">
+									Mai {{e.kat}} idézet
+								</div>
+								<div id="{{$index}}" class="item item-text-wrap doubleTappp" style="border: none;margin: 0px;">
+									„{{e.idezet.idezet}}”
+								</div>
+
+								<div class="item item-text-wrap info"  style="border: none;margin: 0px;padding : 0px;text-align: right">
+									{{e.idezet.kitol}}
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									{{e.idezet.mibol}}
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									feltöltő : {{e.idezet.feltolto}}
+								</div>
+
+							</ion-item>
+
+							<div class="item tabs  tabs-icon-left" style="border : none">
+
+								<button  class="transparent tab-item idezetMenu" ng-class="[e.idezet.kedvenc ? 'ion-ios-heart' : 'ion-ios-heart-outline']" style="font-size: 35px;padding-top: 0px"  ng-click="kedvenc(e.idezet)" ></button>
+								<!--	<button  ng-click="i.isCollapsed = !i.isCollapsed"  class=" transparent tab-item idezetMenu" ng-class="[e.idezet.rate ? ' ion-ios-star' : ' ion-ios-star-outline']" style="font-size: 35px;padding-top: 0px" id='tab1'  ></button>
+								-->
+								<button  class="  ion-android-share-alt transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="socialShare(e.idezet)"    ></button>
+								<!--	<button  class="  ion-social-facebook-outline transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="facebookShare(e.idezet.id)"    ></button>
+								-->
+								<button  class="  ion-image transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px"  ng-click="szerkeszt(e.idezet)"    ></button>
+								<button  class="  ion-close-round transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="delErtesites(e.osztaly)"    ></button>
+
+							</div>
+
+						</ion-item >
+						<ion-item  ng-if="e.datum == tegnap && compareTimes(e.idopont,now) == false "  class="md-whiteframe-z2" style="margin: 10px;padding : 0px" ng-repeat="e in ertesitesek track by $index" >
+
+							<div class="item item-text-wrap" style="border-color : #ddd;border : 0px;margin: 0px;padding-bottom:5px;text-align: center">
+								<m ng-if="e.kat == 'Minden kategória'" class="pink">
+									Egy
+								</m>
+								<m ng-if="e.kat != 'Minden kategória'" class="pink">
+									{{e.kat}}
+								</m>
+								idézet minden nap
+								<m class="pink">
+									{{e.idopont}}
+								</m>
+								-kor.
+							</div>
+
+							<ion-item style="width: 100%;margin: 0px;paddig:0px;" >
+
+								<div ng-if="e.kat == 'Minden kategória'" class="item item-text-wrap pink" style="border: none;margin: 0px;padding : 0px; text-align: center">
+									Mai idézet
+								</div>
+								<div ng-if="e.kat != 'Minden kategória'" class="item item-text-wrap pink" style="border: none;margin: 0px;padding : 0px; text-align: center">
+									Mai {{e.kat}} idézet
+								</div>
+								<div class="item item-text-wrap" style="border: none;margin: 0px;">
+									„{{e.idezet.idezet}}”
+								</div>
+
+								<div class="item item-text-wrap info"  style="border: none;margin: 0px;padding : 0px;text-align: right">
+									{{e.idezet.kitol}}
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									{{e.idezet.mibol}}
+								</div>
+								<div class="item item-text-wrap info" style="border: none;margin: 0px;padding : 0px;text-align: right">
+									feltöltő : {{e.idezet.feltolto}}
+								</div>
+
+							</ion-item>
+
+							<div class="item tabs  tabs-icon-left" style="border : none">
+
+								<button  class="transparent tab-item idezetMenu" ng-class="[e.idezet.kedvenc ? 'ion-ios-heart' : 'ion-ios-heart-outline']" style="font-size: 35px;padding-top: 0px"  ng-click="kedvenc(e.idezet)" ></button>
+								<!--	<button  ng-click="i.isCollapsed = !i.isCollapsed"  class=" transparent tab-item idezetMenu" ng-class="[e.idezet.rate ? ' ion-ios-star' : ' ion-ios-star-outline']" style="font-size: 35px;padding-top: 0px" id='tab1'  ></button>
+								-->
+								<button  class="  ion-android-share-alt transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="socialShare(e.idezet)"    ></button>
+								<button  class="  ion-image transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px"  ng-click="szerkeszt(e.idezet)"    ></button>
+								<!--	<button  class="  ion-social-facebook-outline transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="facebookShare(e.idezet.id)"    ></button>
+								-->
+								<button  class="  ion-close-round transparent tab-item idezetMenu" style="font-size: 35px;padding-top: 0px" id='tab3' ng-click="delErtesites(e.osztaly)"    ></button>
+
+							</div>
+
+						</ion-item >
+						<ion-item  ng-if="e.datum == today && compareTimes(e.idopont,now) == false && ($index == 0 || $index == 32)"  class="md-whiteframe-z2" style="margin: 10px;padding : 10px" ng-repeat="e in ertesitesek track by $index" >
+							<div class="item item-text-wrap" style="border-color : #ddd;border : 0px;margin: 0px;padding-bottom:5px;text-align: center">
+								<m ng-if="e.kat == 'Minden kategória'" class="pink">
+									Egy
+								</m>
+								<m ng-if="e.kat != 'Minden kategória'" class="pink">
+									{{e.kat}}
+								</m>
+								idézet minden nap
+								<m class="pink">
+									{{e.idopont}}
+								</m>
+								-kor.
+							</div>
+						</ion-item >
+						<ion-item ng-if="ertesitesek.length == 0" class="md-whiteframe-z2" style="margin: 10px;text-align: center;padding-top: 0px">
+							<div class="card" >
+								<div class="item item-text-wrap">
+									Töltsd ki az adatokat és nyomd meg a létrehozás gombot, hogy minden nap kapj egy idézet.
+								</div>
+							</div>
+
+							<div class="list">
+								<label class="item item-input item-select" style="border:none">
+									<div class="input-label">
+										Hány órakor?
+									</div>
+									<select ng-model="newErtesites.ora">
+										<option value="{{$index}}" ng-if="$index <=23"  ng-repeat="i in getNumber(number) track by $index"> {{$index}} óra</option>
+
+									</select> </label>
+								<label class="item item-input item-select" style="border:none">
+									<div class="input-label">
+										Hány perckor?
+									</div>
+									<select ng-model="newErtesites.perc">
+										<option value="{{$index}}" ng-repeat="i in getNumber(number) track by $index"> {{$index}} perc</option>
+									</select></label>
+								<label class="item item-input item-select" style="border:none">
+									<div class="input-label">
+										Kategória?
+									</div>
+									<select ng-model="newErtesites.kat">
+										<option selected>Minden kategória</option>
+										<option>Film</option>
+										<option>Élet</option>
+										<option>Emberismeret</option>
+										<option>Szerelem</option>
+										<option>Kapcsolatok</option>
+										<option>Önismeret</option>
+										<option>Bölcsesség</option>
+										<option>Dalszöveg</option>
+										<option>Szeretet</option>
+										<option>Érzelmek</option>
+										<option>Társadalom</option>
+										<option>Vicces</option>
+										<option>Mindennapok</option>
+										<option>Nézőpont</option>
+										<option>Kedvesemnek</option>
+										<option>Halál</option>
+										<option>Idő</option>
+										<option>Nők</option>
+										<option>Motiváció</option>
+										<option>Boldogság</option>
+									</select> </label>
+								<button ng-click="ujErtesites()"  class="button button-outline button-positive">
+									Létrehoz
+								</button>
+							</div>
+						</ion-item>
+
+						<button style="width: 60%;left: 20%;top: 10px"  ng-click="megnyomtapluszidozito()" ng-if="ertesitesek.length == 32 && !megEgyIdozito"  class="button button-outline button-positive">
+							<i style="font-size: 50px" class="icon ion-plus-round"></i>
+						</button>
+						<ion-item ng-if="ertesitesek.length == 32 && megEgyIdozito" class="md-whiteframe-z2" style="margin: 10px;text-align: center;padding-top: 0px">
+							<div class="card" >
+								<div class="item item-text-wrap">
+									Töltsd ki az adatokat és nyomd meg a létrehozás gombot, hogy minden nap kapj egy idézet.
+								</div>
+							</div>
+
+							<div class="list">
+								<label class="item item-input item-select" style="border:none">
+									<div class="input-label">
+										Hány órakor?
+									</div>
+									<select ng-model="newErtesites.ora">
+										<option value="{{$index}}" ng-if="$index <=23"  ng-repeat="i in getNumber(number) track by $index"> {{$index}} óra</option>
+
+									</select> </label>
+								<label class="item item-input item-select" style="border:none">
+									<div class="input-label">
+										Hány perckor?
+									</div>
+									<select ng-model="newErtesites.perc">
+										<option value="{{$index}}" ng-repeat="i in getNumber(number) track by $index"> {{$index}} perc</option>
+									</select></label>
+								<label class="item item-input item-select" style="border:none">
+									<div class="input-label">
+										Kategória?
+									</div>
+									<select ng-model="newErtesites.kat">
+										<option selected>Minden kategória</option>
+										<option>Film</option>
+										<option>Élet</option>
+										<option>Emberismeret</option>
+										<option>Szerelem</option>
+										<option>Kapcsolatok</option>
+										<option>Önismeret</option>
+										<option>Bölcsesség</option>
+										<option>Dalszöveg</option>
+										<option>Szeretet</option>
+										<option>Érzelmek</option>
+										<option>Társadalom</option>
+										<option>Vicces</option>
+										<option>Mindennapok</option>
+										<option>Nézőpont</option>
+										<option>Kedvesemnek</option>
+										<option>Halál</option>
+										<option>Idő</option>
+										<option>Nők</option>
+										<option>Motiváció</option>
+										<option>Boldogság</option>
+									</select> </label>
+								<button ng-click="ujErtesites()"  class="button button-outline button-positive">
+									Létrehoz
+								</button>
+							</div>
+						</ion-item>
+
+					</md-list>
+
+					<div style="height:50em;"></div>
+				</md-content   >
+
+			</ion-slide>
+
+			<ion-slide >
+
+				<div ng-if="editIdezet.idezet == '' && editIdezet.kitol == ''">
+					<div class="pink" style="width: 100%;text-align: center;font-size: 25px;margin: 20px 0" >
+						Idézetes kép szerkesztő
+					</div>
+
+					<ion-item  class="md-whiteframe-z2" ng-click="setSlide(0)"  style="margin: 10px;padding : 10px"  >
+
+						<div class="item-text-wrap" style="text-align: center" >
+							<g class="pink">
+								I.
+							</g>
+							Válassz egy idézetet a kereső segítségével <i class="icon ion-search pink"></i>
+
+						</div>
+
+					</ion-item >
+					<ion-item  class="md-whiteframe-z2" style="margin: 10px;padding : 10px" >
+
+						<div class="item-text-wrap" style="text-align: center">
+
+							<g class="pink">
+								II.
+							</g>
+							Kattints a kiválasztott idézet alatti <i class="icon ion-image pink"></i> ikonra!
+
+						</div>
+
+					</ion-item >
+					<ion-item  class="md-whiteframe-z2" style="margin: 10px;padding : 10px" >
+
+						<div class="item-text-wrap" style="text-align: center">
+
+							<g class="pink">
+								III.
+							</g>
+							Szerkeszd és oszd meg idézetes képed!
+						</div>
+
+					</ion-item >
+
+				</div>
+				<div ng-if="editIdezet.idezet != '' || editIdezet.kitol != ''"  style="text-align: center">
+
+					<div class="tabs tabs-icon-top" style="top:10px" ng-if="!text && !hatter && !effect" >
+						<a class="tab-item active" ng-class="[editIdezet.backImage && !editIdezet.bezar ? 'disabled' : '']"  ng-click="editIdezet.megnyomtaHatter = true;$parent.hatter = true;$parent.text = false;$parent.effect = false;"> <i class="icon ion-image" style="font-size: 40px"></i></a>
+						<a class="tab-item active" ng-class="[!editIdezet.backImage  ? 'disabled' : '']"  ng-click="setEditHeight();editIdezet.bezar = true;editIdezet.megnyomta = true ;$parent.text = true;$parent.hatter = false;$parent.effect = false;"  > <i class="icon ion-edit" style="font-size: 40px" ></i></a>
+						<a class="tab-item active"  ng-class="[!editIdezet.backImage || !editIdezet.megnyomta  ? 'disabled' : '']"  ng-click="legyenFilterScroll(); $parent.effect = true;$parent.text = false;$parent.hatter = false"> <i class="icon ion-ios-color-filter" style="font-size: 40px"></i></a>
+
+					</div>
+
+					<div class="tabs tabs-icon-top"  style="top:10px"  ng-if="text && !color && !font" >
+						<a class="tab-item active"  ng-click="$parent.text = false;$parent.font =  false;$parent.color = false;" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
+						<a class="tab-item active"  ng-click= "$parent.size = false;$parent.font =  true;$parent.color = false;legyenFontScroll()" ng-class="[font ? 'selected' : '']" style="font-size: 35px;line-height: normal"> A </a>
+						<a class="tab-item active"  ng-click="$parent.size = false;$parent.font = false;$parent.color = true;legyenSzinScroll()" ng-class="[color ? 'selected' : '']"> <i class="icon ion-android-color-palette" style="font-size: 40px"></i></a>
+
+					</div>
+
+					<div class="tabs tabs-icon-top"  style="top:10px" ng-if="hatter">
+						<a class="tab-item active"  ng-click="$parent.hatter = false;" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
+						<a class="tab-item active"  ng-click="taloz($index);$parent.hatter = false;" ng-class="[folder ? 'selected' : '']" > <i class="icon ion-folder" style="font-size: 40px"></i></a>
+						<a class="tab-item active"  ng-click="fotoz($index);$parent.hatter = false;" ng-class="[camera ? 'selected' : '']"> <i class="icon ion-camera" style="font-size: 40px"></i></a>
+					</div>
+
+					<div  style="top:60px;position: absolute; width: 100%" ng-if="effect"  >
+						<div class="row" style="padding: 0px;text-align: center">
+							<div class="col col-80" style="padding: 0px;margin: auto auto">
+								<div class="range range-positive">
+									<i class="icon pink ion-android-image"></i>
+									<input class="pink" type="range" ng-change="changeBlur()" ng-model='editIdezet.blur'  min='0' max='25'>
+									<i class="icon pink ion-android-image" style="-webkit-filter: blur(2px);filter: blur(2px);"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div  style="top:60px;position: absolute; width: 100%" ng-if="text && editIdezet.megnyomta"  >
+						<div class="row" style="padding: 0px;text-align: center">
+							<div class="col col-80" style="padding: 0px;margin: auto auto">
+								<div class="range range-positive">
+									<i class="icon pink " style="font-size: 15px">A</i>
+									<input class="pink" type="range" ng-model='editIdezet.edit.fontSize'  min='10' max='40'>
+									<i class="icon pink " style="font-size: 30px">A</i>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="tabs tabs-icon-top" ng-if="font"  style="top:10px;">
+						<div class="row" style="padding: 0px">
+							<div class="col col-33 tab tab-item active " style="padding: 0px;text-align: center">
+								<a class="tab-item active "  ng-click="$parent.font = false" style="width:100%" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
+							</div>
+							<div class="col col-66" style="padding: 0px; ">
+								<div class="jeloloNegyzet transparent" style="margin: auto auto"></div>
+							</div>
+							<div class="col col-66" style="padding: 0px;position: absolute; top : 0px; right : 0px">
+
+								<div class="frame" style="height: 50px;" >
+									<ul class="slidee transparent" >
+										<li class="fonts" ng-click="setFont($index);" style="float:left ;font-family:  {{t}};text-align: center ; "  ng-repeat="t in fonts" >
+											A
+										</li>
+
+									</ul>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="tabs tabs-icon-top" ng-if="color"  style="top:10px;">
+						<div class="row" style="padding: 0px">
+							<div class="col col-33 tab tab-item active" style="padding: 0px;text-align: center">
+								<a class="tab-item active"  ng-click="$parent.color = false"  > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
+							</div>
+							<div class="col col-66" style="padding: 0px; ">
+								<div class="jeloloNegyzet transparent" style="margin: auto auto"></div>
+							</div>
+							<div class="col col-66" style="padding: 0px;position: absolute; top : 0px; right : 0px">
+
+								<div class="frame" style="height: 50px;" >
+									<ul class="slidee transparent" >
+										<li class="szinesKocka"  style="margin: 5px;margin-top: 6px;float:left ;background-color:  {{t}};text-align: center ; "  ng-repeat="t in colors" >
+
+										</li>
+
+									</ul>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="tabs tabs-icon-top" ng-if="effect"  style="top:10px;">
+						<div class="row" style="padding: 0px">
+							<div class="col col-33 tab tab-item active" style="padding: 0px;text-align: center">
+								<a class="tab-item active"  ng-click="$parent.effect = false"> <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
+							</div>
+							<div class="col col-66" style="padding: 0px;position: absolute; top : 0px; right : 0px">
+
+								<div class="frame" style="height: 50px;" >
+									<ul class="slidee transparent" >
+										<li ng-class="[filterSelect == $index ? 'activeFilter' : 'filter']"  class="szinesKocka  " style="float:left ; padding: 5px; text-align: center ; "  ng-repeat="t in filters"  >
+											<img ng-click="applyFilter($index)" src="css/filters/{{t}}.jpg"  width="40px"  height="40px"/>
+										</li>
+
+									</ul>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="cn" style="padding-top:110px;z-index: 400;" >
+
+						<div id="toSize"  class="outEditDiv inner pink" style="position:relative;border : 2px dashed">
+
+							<img id="idezetHatter" class="hatter" src="{{editIdezet.backImage}}" style="max-height: 100%;max-width: 100%;width: 100%;height: 100%;"/>
+							<div id="editDivToCanvas"  style="max-height: 100%;max-width: 100%;width: 100%;height: 100%;text-shadow: 1px 1px 0 black;position: absolute;left:0px;top:0px;">
+								<div id="editDiv" class="draggable "  style="width : 90%;margin: 5%  ;text-align: center" >
+
+									<a e-id="idezet" buttons="no"   e-ng-focus='dragableFalse()'    blur="submit" editable-textarea="editIdezet.idezet" e-style=";width: {{textIdezetAreaWidth}};height : {{textIdezetAreaHeight}}" >
+									<p id="idezetEditDiv" ng-style="{'color' : editIdezet.edit.fontColor,'font-family' : editIdezet.edit.fontFamily,'font-size': editIdezet.edit.fontSize + 'px','line-height' : editIdezet.edit.fontSize + 'px'}">
+										„{{editIdezet.idezet || 'idézet' }}”
+									</p> </a>
+									<a  e-id="kitol" buttons="no" blur="submit" e-ng-focus='dragableFalse()'  editable-textarea="editIdezet.kitol" e-style=";margin-top: 10px;width: {{textKitolAreaWidth}};height : {{textKitolAreaHeight}};" >
+									<p  id="kitolEditDiv" style="margin-top: 10px" ng-style="{'color' : editIdezet.edit.fontColor,'font-family' : editIdezet.edit.fontFamily,'font-size': editIdezet.edit.fontSize-5 + 'px','line-height' : editIdezet.edit.fontSize-5 + 'px'}">
+										{{editIdezet.kitol || 'szerző'}}
+									</p> </a>
+
+									<!--
+									<div ng-style="{'font-size': editIdezet.edit.fontSize + 'px','line-height' : editIdezet.edit.fontSize + 'px'}">
+									„{{editIdezet.idezet}}”
+									</div>
+
+									<div style="margin-top: 10px" ng-style="{'font-size': editIdezet.edit.fontSize-5 + 'px','line-height' : editIdezet.edit.fontSize-5 + 'px'}">
+									{{editIdezet.kitol}}
+									</div>
+									-->
+
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+
+					<div ng-class="[!editIdezet.bezar ? '' : 'hidden']"  id="valasszHatteret"  >
+						<div class="backdrop visible backdrop-loading active" style="position: absolute;top: 70px;background-color: rgba(255, 255, 255, 1); max-width: 600px;z-index: 200; ">
+							<div ng-class="[!editIdezet.backImage && !editIdezet.megnyomtaHatter ? '' : 'hidden']"   style="width: 100%"    >
+
+								<img src="css/selectHatter.png" class="coloredImage" width="110px" height="125px" style="position: absolute;left : 12%;"   />
+								<p class="pink" style="font-size: 25px ; width: 100px;position: absolute;top : 85px;left : 45%">
+									Válassz hátteret!
+								</p>
+							</div>
+
+							<div ng-class="[!editIdezet.backImage && editIdezet.megnyomtaHatter && hatter ? '' : 'hidden']"   style="width: 100%"    >
+								<div class="row" style="float: right">
+									<div class="col">
+
+									</div>
+									<div class="col">
+										<img src="css/selectBackground.png"  class="coloredImage" width="50px" height="120x"  />
+										<p class="pink" style="width: 200px ;font-size: 23px ;text-align: center ;left: -50px;top : -10px;position: relative">
+											Saját album
+										</p>
+									</div>
+									<div class="col">
+										<img  src="css/selectBackground.png" class="coloredImage" width="70px" height="160px"  />
+										<p  class="pink" style="width: 200px ;font-size: 23px ;text-align: center;left: -55px;top : -10px;position: relative">
+											Fotókészítés
+										</p>
+									</div>
+								</div>
+
+							</div>
+
+							<div ng-class="[editIdezet.backImage && !editIdezet.megnyomta ? '' : 'hidden']"  style="width: 100%"    >
+								<img src="css/selectSzoveg.png" class="coloredImage" width="110px" height="158px" style="position: absolute;right :38%"  />
+								<p class="pink" style="font-size: 23px ; width: 150px;top : 95px;position: absolute;left : 53%">
+									Válassz betűtípust és betűszínt!
+								</p>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+
+			</ion-slide>
+
+			<ion-slide  >
+				<md-content  style="height: 70em" >
+
+					<ion-item    class="md-whiteframe-z2" style="margin: 10px;padding: 5px;"  >
+						<div class="row">
+							<div class="col-20 center">
+								<button   class="button button-clear button-positive" ng-click="feedback()" style="margin: 0px">
+									<i class="icon ion-ios-chatbubble-outline  "></i>
+
+								</button>
+							</div>
+
+							<div class="item item-text-wrap col-80" style="border: none;margin: 0px;padding: 0px">
+								Az idézet.hu alkalmazás 2015. márciusában indult. Segíts nekünk, hogy minél jobb legyen az alkalmazás, küldd el észrevételeidet az ikonra kattintva és mi hálásak leszünk érte!
+
+							</div>
+
+						</div>
+					</ion-item>
+					<ion-item    class="md-whiteframe-z2" style="margin: 10px;padding: 5px;"  >
+						<div class="row">
+							<div class="col-20 center">
+								<button   class="button button-clear button-positive" style="margin: 0px">
+									<i class="icon ion-search  "></i>
+
+								</button>
+							</div>
+
+							<div class="item item-text-wrap col-80" style="border: none;margin: 0px;padding: 0px">
+								Írj be egy kulcsszót és böngéssz folyamatosan bővülő idézeteink között! Érdemes többször visszatérned és új kereséseket indítanod.
+							</div>
+						</div>
+					</ion-item>
+					<ion-item    class="md-whiteframe-z2" style="margin: 10px;padding: 5px;"  >
+						<div class="row">
+							<div class="col-20 center">
+								<button   class="button button-clear button-positive" style="margin: 0px">
+									<i style="font-size: 20px" class="ion-ios-heart  "></i>
+
+								</button>
+							</div>
+
+							<div class="item item-text-wrap col-80" style="border: none;margin: 0px;padding: 0px">
+								A keresőben talált szimpatikus idézeteidet az ikon segítségével a Kedvencek közé helyezheted. Az alsó sávban a <i style="font-size: 20px" class="ion-ios-heart  "></i>-re kattintva hozhatod be a kigyűjtött kedvenceid. Az idézetek alatti <i style="font-size: 20px" class="ion-ios-heart  "></i> ki-be kapcsolható.
+							</div>
+						</div>
+					</ion-item>
+					<ion-item    class="md-whiteframe-z2" style="margin: 10px;padding: 5px;"  >
+						<div class="row">
+							<div class="col-20 center">
+								<button   class="button button-clear button-positive" style="margin: 0px">
+									<i class="icon ion-calendar "></i>
+
+								</button>
+							</div>
+
+							<div class="item item-text-wrap col-80" style="border: none;margin: 0px;padding: 0px">
+								Szeretnél motiváló idézetre ébredni? Vagy jól esne egy szerelmes idézet esténként? Állítsd be az Időzítőt és az Idézet.hu alkalmazás küldi számodra az idézetet. Jelenleg kettő témakört választhatsz, illetve kettő időzítés állítható be.
+							</div>
+						</div>
+					</ion-item>
+					<ion-item    class="md-whiteframe-z2" style="margin: 10px;padding: 5px;"  >
+						<div class="row">
+							<div class="col-20 center">
+								<button   class="button button-clear button-positive" style="margin: 0px">
+									<i class="icon ion-image"></i>
+
+								</button>
+							</div>
+
+							<div class="item item-text-wrap col-80" style="border: none;margin: 0px;padding: 0px">
+								Az idézet.hu applikációval a kiválasztott idézetet saját fotódra is illesztheted. Készíts egy fotót vagy válaszd ki a kedvenced készülékedről és helyezd az idézet hátterébe!
+							</div>
+						</div>
+					</ion-item>
+
+					<ion-item    class="md-whiteframe-z2" style="margin: 10px;padding: 5px;"  >
+						<div class="row">
+							<div class="col-20 center">
+								<button   class="button button-clear button-positive" style="margin: 0px">
+									<i class="icon ion-android-send "></i>
+
+								</button>
+							</div>
+
+							<div class="item item-text-wrap col-80" style="border: none;margin: 0px;padding: 0px">
+								Küldj be idézetet az alkalmazásból és használd fel saját fotód feliratozására!
+								Légy részese az idézet.hu küldetésének, gyűjtsük össze Magyarország kedvenc idézeteit!
+							</div>
+						</div>
+					</ion-item>
+
+					<ion-item    class="md-whiteframe-z2" style="margin: 10px;padding: 5px;"  >
+						<div class="row">
+							<div class="col-20 center">
+								<button   class="button button-clear button-positive" style="margin: 0px">
+									<i class="icon ion-social-rss "></i>
+
+								</button>
+							</div>
+
+							<div class="item item-text-wrap col-80" style="border: none;margin: 0px;padding: 0px">
+								Motivációra, sikerre, erőt adó írásokra van szükséged! Ismerd meg az idézet.hu blogját és légy a közösség tagja!
+							</div>
+						</div>
+					</ion-item>
+
+					<ion-item    class="md-whiteframe-z2" style="margin: 10px;padding: 5px;"  >
+						<div class="row">
+							<div class="col-20 center">
+								<button   class="button button-clear button-positive" style="margin: 0px">
+									<i class="icon ion-paintbrush "></i>
+
+								</button>
+							</div>
+
+							<div class="item item-text-wrap col-80" style="border: none;margin: 0px;padding: 0px">
+								Állítsd át a mobil alkalmazás színét és használd úgy, ahogy igazán szereted, válaszd ki a kedvenc színed!
+							</div>
+						</div>
+					</ion-item>
+					<ion-item    class="md-whiteframe-z2" style="margin: 10px;padding: 5px;"  >
+						<div class="row">
+							<div class="col-20 center">
+								<button   class="button button-clear button-positive" style="margin: 0px">
+									<i class="icon ion-help "></i>
+
+								</button>
+							</div>
+
+							<div class="item item-text-wrap col-80" style="border: none;margin: 0px;padding: 0px">
+								Bárhol, bármikor eléred ezt az egyszerű súgót.
+							</div>
+						</div>
+					</ion-item>
+					<div style="height:50em;"></div>
+				</md-content>
+			</ion-slide>
+			<ion-slide  >
+				<md-content  style="height: 70em;text-align: center;padding: 10px" >
+					<div class="pink" style="width: 100%;text-align: center;font-size: 25px;line-height : 25px; margin: 20px 0" >
+						Gyűjtsük össze közösen Magyarország kedvenc idézeteit!
+					</div>
+
+					<div class="list" >
+						<div class="item item-input-inset pink"  style="margin: 10px 10px;padding : 0px;">
+							<label class="item-input-wrapper" style="padding: 5px;border: none;background-color: white"> 								<textarea  placeholder="Ide gépeld vagy másold be a kedvenc idézeted! (* kötelező)" ng-model="sendIdezetData.idezet" style="border : none"  rows="5" cols="70"></textarea> </label>
+
+						</div>
+
+						<div class="item item-input-inset pink"  style="margin: 10px 10px;padding : 0px;">
+							<label class="item-input-wrapper" style="padding: 0px;border: none;background-color: white">
+								<input   style="height: 34px ;margin-left: 10px;border: 0px;width: 100%" type="text" placeholder="Adj meg kulcsszavakat! (* kötelező 2db)" id='tags' style="width:100%;"/>
+							</label>
+
+						</div>
+
+						<div class="item item-input-inset pink"  style="margin: 10px 10px;padding : 0px;">
+							<label class="item-input-wrapper" style="padding: 0px;border: none;background-color: white">
+								<input ng-model="sendIdezetData.szerzo"   style="height: 34px ;margin-left: 10px;border: 0px;width: 100%" type="text" placeholder="A szerző/rendező neve! (* kötelező)" >
+							</label>
+
+						</div>
+
+						<div class="item item-input-inset pink"  style="margin: 10px 10px;padding : 0px;">
+							<label class="item-input-wrapper" style="padding: 0px;border: none;background-color: white">
+								<input ng-model="sendIdezetData.alkotas"   style="height: 34px ;margin-left: 10px;border: 0px;width: 100%" type="text" placeholder="A szerző/rendező alkotása" >
+							</label>
+
+						</div>
+
+					</div>
+					<button ng-click="sendIdezetAjax()" class="button button-outline button-positive">
+						Beküldöm az idézetet
+					</button>
+
+					<div style="height:50em;"></div>
+				</md-content>
+			</ion-slide>
+			<ion-slide style=""  >
+				<!--
+				<div class="row animate-hide " ng-show="!slideHeader" id="blogHeader" ng-click="setSlide(7)" style="width: 100%;position: absolute;z-index: 821;">
+
+				<div class="col col-67 pink" style="font-family: Courgette, cursive;font-size: 25px ;line-height : 25px;text-align: center;padding-top: 5px">
+				<k>
+				idézet.hu blog
+				</k></br>
+				<k style="font-size: 20px">
+				Gedei Attila
+				</k>
+
+				</div>
+
+				<div class="col col-33 " style="text-align: center;">
+				<img height="55px" src="css/blogger.jpg">
+				</div>
+				</div>
+				-->
+
+				<md-content  scroll-watch when-scrolled="moreBlog()"   style="height: 70em;text-align: center;padding: 10px; " >
+					<div class="row animate-hide "  id="blogHeader" ng-click="setSlide(7)" style="margin-bottom: 10px">
+
+						<div class="col col-67 pink" style="font-family: Courgette, cursive;font-size: 25px ;line-height : 25px;text-align: center;padding-top: 5px">
+							<k>
+								idézet.hu blog
+							</k></br>
+							<k  style="font-size: 20px">
+								Gedei Attila
+							</k>
+
+						</div>
+
+						<div class="col col-33 " style="text-align: center;">
+							<img height="55px" src="css/blogger.jpg">
+						</div>
+					</div>
+
+					<md-list >
+						<div ng-click="BlogBejegyzesMegnyit(bejegyzes)" ng-repeat="bejegyzes in blogBejegyzesek" class="blog" style="margin: 20px 10px;;box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);padding: 10px">
+							<div >
+								<h2 style="margin: 0px;font-family: Courgette, cursive;">{{bejegyzes.nagycim}}</h2>
+								<div class="date">
+									{{bejegyzes.datum}}
+								</div>
+							</div>
+
+							<div class="item item-body" style="border: none">
+								<img class="full-image" src="{{bejegyzes.kep}}">
+								<p>
+									{{bejegyzes.kiscim}}
+								</p>
+
+							</div>
+
+							<button  class="button button-outline button-positive" style="margin-top: 5px">
+								Tovább
+							</button>
+						</div>
+
+					</md-list >
+					<div class=" pink" ng-if="blogBejegyzesek.length == 0 || !stopLoad" style="text-align: center;margin: 20px">
+						<k >
+							Blog betöltése...
+						</k>
+					</div>
+
+					<div style="height:50em;"></div>
+				</md-content>
+			</ion-slide>
+			<ion-slide   >
+
+				<md-content  style="height: 70em;text-align: center;padding: 30px;padding-top: 10px" >
+
+					<div class="contentBody" id="bloggerContent">
+
+						<div class="body clearfix">
+
+							<div data-id="116" class="element " style="">
+								<div class="contents dbox" style="">
+									<h1 class="pink" style="font-family: Courgette">Gedei Attila</h1>
+								</div>
+							</div>
+							<div data-id="117" class="element " style="">
+								<div class="contents dbox" style="">
+									<div class="imageandtext imgfloatleft" style="float:left;">
+										<div class="dz-default dz-message imgcont" data-type="textandpicture" style="position:relative;"><img style="max-width: 75% " data-id="178" src="css/blogger.jpg" style="" alt="">
+										</div>
+									</div>
+									<div>
+										<p style="text-align: justify;">
+											Először is fontosnak tartom, hogy kicsit magamról is beszéljek. Tudom, sokkal könnyebb a leírtakba hitet vetni ha tudatában vagytok annak, hogy egy hús-vér, létező ember van a szöveg mögött, és ezáltal tudjátok képileg is kapcsolni a leírt információkat valakihez.
+										</p>
+										<p style="text-align: justify;">
+											Szóval Gedei Attila vagyok. A Budapesti Gazdasági Főiskola nemzetközi gazdálkodás szakán vagyok első éves hallgató. Amíg nem ismerkedtem meg a pozitív gondolkodással és a személyiségfejlesztéssel, teljesen más életet éltem. Természetesen én is rendelkeztem nagy álmokkal, de az álom sosem volt konkrét. Mindig is ügyvéd akartam lenni, kisgyermek korom óta. Sokat nyomott a latba, hogy általános majd középiskolai tanulmányaim alatt is&nbsp; tanáraim e pályára biztattak. Megítélésük szerint kiváló kommunikációs készséggel rendelkezem, így automatikusan az ügyvédi hivatásra asszociált mindenki. „ Annak kell menned” – hallottam ezt nagyon sok ember szájából. Végül pedig amikor pályaválasztás elé került a sor nem azt választottam. A döntésemet financiális jellegű dolgok is befolyásolták. A jelenlegi gazdasági helyzet amiben az ügyvédi hivatás nem annyira jövedelmező az én lehetőségeimhez képest, nem volt túl kecsegtető, így maradt a gazdasági pálya. Egyáltalán nem érzem, hogy rossz döntést hoztam volna, hisz mint tudjuk mindennek megvan a miértje, annak is ahogy az életem így alakult. Ennyit a pályaválasztásról.
+										</p>
+										<p style="text-align: justify;">
+											Igazából nem tartom magam kiemelkedően okosnak, egy kompetenciám van ami tényleg jó, és érdemes javítani, ez pedig a kommunikációm. Mindig is szerettem olvasni, ennek eredményeként pedig számos díjat is nyertem az általános iskolában megszervezett prózamondó versenyeken. Fiatal korom ellenére sok megpróbáltatáson mentem már keresztül, ezért picivel érettebb gondolkodásom van,mint a kortársaimnak. Mindig is éreztem valamit, hogy több van bennem, de fogalmam sem volt, miként tapasztalhatom meg. "Mivel kéne magamból kihozni a legtöbbet?" Sok dologba fogtam már, amiben potenciált véltem felfedezni, de az Istenért sem akart jól működni. Aztán történt az életemben egy esemény amely teljesen megváltoztatta az éltemet. Egy kudarc volt. Elkezdtem&nbsp; a személyiségfejlesztést, elkezdtem cselekedni, és teljesen megváltozott a gondolkodásom, az életvitelem, a világról alkotott képem, egyszóval minden.
+										</p>
+										<p style="text-align: justify;">
+											Ezt a blogot azért írom, hogy olyan gyakorlati alkalmazásokat írjak le nektek mindenféle mellébeszélés nélkül ami nekem segített, és bevált. Azt szeretném reprezentálni, hogy ez egy másolható dolog, és azzal hogy, példát statuálok, nagyon remélem, sokan gondolkodóba esnek, és a saját életére vetítve elkezd pár ilyen praktikát bevetni, ha pedig ezt valaki megtapasztalja nem tud leállni a pozitív gondolkodásról.
+										</p>
+										<p style="text-align: justify;">
+											Célom, hogy kialakítsak egy stabil érzelmi alapot mindenkinek aki olvas, és motiváljam az embereket. Hidd el én sem vagyok varázsló, de ha nekem működött, neked miért ne menne?!
+										</p>
+										<p style="text-align: justify;">
+											Remélem jól fogsz szórakozni az oldalon, hasznos lesz az időtöltés, és tudok neked releváns tanácsadással szolgálni.
+										</p>
+										<p style="text-align: justify;">
+											Nagyon sok sikert kívánok mindenkinek!
+											<br>
+											&nbsp;
+										</p>
+										<p style="text-align: justify;">
+											<em>Gedei Attila</em>
+										</p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+					<div style="height:50em;"></div>
+				</md-content>
+			</ion-slide>
+			<!-- ez a 8. slide -->
+			<ion-slide class="blogBejegyzes"  >
+
+				<md-content class="blogBejegyzes"  style="height: 70em;padding: 10px;padding-top: 10px" >
+
+					<div >
+						<h2 style="margin: 0px;padding: 20px;font-family: Courgette;text-align: center">{{currentBlog.nagycim}}</h2>
+
+					</div>
+
+					
+
+					<div class="item item-body" style="border: none;padding: 20px;">
+						<p ng-bind-html="currentBlog.tartalom"></p>
+					</div>
+
+					<div id="facebookDiv" style="max-width: 100%;text-align: center">
+						<p class="facebookShare" style="display: inline;font-size: 11px"  ng-click="shareBlog(currentBlog.link)" >
+							Megosztás
+						</p>					
+					</div>
+					
+					<div style="height:50em;"></div>
+				</md-content>
+			</ion-slide>
+
+		</ion-slide-box>
+
+		<!--
+		loading
+		-->
+		<div ng-if="loading">
+			<div class="backdrop visible backdrop-loading active"></div>
+			<div class="loading-container visible active">
+				<div class="loading" style="background-color: rgba(255, 255, 255, 1);padding: 5px 20px;width: 175px">
+					<div><img class="coloredImage" style="margin : 5px" width="35px" id="image" src="css/cordova_48.png">
+						<div>
+							<div class="pink" style="font-family: Courgette, cursive">
+								Idézetek betöltése...
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div ng-if="sendIdezet">
+			<div class="backdrop visible backdrop-loading active"></div>
+			<div class="loading-container visible active">
+				<div class="loading" style="background-color: rgba(255, 255, 255, 1);padding: 5px 20px;width: 175px">
+					<div><img class="coloredImage" style="margin : 5px" width="35px" id="image" src="css/cordova_48.png">
+						<div>
+							<div class="pink" style="font-family: Courgette, cursive">
+								Idézet küldése...
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div ng-class="[sharingImage || '' ? '' : 'hidden']">
+			<div class="backdrop visible backdrop-loading active"></div>
+			<div class="loading-container visible active" >
+				<div class="loading" style="background-color: rgba(255, 255, 255, 1);padding: 5px 20px;width: 175px">
+					<div><img class="coloredImage" style="margin : 5px" width="35px" id="image" src="css/cordova_48.png">
+						<div>
+							<div class="pink" style="font-family: Courgette, cursive">
+								Kép megosztása...
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-if="loadingGallery">
+			<div class="backdrop visible backdrop-loading active"></div>
+			<div class="loading-container visible active" >
+				<div class="loading" style="background-color: rgba(255, 255, 255, 1);padding: 5px 20px;width: 175px">
+					<div><img class="coloredImage" style="margin : 5px" width="35px" id="image" src="css/cordova_48.png">
+						<div>
+							<div  class="pink" style="font-family: Courgette, cursive">
+								Saját album betöltése...
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div ng-if="loadingCamera">
+			<div class="backdrop visible backdrop-loading active"></div>
+			<div class="loading-container visible active" >
+				<div class="loading" style="background-color: rgba(255, 255, 255, 1);padding: 5px 20px;width: 175px">
+					<div><img class="coloredImage" style="margin : 5px" width="35px" id="image" src="css/cordova_48.png">
+						<div>
+							<div class="pink" style="font-family: Courgette, cursive">
+								Fotókészítés betöltése...
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div ng-class="[filtering || '' ? '' : 'hidden']">
+			<div class="backdrop visible backdrop-loading active"></div>
+			<div class="loading-container visible active">
+				<div class="loading" style="background-color: rgba(255, 255, 255, 1);padding: 5px 20px;width: 175px">
+					<div><img class="coloredImage" style="margin : 5px" width="35px" id="image" src="css/cordova_48.png">
+						<div>
+							<div class="pink" style="font-family: Courgette, cursive">
+								Szűrés...
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div ng-if="kedvencPopup" id="kedvencPopup">
+			<div class="backdrop visible backdrop-loading active"></div>
+			<div class="loading-container visible active" style="padding: 0px">
+				<div class="loading" style="width : 50%;height: auto; text-align: center;padding: 10px;color : black">
+					<h3 style="color:black;font-family:'Courgette'">Gratulálok!</h1>
+					Az idézetet a kedvenceid közé helyezted. A <i style="font-size: 20px" class="ion-ios-heart pink "></i> használatával bármikor elérheted.
+					<button style="margin-top: 10px" class="button button-block button-outline button-positive" ng-click="$parent.kedvencPopup = false;">
+						Rendben
+					</button>
+				</div>
+			</div>
+		</div>
+
+	</ion-side-menu-content>
+</ion-side-menus>
+
+<div ng-class="[nevjegy || '' ? '' : 'hidden']" class="backdrop visible active"></div>
+<div ng-class="[nevjegy || '' ? '' : 'hidden']" class="popup-container popup-showing active" ng-class="cssClass">
+
+	<div class="popup pink" >
+		<div class="popup-head" style="border: none">
+			<i ng-click="nevjegy = false" style="font-size: 30px;position: absolute;top : 2px; right: 2px" class="icon pink ion-close-circled"></i>
+		</div>
+		<div class="popup-body" style="border: none">
+
+			<div style="font-family: Courgette, cursive;text-align:center;font-size:25px">
+
+				<img width="80%" src="css/icon-webstudio2.png">
+			</div>
+		</div>
+		<div class="popup-buttons" ng-show="buttons.length">
+			<!-- ngRepeat: button in buttons -->
+		</div>
+	</div>
+</div>
+
+<div ng-if="kepEdit" id="kepEdit">
+	<div class="backdrop visible backdrop-loading active"></div>
+	<div class="loading-container visible active" style="padding: 0px">
+		<div class="loading" width="100%" height="100%" style="width : 100%;height: 100%; text-align: center;padding: 0px">
+
+			<img class="coloredImage" src="{{imageUri }}" imageonload id="editImage">
+
+			<div class="row" style="position: absolute;bottom : 10px;z-index: 888;font-size: 30px">
+
+				<div class="col col-33" ng-click="nosave()" >
+					<i class="icon ion-close-round"></i>
+				</div>
+				<div class="col col-33" ng-click="rotate()" >
+					<i class="icon ion-ios-loop-strong"></i>
+				</div>
+				<div class="col col-33" ng-click="save()" >
+					<i class="icon ion-checkmark"></i>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+</div>

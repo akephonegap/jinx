@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport" />
+
+		<meta charset="utf-8">
+
+		<link href="lib/ionic/css/ionicons.css" rel="stylesheet">
+
+		<link href="css/style.css" rel="stylesheet">
+
+		<style>
+			@font-face {
+				font-family: 'Courgette';
+				src: url('css/fonts/Courgette-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Lily Script One';
+				src: url('css/fonts/LilyScriptOne-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Petit Formal Script';
+				src: url('css/fonts/PetitFormalScript-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Marck Script';
+				src: url('css/fonts/MarckScript-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Lobster';
+				src: url('css/fonts/Lobster-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Francois One';
+				src: url('css/fonts/FrancoisOne.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Kaushan Script';
+				src: url('css/fonts/KaushanScript-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Jura';
+				src: url('css/fonts/Jura-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Playball';
+				src: url('css/fonts/Playball-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Shadows Into Light Two';
+				src: url('css/fonts/ShadowsIntoLightTwo-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Audiowide';
+				src: url('css/fonts/Audiowide-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+			@font-face {
+				font-family: 'Freckle Face';
+				src: url('css/fonts/FreckleFace-Regular.ttf') format('truetype');/* Safari, Android, iOS */
+			}
+
+			* {
+				font-family: 'Courgette', cursive;
+			}
+
+		</style>
+
+		<link rel="stylesheet" type="text/css" href="material/material.css">
+		<link rel="stylesheet" type="text/css" href="lib/ionic/css/ionic.css">
+
+		<script src="lib/ionic/js/ionic.bundle.js"></script>
+
+		<script>
+			function checkConnection() {
+				var networkState = navigator.network.connection.type;
+
+				var states = {};
+				states[Connection.UNKNOWN] = 'Unknown connection';
+				states[Connection.ETHERNET] = 'Ethernet connection';
+				states[Connection.WIFI] = 'WiFi connection';
+				states[Connection.CELL_2G] = 'Cell 2G connection';
+				states[Connection.CELL_3G] = 'Cell 3G connection';
+				states[Connection.CELL_4G] = 'Cell 4G connection';
+				states[Connection.NONE] = 'No network connection';
+
+				if (networkState == Connection.UNKNOWN || networkState == Connection.NONE) {
+					return false;
+				} else {
+					return true;
+				}
+			};
+
+		</script>
+
+		<script src="phonegap.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="css/cropper.css">
+		<script src="js/cropper.js"></script>
+
+		<link rel="stylesheet" href="css/jquery-ui.css">
+		<script src="js/jquery-ui.js"></script>
+
+		<script src="js/html2canvas.js"></script>
+
+		<script src="js/jquery-ui-touch.js"></script>
+		<script src="js/jquery.touchSwipe.js"></script>
+
+		<script src="js/sly.js"></script>
+
+		<script src="js/blur.js"></script>
+		<script src="js/hello.js"></script>
+
+		<script src="js/filterous.js"></script>
+		<script src="js/filterousEffects.js"></script>
+
+		<link href="lib/tagsinput/select2.css" rel="stylesheet" />
+		<script src="lib/tagsinput/select2.js"></script>
+
+		<link href="css/mainStyle.css" rel="stylesheet">
+
+		<link href="css/xeditable.css" rel="stylesheet">
+		<script src="js/xeditable.js"></script>
+
+		
+
+	</head>
+	<body  ng-app="starter" >
+
+		<ion-pane>
+
+			<div ui-view  class='view'  id="angularScope"></div>
+
+		</ion-pane>
+		<li class="fonts"  style="float:left ;font-family:  {{t}};text-align: center ; "  ng-repeat="t in fonts" >
+			A
+		</li>
+
+		<div id="hereAppend"></div>
+		<img class="coloredImage" style="margin : 5px" width="35px" id="image" src="css/cordova_48.png">
+		<div id="forSize" class="outEditDiv" style="position:relative;border : 2px dashed;max-width: 600px">
+
+		</div>
+
+		
+	</body>
+
+</html>

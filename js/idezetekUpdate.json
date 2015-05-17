@@ -1,0 +1,75 @@
+[
+	{
+		"id": "200000000000000",
+		"idezet": "Az igazi szerelem ta egyszerű romantikus vonzalom, az barátság is egyben.",
+		"idezetIgnoreAccents": "Az igazi szerelem tobb, mint egyszeru romantikus vonzalom, az baratsag is egyben.",
+		"cimke": "Igaz szerelem ",
+		"kitol": "Adam J. Jackson",
+		"mibol": "Az igaz szeretet 10 titka",
+		"feltolto": "arnold georgia"
+	}, {
+		"id": "6",
+		"idezet": "Csak két arasznyi az út, s megtalálod Istent: két arasznyira a homlokodtól lefelé balra...",
+		"idezetIgnoreAccents": "Csak ket arasznyi az ut, s megtalalod Istent: ket arasznyira a homlokodtol lefele balra...",
+		"cimke": "Isten ",
+		"kitol": "Gárdonyi Géza",
+		"mibol": "Bibi",
+		"feltolto": "stevens dave"
+	}, {
+		"id": "7",
+		"idezet": "A boldogság annál édesebb, minél több bánat és aggodalom árán jutunk hozzá.",
+		"idezetIgnoreAccents": "A boldogsag annal edesebb, minel tobb banat es aggodalom aran jutunk hozza.",
+		"cimke": "Boldogság ",
+		"kitol": "Carlo Goldoni",
+		"mibol": "Három komédia",
+		"feltolto": "kim april"
+	}, {
+		"id": "10",
+		"idezet": "Nem az baj, ha az ember más, hanem az, hogy másnak érzi magát.",
+		"idezetIgnoreAccents": "Nem az baj, ha az ember mas, hanem az, hogy masnak erzi magat.",
+		"cimke": "Önismeret ",
+		"kitol": "Daniel Gottlieb",
+		"mibol": "Drága Sam!",
+		"feltolto": "horton nathaniel"
+	}, {
+		"id": "12",
+		"idezet": "Nézek az égen át begyulladt szemekkel. Reszket a félhomály, hát szeress vagy eressz el.",
+		"idezetIgnoreAccents": "Nezek az egen at begyulladt szemekkel. Reszket a felhomaly, hat szeress vagy eressz el.",
+		"cimke": "Vágyakozás Dalszöveg ",
+		"kitol": "Quimby",
+		"mibol": "Hintalógalopp",
+		"feltolto": "sanders norman"
+	}, {
+		"id": "13",
+		"idezet": "Általában ugyanazt akarni és ugyanazt nem akarni, ez az igazi barátság.",
+		"idezetIgnoreAccents": "Általaban ugyanazt akarni es ugyanazt nem akarni, ez az igazi baratsag.",
+		"cimke": "Bölcsesség Barátság ",
+		"kitol": "Gaius Sallustius Crispus",
+		"mibol": "",
+		"feltolto": "castro adrian"
+	}, {
+		"id": "21",
+		"idezet": "Az ember nem találkozik azokkal, akiket szeret, hanem rájuk ismer.",
+		"idezetIgnoreAccents": "Az ember nem talalkozik azokkal, akiket szeret, hanem rajuk ismer.",
+		"cimke": "Emberismeret ",
+		"kitol": "Anna Gavalda",
+		"mibol": "Édes életünk",
+		"feltolto": "knight bob"
+	}, {
+		"id": "24",
+		"idezet": "Mindenki tévedhet, de csak a balga ragaszkodik tévedéséhez.",
+		"idezetIgnoreAccents": "Mindenki tevedhet, de csak a balga ragaszkodik tevedesehez.",
+		"cimke": "Emberismeret ",
+		"kitol": "Marcus Tullius Cicero",
+		"mibol": "idézi: Kassai Tibor - Szemenszedett bölcsességek",
+		"feltolto": "black tracy"
+	}, {
+		"id": "29",
+		"idezet": "Minden nő a sötét hangulatú, merengő férfiaknak jut.",
+		"idezetIgnoreAccents": "Minden no a sotet hangulatu, merengo ferfiaknak jut.",
+		"cimke": "Férfiak ",
+		"kitol": "Julia Quinn",
+		"mibol": "Mr. Bridgerton csábítása",
+		"feltolto": "jenkins claudia"
+	}
+]
