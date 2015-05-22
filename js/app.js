@@ -124,10 +124,36 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 
 
+.filter('sumOfTwoValues', function () {
+    return function (data, key1, key2) {
+        if (typeof (data) === 'undefined' || typeof (key1) === 'undefined' || typeof (key2) === 'undefined') {
+            return 0;
+        }
+        var keyObjects1 = key1.split('.');
+        var keyObjects2 = key2.split('.');
+        var sum = 0;
+        for (i = 0; i < data.length; i++) {
+            var value1 = data[i];
+            var value2 = data[i];
+            for (j = 0; j < keyObjects1.length; j++) {
+                value1 = value1[keyObjects1[j]];
+            }
+            for (k = 0; k < keyObjects2.length; k++) {
+                value2 = value2[keyObjects2[k]];
+            }
+            sum = sum + (1 * value2);
+            
+            //sum = sum + (value1 * value2); első változó helyett egyes..
+        }
+        return sum;
+    }
+})
 
 
 
 .controller('homeCtrl', function($scope, $window,  $rootScope,  $filter, $location, $anchorScroll, $ionicTabsDelegate, $ionicScrollDelegate, $ionicPlatform, $animate, $timeout, $ionicModal, $ionicSlideBoxDelegate, $state, $ionicPopup, $ionicPlatform, $ionicSideMenuDelegate, $ionicLoading, $http) {
+
+
 
 	$rootScope.online = navigator.onLine;
 	$window.addEventListener("offline", function() {
@@ -143,23 +169,42 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 	
 	
+	//visszagombkezelése android
+	
+	
+	
+	
+	
 	
 	$ionicPlatform.registerBackButtonAction(function() {
-		var myPopup = $ionicPopup.show({			    
-			    title: 'Kilépés!',
-			    template: '<div style="font-family: Courgette, cursive;">Biztos ki akarsz lépni?</div>',			       		 
-			    scope: $scope,
-			    buttons: [
-			      { text: 'Nem' },
-			      {
-			        text: '<b>Igen</b>',
-			        type: 'button-outline button-positive',
-			        onTap: function(e) {			          
-						navigator.app.exitApp();	
-			        }
-			      },
-			    ]
-		});
+		//visszagomb, ha idézeteképelkészült popup
+		
+		if($scope.keszAKep){
+			$scope.keszAKep = false;
+			$scope.$apply();
+		
+		}else if($scope.keszitsTobbet){
+			$scope.keszitsTobbet = false;
+			$scope.$apply();	
+		}else{
+			var myPopup = $ionicPopup.show({			    
+				    title: 'Kilépés!',
+				    template: '<div style="font-family: Courgette, cursive;">Biztos ki akarsz lépni?</div>',			       		 
+				    scope: $scope,
+				    buttons: [
+				      { text: 'Nem' },
+				      {
+				        text: '<b>Igen</b>',
+				        type: 'button-outline button-positive',
+				        onTap: function(e) {			          
+							navigator.app.exitApp();	
+				        }
+				      },
+				    ]
+			});
+		}
+	
+		
 	}, 100);
 	
 	$scope.titles = ['Idézetek', 'Kedvencek', 'Időzitők', 'Súgó'];
@@ -610,7 +655,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 	
 	$scope.sharingImage = false;
 	$rootScope.text =false;
-	$rootScope.hatter =false;
+	$rootScope.hatter = false;
 	$rootScope.font =false;
 	$rootScope.size =false;
 	$rootScope.color =false;
@@ -730,13 +775,15 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
  document.addEventListener("deviceready", onDeviceReady, false);
    
 	function onDeviceReady() {
+	
+	
 		
 		//ios ne csusszon szét a kép
-		cordova.plugins.Keyboard.disableScroll(true);
+	    cordova.plugins.Keyboard.disableScroll(true);
 		
 	
  
-		
+		/*
 		$rootScope.gaPlugin;
 		$rootScope.gaPlugin=window.plugins.gaPlugin;
 		$rootScope.gaPlugin.init($rootScope.successHandler,$rootScope.errorHandler,"UA-59986649-1",10);
@@ -747,7 +794,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		$rootScope.errorHandler= function(error) {
 		 	console.log('nativePluginErrorHandler - ' + error);
 		};		
-		
+		*/
 		        
 	
 		
@@ -1340,14 +1387,16 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 					if (blogok.length != null) {
 						blogok.forEach(function(e, i) {
 
+						
 							$scope.blogBejegyzesek.push({
 								'id' : e.id,
- 								'nagycim' : e.title,	
+								'nagycim' : e.title,
 								'kiscim' : e.subTitle,
-								'datum' : e.inserted,
+								'datum' : e.startDate,
 								'tartalom' : e.description,
 								'kep' : e.kep
-							});
+							}); 
+
 
 						});
 
@@ -1892,47 +1941,111 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 	
 	
+		$scope.kepMegosztas = function(){
+			$scope.keszAKep = false;
+			$scope.keszitsTobbet = false;
+			$scope.$apply();
+			
+			window.plugins.socialsharing.share("#idezet.hu - www.idezet.hu", null, $rootScope.keszKep, null);						
+			$rootScope.gaPlugin.trackEvent($rootScope.successHandler, $rootScope.errorHandler, $scope.userid, "Megoszt egy képet : id=" + $rootScope.editIdezet.id + ", cimkék=" + $rootScope.editIdezet.cimke, new Date(), 1);
+			
+		};
+		
+		$scope.kosar = [];
+		
+		$scope.kepKosarba = function(){
+			console.log($scope.keszKepParams)
+			
+			$scope.kosar.push({
+				kep : $rootScope.keszKep,
+				idezet : 'sfsadfasf',
+				kitol : 'asdgasdg',
+				ar : 4990,
+				osszar : 4990,
+				db : 1,
+				hatter : 'valamikép'					
+			});
+			$scope.lastKosarIndex = $scope.kosar.length - 1;
+		
+			$scope.keszAKep = false;
+			$scope.keszitsTobbet = true;
+			
+			//$scope.setSlide(9);
+			
+			
+			$scope.$apply();
+			
 	
+		};
+		
+		$scope.goToKosar = function(){
+			$scope.kosar[$scope.lastKosarIndex].db = $scope.darabszam;
+			//console.log($scope.kosar);
+			
+			
+			$scope.keszitsTobbet = false;			
+			$scope.setSlide(9);			
+			
+			$scope.$apply();
+			
 	
-		function fragmentText(text, maxWidth) {
-			var words = text.split(' '), lines = [], line = "";
-			if (ctx.measureText(text).width < maxWidth) {
-				return [text];
+		};
+		
+		$scope.oneMoreKep = function(){
+			$scope.darabszam  = 1;
+			
+			$scope.keszitsTobbet = false;			
+			$scope.setSlide(0);			
+			
+			$scope.$apply();
+			
+	
+		};
+		
+		$scope.darabszam = 1;
+		$scope.setDarabszam = function(mennyivel){
+			if($scope.darabszam + mennyivel >= 1) $scope.darabszam += mennyivel;
+		};
+		
+		$scope.setKosarDarabszam = function(kep , mennyivel){
+			if(kep.db + mennyivel >= 1){
+				kep.db += mennyivel;
+				kep.osszar = kep.db * kep.ar - $scope.faktor(kep.db-1) * (kep.ar * 0.1);
+				
+			} 
+		};
+		
+		
+		
+		$scope.getKosarOsszeg = function(){
+			
+			$scope.vegOsszeg = 0;
+			$scope.kosar.forEach(function(kep, i) {
+				$scope.vegOsszeg += kep.osszar;
+			}); 
+			
+
+		};
+		
+		$scope.faktor = function(szam){
+			var n = 0;
+			
+			for ( i = 1; i <= szam; i++) {				
+				n += i;
 			}
-			while (words.length > 0) {
-				while (ctx.measureText(words[0]).width >= maxWidth) {
-					var tmp = words[0];
-					words[0] = tmp.slice(0, -1);
-					if (words.length > 1) {
-						words[1] = tmp.slice(-1) + words[1];
-					} else {
-						words.push(tmp.slice(-1));
-					}
-				}
-				if (ctx.measureText(line + words[0]).width < maxWidth) {
-					line += words.shift() + " ";
-				} else {
-					lines.push(line);
-					line = "";
-				}
-				if (words.length === 0) {
-					lines.push(line);
-				}
-			}
-			return lines;
-		}
-	
-	
+			
+			return n;
+		
+		};
 		
 		
-		
-		$scope.shareImage2 = function() {
+		$scope.kepetKeszit = function() {
 			$scope.sharingImage = true;
 			
+			$scope.keszKepParams = {};
+			
+			
 			var kellPicikep = false;
-
-		
-
 
 			$timeout(function() {
 				var imageObj = new Image();
@@ -2100,13 +2213,13 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 						//$scope.kepEdit = true;
 						//$rootScope.imageUri = extra_canvas.toDataURL('image/jpeg');
 						
+						
+						$scope.keszAKep = true;
+						$rootScope.keszKep = extra_canvas.toDataURL('image/jpeg');
+						
 						$scope.$apply(); 
 
 
-						window.plugins.socialsharing.share("#idezet.hu - www.idezet.hu", null, extra_canvas.toDataURL('image/jpeg'), null);
-						
-						
-						$rootScope.gaPlugin.trackEvent($rootScope.successHandler, $rootScope.errorHandler, $scope.userid, "Megoszt egy képet : id=" + $rootScope.editIdezet.id + ", cimkék=" + $rootScope.editIdezet.cimke, new Date(), 1);
 					};
 
 					//ez azért kell hogy, újjra lefusson, mégha nem is változott src
@@ -2123,8 +2236,8 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 						var picikep = document.getElementById('filteredPhoto');
 						$('#filteredPhoto').remove();
 						
+						$scope.keszKepParams.effekt = $rootScope.filters[$scope.filterSelect];
 						
-
 						ApplyEffects[$rootScope.filters[$scope.filterSelect]](imageObj, 'jpeg', function() {
 							
 							logo.src = 'css/idezet_logo_pici.png';
@@ -2147,6 +2260,8 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 				imageObj.id = 'fullImage';
 				imageObj.src = $rootScope.editIdezet.fullBackImage;
+				
+				$scope.keszKepParams.hatter = $rootScope.editIdezet.fullBackImage;
 				
 
 			}, 100);
@@ -2269,9 +2384,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			$scope.$apply();
 		}, {
 			destinationType : Camera.DestinationType.DATA_URL,
-			correctOrientation : true,
-			targetWidth : 1280,
-			targetHeight : 1280,
+			correctOrientation : true
 		}); 
 
 	};
@@ -2281,7 +2394,26 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		
 
 		
-	
+
+		$scope.editPixaImage = function(url) {
+			$scope.kepEdit = true;
+			$("#idezetHatter").show();
+
+			$("#filteredPhoto").remove();
+			//filterkép törlése
+			var image_x = document.getElementById('filteredPhoto');
+			if (image_x != null) {
+				image_x.parentNode.removeChild(image_x);
+			}
+
+			$rootScope.editIdezet.filterIndex = 0;
+			$scope.filterSelect = 0;
+
+			
+			$rootScope.imageUri = url;
+			$scope.$apply();
+		}; 
+
 		
 	
 	$scope.taloz = function(index) {
@@ -2313,9 +2445,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		}, {
 			destinationType : Camera.DestinationType.DATA_URL,
 			sourceType : 0,
-			correctOrientation : true,
-			targetWidth: 1280,
-  			targetHeight: 1280,
+			correctOrientation : true
 		});
 
 	};
@@ -2339,11 +2469,45 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			//$rootScope.editIdezet.backImage = "js/effects/bokeh-stars.png" 
 			
 			
+
+			
+			
 			
 				
 			$scope.lastPage = $scope.page;
 			//console.log($scope.lastPage)
 			
+			
+			
+			//get image from pixabay
+			
+			
+			var cimkek = idezet.cimke.split(' ');
+			var pixabayCimke = cimkek[0];
+			console.log(pixabayCimke);
+
+			
+			if ($scope.lastPage == 0) {
+				pixabayCimke = $scope.searchText;
+			};
+
+			var USERNAME = 'lukacsisz0';
+			var API_KEY = 'a66d2574021173e56c50';
+			var URL = "http://pixabay.com/api/?username=" + USERNAME + "&key=" + API_KEY + "&q=" + encodeURIComponent(pixabayCimke) + "&lang=hu&min_width=1920&min_height=1920";
+
+			$scope.pixaImages = [];
+			$http.get(URL).success(function(data) {
+
+				if (parseInt(data.totalHits) > 0) {
+					$.each(data.hits, function(i, hit) {
+						$scope.pixaImages.push(hit.webformatURL);
+					});
+				} else {
+					console.log('No hits');
+				}
+
+			});
+
 			
 
 			
@@ -2895,6 +3059,10 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			$ionicSlideBoxDelegate.enableSlide(false);
 		}else if(i == 8){
 			$ionicSlideBoxDelegate.enableSlide(false);
+		}else if(i == 9){
+			$ionicSlideBoxDelegate.enableSlide(false);
+			
+			
 		}  else {
 			
 			$ionicSlideBoxDelegate.enableSlide(true);
