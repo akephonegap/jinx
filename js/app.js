@@ -179,6 +179,19 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 	$ionicPlatform.registerBackButtonAction(function() {
 		//visszagomb, ha idézeteképelkészült popup
 		
+		$scope.keszAKepBezar = function(){
+	
+			$scope.keszAKep = false;
+			$scope.$apply();
+		};
+		
+			
+		$scope.keszitsTobbetBezar = function(){
+	
+			$scope.keszitsTobbet = false;
+			$scope.$apply();
+		};
+		
 		if($scope.keszAKep){
 			$scope.keszAKep = false;
 			$scope.$apply();
@@ -1951,10 +1964,30 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			
 		};
 		
-		$scope.kosar = [];
+		$scope.kosar = [{
+				kep : 'css/600x600-bananas.jpg',
+				idezet : 'sfsadfasf',
+				kitol : 'asdgasdg',
+				ar : 4990,
+				osszar : 4990,
+				db : 1,
+				hatter : 'valamikép'					
+			},{
+				kep : 'css/600x600-bananas.jpg',
+				idezet : 'sfsadfasf',
+				kitol : 'asdgasdg',
+				ar : 4990,
+				osszar : 4990,
+				db : 1,
+				hatter : 'valamikép'					
+			}];
+			
+		$scope.deleteFromKosar = function(index){
+			$scope.kosar.splice(index, 1);
+		};
 		
 		$scope.kepKosarba = function(){
-			console.log($scope.keszKepParams)
+		
 			
 			$scope.kosar.push({
 				kep : $rootScope.keszKep,
