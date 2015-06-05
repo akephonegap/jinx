@@ -147,7 +147,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize                                            + 'px'
+		font-size: {{editIdezet.edit.fontSize                                                    + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize + 'px'	}};
 	}
@@ -160,7 +160,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize-5                                            + 'px'
+		font-size: {{editIdezet.edit.fontSize-5                                                    + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize-5 + 'px'}};
 	}
@@ -194,7 +194,7 @@
 
 	<ion-side-menu-content drag-content="false" >
 
-		<div class="bar  bar-header  pink" style="height: 48px;margin-top: 0px;border:none;border-bottom: 2px solid;">
+		<div class="bar  bar-header  pink " style="height: 48px;margin-top: 0px;border:none;border-bottom: 2px solid;" >
 			<!-- visszanyilak definiálása -->
 			<button ng-if="page==7"  ng-click="setSlide(6)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
 				<i class="icon ion-arrow-left-c "></i> Blog
@@ -202,7 +202,12 @@
 			<button ng-if="page==8"  ng-click="setSlide(6)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
 				<i class="icon ion-arrow-left-c "></i> Blog
 			</button>
-
+			<button ng-if="page==3 && !nincsVissza"  ng-click="display('fomenu',true)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
+				<i class="icon ion-arrow-left-c "></i>
+			</button>
+			
+			
+		
 			<h1  class="title " style="height: 44px;margin-top: 0px;font-family: 'Courgette', cursive;" ><img class="coloredImage"  width="150em"  src="css/idezet_logo_ekezetteljes.png" /></h1>
 			<button  ng-click="toggleMenu()" class="button button-clear button-positive pink" >
 				<i class="icon ion-gear-a  "></i>
@@ -225,7 +230,7 @@
 			</div>
 		</div>
 		<i ng-if="page == 0 && scrollTop > 400" ng-click="scrollToTop()" style="bottom: 50px;right: 20px;font-size: 60px;position: fixed;z-index: 800" class="icon ion-android-arrow-dropup-circle pink"></i>
-		<ion-slide-box   show-pager="false" style=" max-width: 600px;margin: 50px auto" on-slide-changed="slideHasChanged($index)" >
+		<ion-slide-box   show-pager="false" style=" max-width: 600px;margin: auto auto;padding-top: 50px" on-slide-changed="slideHasChanged($index)" >
 			<ion-slide  data-ng-init="init()" >
 
 				<md-content id="idezetekLista"  style="height: 70em;" when-scrolled="loadMore()"    style="text-align: center">
@@ -652,68 +657,58 @@
 					</ion-item >
 
 				</div>
-				<div ng-if="editIdezet.idezet != '' || editIdezet.kitol != ''"  style="text-align: center">
+				<div id="szerkesztoDiv" ng-if="editIdezet.idezet != '' || editIdezet.kitol != ''"  style="text-align: center;">
 
-					<div class="tabs tabs-icon-top" style="top:10px" ng-if="!text && !hatter && !effect" >
-						<a class="tab-item active" ng-class="[editIdezet.backImage && !editIdezet.bezar ? 'disabled' : '']"  ng-click="editIdezet.megnyomtaHatter = true;$parent.hatter = true;$parent.text = false;$parent.effect = false;"> <i class="icon ion-image" style="font-size: 40px"></i></a>
-						<a class="tab-item active" ng-class="[!editIdezet.backImage  ? 'disabled' : '']"  ng-click="setEditHeight();editIdezet.bezar = true;editIdezet.megnyomta = true ;$parent.text = true;$parent.hatter = false;$parent.effect = false;"  > <i class="icon ion-edit" style="font-size: 40px" ></i></a>
-						<a class="tab-item active"  ng-class="[!editIdezet.backImage || !editIdezet.megnyomta  ? 'disabled' : '']"  ng-click="legyenFilterScroll(); $parent.effect = true;$parent.text = false;$parent.hatter = false"> <i class="icon ion-ios-color-filter" style="font-size: 40px"></i></a>
-
-					</div>
-
-					<div class="tabs tabs-icon-top"  style="top:10px"  ng-if="text && !color && !font" >
-						<a class="tab-item active"  ng-click="$parent.text = false;$parent.font =  false;$parent.color = false;" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
-						<a class="tab-item active"  ng-click= "$parent.size = false;$parent.font =  true;$parent.color = false;legyenFontScroll()" ng-class="[font ? 'selected' : '']" style="font-size: 35px;line-height: normal"> A </a>
-						<a class="tab-item active"  ng-click="$parent.size = false;$parent.font = false;$parent.color = true;legyenSzinScroll()" ng-class="[color ? 'selected' : '']"> <i class="icon ion-android-color-palette" style="font-size: 40px"></i></a>
+					<div class="fomenu tabs tabs-icon-top" style="top:10px;display: none"  >
+						<a class="tab-item active" ng-class="[editIdezet.backImage && !editIdezet.bezar ? 'disabled' : '']"  ng-click="editIdezet.megnyomtaHatter = true;display('hatter')"> <i class="icon ion-image" style="font-size: 40px"></i></a>
+						<a class="tab-item active" ng-class="[!editIdezet.backImage  ? 'disabled' : '']"  ng-click="setEditHeight();editIdezet.bezar = true;editIdezet.megnyomta = true ;display('szoveg')"  > <i class="icon ion-edit" style="font-size: 40px" ></i></a>
+						<a class="tab-item active"  ng-class="[!editIdezet.backImage || !editIdezet.megnyomta  ? 'disabled' : '']"  ng-click="legyenFilterScroll(); display('filter')"> <i class="icon ion-ios-color-filter" style="font-size: 40px"></i></a>
 
 					</div>
 
-					<div class="tabs tabs-icon-top"  style="top:10px" ng-if="hatter">
-						<a class="tab-item active"  ng-click="$parent.hatter = false;" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
-						<a class="tab-item active"  ng-click="taloz($index);$parent.hatter = false;" ng-class="[folder ? 'selected' : '']" > <i class="icon ion-folder" style="font-size: 40px"></i></a>
-						<a class="tab-item active"  ng-click="fotoz($index);$parent.hatter = false;" ng-class="[camera ? 'selected' : '']"> <i class="icon ion-camera" style="font-size: 40px"></i></a>
+					<div class="hatter tabs tabs-icon-top"  style="top:10px;display: none" >
+						
+						<a class="tab-item active"  ng-click="taloz($index)" ng-class="[folder ? 'selected' : '']" > <i class="icon ion-folder" style="font-size: 40px"></i></a>
+						<a class="tab-item active"  ng-click="fotoz($index)" ng-class="[camera ? 'selected' : '']"> <i class="icon ion-camera" style="font-size: 40px"></i></a>
 					</div>
-					<div class="tabs tabs-icon-top" ng-click="$parent.hatter = false;" ng-if="hatter" style="top:60px">
+
+					<div class="hatter tabs tabs-icon-top" ng-click=";border: none"  style="top:60px;display: none">
 						<ion-scroll direction="x" class="wide-as-needed" >
 							<img ng-click="editPixaImage(kep);" ng-repeat="kep in pixaImages" style="max-width: 60px;max-height: 40px" src="{{kep}}"	/>
 						</ion-scroll>
 					</div>
 
-					<div  style="top:60px;position: absolute; width: 100%" ng-if="effect"  >
-						<div class="row" style="padding: 0px;text-align: center">
-							<div class="col col-80" style="padding: 0px;margin: auto auto">
-								<div class="range range-positive">
-									<i class="icon pink ion-android-image"></i>
-									<input class="pink" type="range" ng-change="changeBlur()" ng-model='editIdezet.blur'  min='0' max='25'>
-									<i class="icon pink ion-android-image" style="-webkit-filter: blur(2px);filter: blur(2px);"></i>
-								</div>
-							</div>
-						</div>
+					
+
+					<div class="szoveg tabs tabs-icon-top"  style="top:10px;"   >
+
+						
+						<a class="tab-item active"  ng-click="display('szovegFont');legyenFontScroll()" ng-class="[font ? 'selected' : '']" style="font-size: 35px;line-height: normal"> A </a>
+						<a class="tab-item active"  ng-click="display('szovegColor');legyenSzinScroll()" ng-class="[color ? 'selected' : '']"> <i class="icon ion-android-color-palette" style="font-size: 40px"></i></a>
+
 					</div>
 
-					<div  style="top:60px;position: absolute; width: 100%" ng-if="text && editIdezet.megnyomta"  >
+					<div class="szoveg szovegFont szovegColor tabs"  style="top:60px;position: absolute; width: 100%;border: none" ng-if="editIdezet.megnyomta"  >
 						<div class="row" style="padding: 0px;text-align: center">
 							<div class="col col-80" style="padding: 0px;margin: auto auto">
 								<div class="range range-positive">
 									<i class="icon pink " style="font-size: 15px">A</i>
-									<input class="pink" type="range" ng-model='editIdezet.edit.fontSize'  min='10' max='40'>
+									<input class="pink" type="range" id="fontSizeRange" ng-model='fontSize' ng-change="fontSizeRange(fontSize)"  min='10' max='40'>
 									<i class="icon pink " style="font-size: 30px">A</i>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="tabs tabs-icon-top" ng-if="font"  style="top:10px;">
+					<div class="szovegFont tabs" class="tabs tabs-icon-top"   style="top:10px;display: none">
 						<div class="row" style="padding: 0px">
-							<div class="col col-33 tab tab-item active " style="padding: 0px;text-align: center">
-								<a class="tab-item active "  ng-click="$parent.font = false" style="width:100%" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
-							</div>
-							<div class="col col-66" style="padding: 0px; ">
+							
+							<div class="col " style="padding: 0px; ">
 								<div class="jeloloNegyzet transparent" style="margin: auto auto"></div>
 							</div>
-							<div class="col col-66" style="padding: 0px;position: absolute; top : 0px; right : 0px">
+							<div class="col " style="padding: 0px;position: absolute; top : 0px; right : 0px">
 
-								<div class="frame" style="height: 50px;" >
+								<div class="frame frameFont" style="height: 50px;" >
 									<ul class="slidee transparent" >
 										<li class="fonts" ng-click="setFont($index);" style="float:left ;font-family:  {{t}};text-align: center ; "  ng-repeat="t in fonts" >
 											A
@@ -728,17 +723,15 @@
 
 					</div>
 
-					<div class="tabs tabs-icon-top" ng-if="color"  style="top:10px;">
+					<div class="szovegColor tabs tabs-icon-top"  style="top:10px;display: none">
 						<div class="row" style="padding: 0px">
-							<div class="col col-33 tab tab-item active" style="padding: 0px;text-align: center">
-								<a class="tab-item active"  ng-click="$parent.color = false"  > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
-							</div>
-							<div class="col col-66" style="padding: 0px; ">
+							
+							<div class="col " style="padding: 0px; ">
 								<div class="jeloloNegyzet transparent" style="margin: auto auto"></div>
 							</div>
-							<div class="col col-66" style="padding: 0px;position: absolute; top : 0px; right : 0px">
+							<div class="col " style="padding: 0px;position: absolute; top : 0px; right : 0px">
 
-								<div class="frame" style="height: 50px;" >
+								<div class="frame frameColor" style="height: 50px;" >
 									<ul class="slidee transparent" >
 										<li class="szinesKocka"  style="margin: 5px;margin-top: 6px;float:left ;background-color:  {{t}};text-align: center ; "  ng-repeat="t in colors" >
 
@@ -753,14 +746,12 @@
 
 					</div>
 
-					<div class="tabs tabs-icon-top" ng-if="effect"  style="top:10px;">
+					<div class="filter tabs tabs-icon-top"  style="top:10px;display: none">
 						<div class="row" style="padding: 0px">
-							<div class="col col-33 tab tab-item active" style="padding: 0px;text-align: center">
-								<a class="tab-item active"  ng-click="$parent.effect = false"> <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
-							</div>
+							
 							<div class="col col-66" style="padding: 0px;position: absolute; top : 0px; right : 0px">
 
-								<div class="frame" style="height: 50px;" >
+								<div class="frame frameFilter" style="height: 50px;" >
 									<ul class="slidee transparent" >
 										<li ng-class="[filterSelect == $index ? 'activeFilter' : 'filter']"  class="szinesKocka  " style="float:left ; padding: 5px; text-align: center ; "  ng-repeat="t in filters"  >
 											<img ng-click="applyFilter($index)" src="css/filters/{{t}}.jpg"  width="40px"  height="40px"/>
@@ -774,6 +765,18 @@
 						</div>
 
 					</div>
+					
+					<div class="filter tabs" style="top:60px;position: absolute; width: 100%;display: none;border: none"   >
+						<div class="row" style="padding: 0px;text-align: center">
+							<div class="col col-80" style="padding: 0px;margin: auto auto">
+								<div class="range range-positive">
+									<i class="icon pink ion-android-image"></i>
+									<input class="pink" type="range" ng-change="changeBlur()" ng-model='editIdezet.blur'  min='0' max='25'>
+									<i class="icon pink ion-android-image" style="-webkit-filter: blur(2px);filter: blur(2px);"></i>
+								</div>
+							</div>
+						</div>
+					</div>
 
 					<div class="cn" style="padding-top:110px;z-index: 400;" >
 
@@ -783,24 +786,14 @@
 							<div id="editDivToCanvas"  style="max-height: 100%;max-width: 100%;width: 100%;height: 100%;text-shadow: 1px 1px 0 black;position: absolute;left:0px;top:0px;">
 								<div id="editDiv" class="draggable "  style="width : 90%;margin: 5%  ;text-align: center" >
 
-									<a e-id="idezet" buttons="no"   e-ng-focus='dragableFalse()'    blur="submit" editable-textarea="editIdezet.idezet" e-style=";width: {{textIdezetAreaWidth}};height : {{textIdezetAreaHeight}}" >
-									<p id="idezetEditDiv" ng-style="{'color' : editIdezet.edit.fontColor,'font-family' : editIdezet.edit.fontFamily,'font-size': editIdezet.edit.fontSize + 'px','line-height' : editIdezet.edit.fontSize + 'px'}">
-										„{{editIdezet.idezet || 'idézet' }}”
-									</p> </a>
-									<a  e-id="kitol" buttons="no" blur="submit" e-ng-focus='dragableFalse()'  editable-textarea="editIdezet.kitol" e-style=";margin-top: 10px;width: {{textKitolAreaWidth}};height : {{textKitolAreaHeight}};" >
-									<p  id="kitolEditDiv" style="margin-top: 10px" ng-style="{'color' : editIdezet.edit.fontColor,'font-family' : editIdezet.edit.fontFamily,'font-size': editIdezet.edit.fontSize-5 + 'px','line-height' : editIdezet.edit.fontSize-5 + 'px'}">
-										{{editIdezet.kitol || 'szerző'}}
-									</p> </a>
-
-									<!--
-									<div ng-style="{'font-size': editIdezet.edit.fontSize + 'px','line-height' : editIdezet.edit.fontSize + 'px'}">
-									„{{editIdezet.idezet}}”
-									</div>
-
-									<div style="margin-top: 10px" ng-style="{'font-size': editIdezet.edit.fontSize-5 + 'px','line-height' : editIdezet.edit.fontSize-5 + 'px'}">
-									{{editIdezet.kitol}}
-									</div>
-									-->
+									<span e-form="textBtnForm1" ios-dblclick="textBtnForm1.$show()" e-id="idezet" buttons="no"    blur="submit" editable-textarea="editIdezet.idezet" e-style=";width: {{textIdezetAreaWidth}};height : {{textIdezetAreaHeight}}" >
+										<p id="idezetEditDiv" ng-style="{'color' : editIdezet.edit.color;'font-family' : editIdezet.edit.color;'fontFamily': 'font-size': editIdezet.edit.fontSize + 'px','line-height' : editIdezet.edit.fontSize + 'px'}">
+											„{{editIdezet.idezet || 'idézet' }}”
+										</p> </span>
+									<span e-form="textBtnForm2" ios-dblclick="textBtnForm2.$show()"  e-id="kitol" buttons="no" blur="submit" e-ng-focus='dragableFalse()'  editable-textarea="editIdezet.kitol" e-style=";margin-top: 10px;width: {{textKitolAreaWidth}};height : {{textKitolAreaHeight}};" >
+										<p  id="kitolEditDiv" style="margin-top: 10px" ng-style="{'color' : editIdezet.edit.color;'font-family' : editIdezet.edit.color;'fontFamily': editIdezet.edit.fontSize-5 + 'px','line-height' : editIdezet.edit.fontSize-5 + 'px'}">
+											{{editIdezet.kitol || 'szerző'}}
+										</p> </span>
 
 								</div>
 
@@ -1034,24 +1027,6 @@
 				</md-content>
 			</ion-slide>
 			<ion-slide style=""  >
-				<!--
-				<div class="row animate-hide " ng-show="!slideHeader" id="blogHeader" ng-click="setSlide(7)" style="width: 100%;position: absolute;z-index: 821;">
-
-				<div class="col col-67 pink" style="font-family: Courgette, cursive;font-size: 25px ;line-height : 25px;text-align: center;padding-top: 5px">
-				<k>
-				idézet.hu blog
-				</k></br>
-				<k style="font-size: 20px">
-				Gedei Attila
-				</k>
-
-				</div>
-
-				<div class="col col-33 " style="text-align: center;">
-				<img height="55px" src="css/blogger.jpg">
-				</div>
-				</div>
-				-->
 
 				<md-content  scroll-watch when-scrolled="moreBlog()"   style="height: 70em;text-align: center;padding: 10px; " >
 					<div class="row animate-hide "  id="blogHeader" ng-click="setSlide(7)" style="margin-bottom: 10px">

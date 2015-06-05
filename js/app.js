@@ -25,7 +25,44 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			scope.$apply(attrs['myclick']);
 		});
 	};
-}).directive('whenScrolled', function($rootScope) {
+	
+	
+})
+
+.directive('iosDblclick', function() {
+
+	const DblClickInterval = 300;
+	//milliseconds
+
+	var firstClickTime;
+	var waitingSecondClick = false;
+
+	return {
+		restrict : 'A',
+		link : function(scope, element, attrs) {
+			element.bind('click', function(e) {
+
+				if (!waitingSecondClick) {
+					firstClickTime = (new Date()).getTime();
+					waitingSecondClick = true;
+
+					setTimeout(function() {
+						waitingSecondClick = false;
+					}, DblClickInterval);
+				} else {
+					waitingSecondClick = false;
+
+					var time = (new Date()).getTime();
+					if (time - firstClickTime < DblClickInterval) {
+						scope.$apply(attrs.iosDblclick);
+					}
+				}
+			});
+		}
+	};
+})
+
+.directive('whenScrolled', function($rootScope) {
 	return function(scope, elm, attr) {
 		var raw = elm[0];
 		
@@ -785,14 +822,14 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
  var pushNotification;
 
 
- document.addEventListener("deviceready", onDeviceReady, false);
+document.addEventListener("deviceready", onDeviceReady, false);
    
 	function onDeviceReady() {
 	
 	
 		
 		//ios ne csusszon szét a kép
-	    cordova.plugins.Keyboard.disableScroll(true);
+	   // cordova.plugins.Keyboard.disableScroll(true);
 		
 	
  
@@ -2498,8 +2535,14 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			
 			$rootScope.editIdezet.idezet = idezet.idezet;
 			
+			
+			
+			
 			$rootScope.editIdezet.edit.fontColor  =  $rootScope.editIdezet.edit.fontColor || 'black';
-			//$rootScope.editIdezet.backImage = "js/effects/bokeh-stars.png" 
+			
+			
+			
+			$rootScope.editIdezet.backImage = "js/effects/bokeh-stars.png" 
 			
 			
 
@@ -2547,7 +2590,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			$scope.newformeKepEdit = false;	  				
 			$ionicSlideBoxDelegate.slide(3);
 			
-		
+			
 		 
 			
 			$scope.$apply();
@@ -2627,7 +2670,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 	$rootScope.filters.push('lotus');
 	$rootScope.filters.push('phykos');
 
-
+ 
 
 
 
@@ -2637,7 +2680,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		
 			$timeout(function() {
 
-				var $frame = $('.frame');
+				var $frame = $('.frameColor');
 				var $wrap = $frame.parent();
 
 				var options = {
@@ -2650,7 +2693,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 					mouseDragging : 0,
 					startAt : $rootScope.editIdezet.colorIndex || 0,
 					scrollBar : $wrap.find('.scrollbar'),
-					speed : 500,
+					speed : 100,
 					easing : 'easeOutExpo'
 				};
 
@@ -2688,11 +2731,16 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 				});
 
 				$rootScope.sly.on('active', function(e, itemIndex) {
-
+					
+					
 					$rootScope.editIdezet.edit.fontColor = $rootScope.colors[itemIndex];
 					$rootScope.editIdezet.colorIndex = itemIndex;
-					$scope.$apply();
-
+					
+					$("#idezetEditDiv").css('color', $rootScope.colors[itemIndex]);
+					$("#kitolEditDiv").css('color', $rootScope.colors[itemIndex]);
+					
+					
+					
 					// 'load'
 
 				});
@@ -2711,7 +2759,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		
 			$timeout(function() {
 
-				var $frame = $('.frame');
+				var $frame = $('.frameFont');
 				var $wrap = $frame.parent();
 
 				var options = {
@@ -2724,7 +2772,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 					mouseDragging : 0,
 					startAt : $rootScope.editIdezet.fontIndex || 0,
 					scrollBar : $wrap.find('.scrollbar'),
-					speed : 500,
+					speed : 100,
 					easing : 'easeOutExpo'
 				};
 
@@ -2765,7 +2813,9 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 				$rootScope.sly.on('active', function(e, itemIndex) {
 					$rootScope.editIdezet.edit.fontFamily = $rootScope.fonts[itemIndex];
 					$rootScope.editIdezet.fontIndex = itemIndex;
-					$scope.$apply();
+					
+					$("#idezetEditDiv").css("font-family","\'"+$rootScope.fonts[itemIndex]+"\'");
+					$("#kitolEditDiv").css("font-family","\'"+$rootScope.fonts[itemIndex]+"\'");
 
 					// 'load'
 
@@ -2790,7 +2840,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		
 			$timeout(function() {
 
-				var $frame = $('.frame');
+				var $frame = $('.frameFilter');
 				var $wrap = $frame.parent();
 
 				var options = {
@@ -2803,7 +2853,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 					mouseDragging : 0,
 					startAt : $rootScope.editIdezet.filterIndex || 0,
 					scrollBar : $wrap.find('.scrollbar'),
-					speed : 500,
+					speed : 100,
 					easing : 'easeOutExpo'
 				};
 
@@ -2844,7 +2894,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 				$rootScope.sly.on('active', function(e, itemIndex) {
 					$rootScope.editIdezet.edit.filter = $rootScope.filters[itemIndex];
 					$rootScope.editIdezet.filterIndex = itemIndex;
-					$scope.$apply();
+					
 
 					// 'load'
 
@@ -2961,7 +3011,52 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		};
 
  
+ 
+ 	
+		$scope.fontSizeRange = function(fontSize) {
+			$rootScope.editIdezet.edit.fontSize = fontSize;
 
+			$("#idezetEditDiv").css("font-size", fontSize + "px");
+			$("#idezetEditDiv").css("line-height", fontSize + "px");
+
+			$("#kitolEditDiv").css("font-size", fontSize - 5 + "px");
+			$("#kitolEditDiv").css("line-height", fontSize - 5 + "px");
+		};
+
+
+	$scope.display = function(mit,vissza){
+		
+
+			
+		if ($scope.hol == "szovegFont" || $scope.hol == "szovegColor") {
+			$('#szerkesztoDiv .tabs').hide();
+			$('.' + 'szoveg').show();
+			$scope.hol = mit;
+			
+			
+		} else {
+		
+		
+			$('#szerkesztoDiv .tabs').hide();
+			$('.' + mit).show();
+			$scope.hol = mit;
+			
+			$scope.nincsVissza = true;
+			if(mit != 'fomenu')	$scope.nincsVissza = false;
+				
+			 
+			
+		}
+
+	
+		
+
+
+	
+		
+		
+	
+	};
 
 	$scope.slideHasChanged = function(i) {
 		$scope.limit = 5;
@@ -3011,6 +3106,16 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 					
 					var cw = $('#forSize').width();
 					
+				
+					
+					$("#idezetEditDiv").css('color', $rootScope.editIdezet.edit.fontColor || 'black');
+					$("#kitolEditDiv").css('color', $rootScope.editIdezet.edit.fontColor || 'black');
+					$("#idezetEditDiv").css("font-size", "20px");
+					$("#idezetEditDiv").css("line-height","20px");
+
+					$("#kitolEditDiv").css("font-size","15px");
+					$("#kitolEditDiv").css("line-height", "15px"); 
+
 					
 					
 					
@@ -3070,7 +3175,15 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 							if (currSize * (1 + zoomRate) < 40 && currSize * (1 + zoomRate) > 10) {
 								$rootScope.editIdezet.edit.fontSize = currSize * (1 + zoomRate);
-								$scope.$apply();
+								
+								
+								$("#idezetEditDiv").css("font-size",currSize * (1 + zoomRate)+"px");
+								$("#idezetEditDiv").css("line-height",currSize * (1 + zoomRate)+"px");
+								
+								$("#kitolEditDiv").css("font-size",currSize * (1 + zoomRate)-5+"px");
+								$("#kitolEditDiv").css("line-height",currSize * (1 + zoomRate)-5+"px");
+								
+								$("#fontSizeRange").val(currSize * (1 + zoomRate));
 							};
 
 						},
@@ -3079,6 +3192,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 					});
 
 				}, 100);
+				
 			
 
 
