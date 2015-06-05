@@ -117,7 +117,17 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 					guides : false,
 					minCropBoxWidth : window.innerWidth-5
 				});
+				
+			
+				$('#selectHatter').hide();
+				$('#hatterLehetoseg').hide();
+				$('#szerkesztoDiv .tabs').hide();
+				$('.' + 'fomenu').show();
+
             });
+       
+			
+
         }
     };
 })
@@ -829,7 +839,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 	
 		
 		//ios ne csusszon szét a kép
-	   // cordova.plugins.Keyboard.disableScroll(true);
+	    cordova.plugins.Keyboard.disableScroll(true);
 		
 	
  
@@ -1075,7 +1085,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			
 			
 			if($rootScope.online) {
-				idezetekFrissit(function() {
+				idezetekFrissit(function() { 
 					var newIdezetekSzama = $scope.idezetek.length - oldIdezetekSzama;
 					console.log('új idézetek száma : ' + newIdezetekSzama);
 
@@ -1298,6 +1308,8 @@ document.addEventListener("deviceready", onDeviceReady, false);
 		};
 	
 		
+		
+
 		
 
 		
@@ -2337,11 +2349,257 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			}, 100);
 
 		};
+		
+		$scope.kepetKeszit2 = function() {
+			$scope.sharingImage = true;
+			
+			$scope.keszKepParams = {};
+			
+			
+			var kellPicikep = false;
+
+			$timeout(function() {
+				var imageObj = new Image();
+
+				imageObj.onload = function() {
+					
+					var logo = new Image();
+					
+					
+					logo.onload = function() {
+						
+						logo.width = 100;
+						logo.height = 30;
+						
+						var kepmeret = imageObj.width;
+						
+						alert('a kép mérete : '+imageObj.width+"x"+imageObj.width);
+
+						var extra_canvas = document.createElement("canvas");
+						extra_canvas.setAttribute('width', kepmeret);
+						extra_canvas.setAttribute('height', kepmeret);
+						var ctx = extra_canvas.getContext('2d');
+
+
+
+						imageObj = document.getElementById('filteredPhoto') || document.getElementById('fullImage');
+
+						
+
+						ctx.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height, 0, 0,  kepmeret,  kepmeret);
+						
+					
+						
+						if(picikep){
+							$( "#toSize" ).prepend(picikep);
+							
+						};
+							
+										
+						
+						stackBlurCanvasRGBA(extra_canvas, 0, 0,  kepmeret,  kepmeret, $rootScope.editIdezet.blur * 3);
+
+						
+						
+						ctx.drawImage(logo, extra_canvas.width - 100, extra_canvas.height - 30, 100, 30);
+
+
+  
+						// text illesztés canvasra
+						var scale =  kepmeret / $('#editDivToCanvas').width();
+						var szoveg = $rootScope.editIdezet;
+						var eredetiWidth = $('#editDivToCanvas').width() * 0.9;
+						var ujWidthScale = $('#editDiv').width() / eredetiWidth;
+						var text = "„"+szoveg.idezet+"”";
+						var marginLeft = ($('#editDiv').width() / ujWidthScale * 0.05) * scale;
+						var marginTop = ($('#editDiv').width() / ujWidthScale * 0.05) * scale;
+						var posLeft = 0;
+						var posTop = 0;
+						if ($('#editDiv').css('left') != 'auto')
+							posLeft = parseFloat($('#editDiv').css('left').replace('px', '')) * scale;
+						if ($('#editDiv').css('top') != 'auto')
+							posTop = parseFloat($('#editDiv').css('top').replace('px', '')) * scale;
+						var width = $('#editDiv').width() * scale; 
+						var maxWidth = $('#editDiv').width() * scale;
+						var height = $('#editDiv').height() * scale;
+						var fontFamily = szoveg.edit.fontFamily;
+						var fontSize = szoveg.edit.fontSize * scale + "px";
+						var fontColour = szoveg.edit.fontColor;
+						ctx.font = fontSize + " " + fontFamily;
+						ctx.textAlign = "center";
+						ctx.fillStyle = fontColour;
+						ctx.shadowColor = "black";
+						ctx.shadowOffsetX = 1;
+						ctx.shadowOffsetY = 1;
+						
+						 
+						
+
+						//idézet illesztés
+						
+						
+						
+						var szerzoSor = 0;
+					
+					
+						if (ctx.measureText(text).width < maxWidth) {
+						
+							ctx.fillText(text, 7 + posLeft + marginLeft + (width / 2), posTop + marginTop + 2 + ((0 + 1) * parseInt(fontSize, 0)));							
+							szerzoSor += 1;
+						} else {
+							var words = text.split(' '), lines = [], line = "";
+							
+							while (words.length > 0) {
+								while (ctx.measureText(words[0]).width >= maxWidth) {
+									var tmp = words[0];
+									words[0] = tmp.slice(0, -1);
+									if (words.length > 1) {
+										words[1] = tmp.slice(-1) + words[1];
+									} else {
+										words.push(tmp.slice(-1));
+									}
+								}
+								if (ctx.measureText(line + words[0]).width < maxWidth) {
+									line += words.shift() + " ";
+								} else {
+									lines.push(line);
+									line = "";
+								}
+								if (words.length === 0) {
+									lines.push(line);
+								}
+							}					
+							
+							lines.forEach(function(line, i) {
+								ctx.fillText(line, 7 + posLeft + marginLeft + (width / 2), posTop + marginTop + 2 + ((i + 1) * parseInt(fontSize, 0)));
+								szerzoSor += 1;
+							}); 
+
+						}
+
+						
+					
+						
+						//szerző illesztés
+						ujfontSize = (szoveg.edit.fontSize - 5) * scale + "px";
+						ctx.font = ujfontSize + " " + fontFamily;
+						var words = szoveg.kitol.split(' '), lines = [], line = "";
+						
+						
+						if (ctx.measureText(text).width < maxWidth) {
+
+							ctx.fillText(szoveg.kitol, 7 + posLeft + marginLeft + (width / 2), posTop + marginTop + 12 + ((szerzoSor + 0 + 1) * parseInt(fontSize, 0)));
+
+						} else {
+							while (words.length > 0) {
+								while (ctx.measureText(words[0]).width >= maxWidth) {
+									var tmp = words[0];
+									words[0] = tmp.slice(0, -1);
+									if (words.length > 1) {
+										words[1] = tmp.slice(-1) + words[1];
+									} else {
+										words.push(tmp.slice(-1));
+									}
+								}
+								if (ctx.measureText(line + words[0]).width < maxWidth) {
+									line += words.shift() + " ";
+								} else {
+									lines.push(line);
+									line = "";
+								}
+								if (words.length === 0) {
+									lines.push(line);
+								}
+							}
+							lines.forEach(function(line, i) {
+								ctx.fillText(line, 7 + posLeft + marginLeft + (width / 2), posTop + marginTop + 12 + ((szerzoSor + i + 1) * parseInt(fontSize, 0)));
+							});
+						}
+						
+						
+						
+						
+					
+						
+						$scope.sharingImage = false;
+						
+						
+
+						//$scope.kepEdit = true;
+						//$rootScope.imageUri = extra_canvas.toDataURL('image/jpeg');
+						
+						
+			
+						 
+						
+						
+						
+					
+						window.canvas2ImagePlugin.saveImageDataToLibrary(function(msg) {
+							alert(msg);
+						}, function(err) {
+							alert(err);
+						}, extra_canvas);
+						
+
+
+						
+						$scope.$apply(); 
+
+
+					};
+
+					//ez azért kell hogy, újjra lefusson, mégha nem is változott src
+
+					if (document.getElementById('fullImage')) {
+						document.getElementById("hereAppend").removeChild(document.getElementById('fullImage'));
+					}
+					document.getElementById("hereAppend").appendChild(imageObj);
+					
+						
+					if (document.getElementById('filteredPhoto')) {
+						
+					
+						var picikep = document.getElementById('filteredPhoto');
+						$('#filteredPhoto').remove();
+						
+						$scope.keszKepParams.effekt = $rootScope.filters[$scope.filterSelect];
+						
+						ApplyEffects[$rootScope.filters[$scope.filterSelect]](imageObj, 'jpeg', function() {
+							
+							logo.src = 'css/idezet_logo_pici.png';
+						});
+
+					} else {
+						
+						logo.src = 'css/idezet_logo_pici.png';
+						
+					};
+
+
+				
+					
+					
+
+					
+
+				};
+
+				imageObj.id = 'fullImage';
+				imageObj.src = $rootScope.editIdezet.fullBackImage;
+				
+				$scope.keszKepParams.hatter = $rootScope.editIdezet.fullBackImage;
+				
+
+			}, 100);
+
+		};
+
 
 		
 		$scope.changeBlur= function() {
        		console.log($rootScope.editIdezet.blur);       		
-       		$('.hatter').css('filter', 'blur('+$rootScope.editIdezet.blur+'px)').css('webkitFilter', 'blur('+$rootScope.editIdezet.blur+'px)').css('mozFilter', 'blur('+$rootScope.editIdezet.blur+'px)').css('oFilter', 'blur('+$rootScope.editIdezet.blur+'px)').css('msFilter', 'blur('+$rootScope.editIdezet.blur+'px)');
+       		$('.hatterIdezet').css('filter', 'blur('+$rootScope.editIdezet.blur+'px)').css('webkitFilter', 'blur('+$rootScope.editIdezet.blur+'px)').css('mozFilter', 'blur('+$rootScope.editIdezet.blur+'px)').css('oFilter', 'blur('+$rootScope.editIdezet.blur+'px)').css('msFilter', 'blur('+$rootScope.editIdezet.blur+'px)');
        		
       	};
 		
@@ -2534,30 +2792,18 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			$rootScope.editIdezet.kitol = idezet.kitol;
 			
 			$rootScope.editIdezet.idezet = idezet.idezet;
-			
-			
-			
-			
+						
 			$rootScope.editIdezet.edit.fontColor  =  $rootScope.editIdezet.edit.fontColor || 'black';
 			
-			
-			
-			$rootScope.editIdezet.backImage = "js/effects/bokeh-stars.png" 
-			
-			
-
-			
-			
-			
+			//$rootScope.editIdezet.backImage = "js/effects/bokeh-stars.png" 
+						
 				
 			$scope.lastPage = $scope.page;
 			//console.log($scope.lastPage)
 			
 			
-			
 			//get image from pixabay
-			
-			
+						
 			var cimkek = idezet.cimke.split(' ');
 			var pixabayCimke = cimkek[0];
 			console.log(pixabayCimke);
@@ -2589,7 +2835,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			
 			$scope.newformeKepEdit = false;	  				
 			$ionicSlideBoxDelegate.slide(3);
-			
+			$scope.display('fomenu');
 			
 		 
 			
@@ -3036,7 +3282,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			
 		} else {
 		
-		
+			
 			$('#szerkesztoDiv .tabs').hide();
 			$('.' + mit).show();
 			$scope.hol = mit;
@@ -3047,16 +3293,24 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			 
 			
 		}
-
-	
-		
-
-
-	
 		
 		
 	
 	};
+	
+	 
+	
+		$scope.showHatterLehetoseg = function(kibe) {
+			if (kibe) {
+				$('#hatterLehetoseg').show();
+				$('#selectHatter').hide();
+			} else { 
+				$('#hatterLehetoseg').hide();
+				 $('#selectHatter').show();
+							
+			}
+
+		}; 
 
 	$scope.slideHasChanged = function(i) {
 		$scope.limit = 5;
@@ -3098,7 +3352,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
         }else if (i == 3 && $rootScope.editIdezet.idezet.length > 5) {
 
-			
+				
 			
 				$timeout(function() {
 
