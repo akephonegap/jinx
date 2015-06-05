@@ -147,7 +147,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize                                                       + 'px'
+		font-size: {{editIdezet.edit.fontSize                                                           + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize + 'px'	}};
 	}
@@ -160,7 +160,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize-5                                                       + 'px'
+		font-size: {{editIdezet.edit.fontSize-5                                                           + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize-5 + 'px'}};
 	}
@@ -185,7 +185,6 @@
 			<i ng-click="setTheme(t,$index)" ng-repeat="t in themeColors" class="icon ion-record " style="font-size: 40px;margin : 3px; color :	 {{t}}"></i>
 		</div>
 
-		
 		<a class="item item-icon-left pink "  ng-click="nyitcsukMenu();setSlide(4)" > <i class="icon ion-help pink"></i> Segítség </a>
 
 		<!-- <a class="item item-icon-left pink " ng-click="nevjegyShow()"  > <i class="icon ion-card pink"></i> Névjegy </a> -->
@@ -221,7 +220,7 @@
 		</div>
 		<div class="tabs-striped tabs-bottom  hide-on-keyboard-open" ng-if="page == 3 && editIdezet.idezet != ''"  >
 			<div class="tabs tabs-icon-top"  >
-				<a class="tab-item active" ng-click="setSlide(lastPage)"  style="border: none" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i> <i ng-if="lastPage == 0" class="icon ion-search" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i><i ng-if="lastPage == 1" class="icon ion-ios-heart" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i><i ng-if="lastPage == 2" class="icon ion-calendar" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i> </a>
+				<a class="tab-item active" ng-click=" setSlide(lastPage);"  style="border: none" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i> <i ng-if="lastPage == 0" class="icon ion-search" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i><i ng-if="lastPage == 1" class="icon ion-ios-heart" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i><i ng-if="lastPage == 2" class="icon ion-calendar" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i> </a>
 
 				<md-button  class="tab-item transparent" ></md-button>
 				<md-button  class="tab-item transparent " ></md-button>
@@ -804,8 +803,7 @@
 
 					<div ng-class="[!editIdezet.bezar ? '' : 'hidden']"  id="valasszHatteret"  >
 						<div class="backdrop visible backdrop-loading active" style="position: absolute;top: 110px;background-color: rgba(255, 255, 255, 1); max-width: 600px;z-index: 200; ">
-							
-							
+
 							<div id="selectHatter"    style="width: 100%"    >
 
 								<img src="css/selectHatter.png" class="coloredImage" width="110px" height="125px" style="position: absolute;left : 12%;"   />
@@ -1343,33 +1341,53 @@
 			<div class="backdrop visible backdrop-loading active"></div>
 			<div class="loading-container visible active" style="padding: 0px">
 				<div class="loading" width="100%" height="100%" style="width : 100%;height: 100%; text-align: center;padding: 0px">
-					<i ng-click="keszAKepBezar()" style="float: right;font-size: 30px;margin: 5px" class="icon ion-ios-close-outline"></i>
+
+					<button ng-click="keszAKepBezar()" class="transparent" style="position: absolute; top : 0px;right : 0px; width: 80%">
+						<i style="float: right;font-size: 30px;color: white" class="icon ion-ios-close-outline"></i>
+
+					</button>
 
 					<div style="margin: 5px 10px;"   >
 						<p style="font-size: 20px">
-							Idézetes képed elkészült <i style="font-size: 30px" class="pink icon ion-android-checkmark-circle"></i>
+							Idézetes képed elkészült <i style="font-size: 30px;color: green" class=" icon ion-android-checkmark-circle"></i>
 						</p>
 						Rendeld meg
-						<k class="pink">
-							30x30
-						</k> cm-es vászonképként és díszítsd vele a lakásod, irodád.
+
+						30x30
+						cm-es vászonképként és díszítsd vele a lakásod, irodád.
 						</br>Ajándéknak is kitűnő.
 					</div>
 
-					<div style="position: relative; left: 0; top: 0;width: 80%;margin: auto">
-						<img src="css/enteriorkep/enterior.jpg" style="position: relative; top: 0; left: 0;width: 100%"/>
-						<img src="{{keszKep}}" style="position: absolute; top: 20%; left: 39.5%; width: 21%;box-shadow: 3px 3px 2px #888888;"/>
+					<div style="position: relative; left: 0; top: 0;width: 80%; height: 30% ;margin: auto">
+						<img src="css/enteriorkep/enterior1.jpg" style="position: relative; top: 0; left: 0;height: 100%"/>
+						<img src="{{keszKep}}" style="position: absolute; top: 15%; left: 42%; width: 15%;box-shadow: 3px 3px 2px #888888;"/>
 					</div>
-
-					<div style="margin: 5px;font-size: 20px">
+					<!--  -->
+					<div style="margin: 20px;font-size: 20px">
 						<i class="icon ion-ios-pricetag-outline"></i> 4.990,-
 					</div>
-					<button ng-click="kepKosarba()" class="button button-outline button-positive" style="margin: 5px">
-						<i class="icon ion-android-cart"></i> Kosárba
+					<button ng-click="kepKosarba()" class="button button-outline button-balanced" style="position: absolute;bottom :80px;  left : 10%;width: 80%">
+						<div class="row" style="margin: 0px;padding: 0px">
+							<div class="col col-20">
+								<i class="icon ion-android-cart"></i>
+							</div>
+							<div class="col col-80">
+								Kép a kosárba
+							</div>
+						</div>
+
 					</button>
 					<br />
-					<button ng-click="kepMegosztas()" class="button button-outline button-light" style="margin: 5px">
-						<i class="icon ion-android-share-alt"></i> Tovább a megosztáshoz
+					<button ng-click="kepMegosztas()" class="button button-outline button-light" style="position: absolute; bottom: 10px;left : 10%;width: 80%">
+
+						<div class="row" style="margin: 0px;padding: 0px">
+							<div class="col col-20">
+								<i class="icon ion-android-share-alt"></i>
+							</div>
+							<div class="col col-80">
+								Kép megosztása
+							</div>
+						</div>
 					</button>
 
 				</div>

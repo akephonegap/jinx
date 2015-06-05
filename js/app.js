@@ -220,24 +220,24 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 	
 	
 	
+	$scope.keszAKepBezar = function() {	
+		$scope.keszAKep = false;
+		$scope.$apply();
+	};
+
+	$scope.keszitsTobbetBezar = function() {
+
+		$scope.keszitsTobbet = false;
+		$scope.$apply();
+	}; 
+
 	
 	
 	
 	$ionicPlatform.registerBackButtonAction(function() {
 		//visszagomb, ha idézeteképelkészült popup
 		
-		$scope.keszAKepBezar = function(){
-	
-			$scope.keszAKep = false;
-			$scope.$apply();
-		};
 		
-			
-		$scope.keszitsTobbetBezar = function(){
-	
-			$scope.keszitsTobbet = false;
-			$scope.$apply();
-		};
 		
 		if($scope.keszAKep){
 			$scope.keszAKep = false;
@@ -839,7 +839,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 	
 		
 		//ios ne csusszon szét a kép
-	    cordova.plugins.Keyboard.disableScroll(true);
+	    //cordova.plugins.Keyboard.disableScroll(true);
 		
 	
  
@@ -2004,11 +2004,16 @@ document.addEventListener("deviceready", onDeviceReady, false);
 	
 	
 		$scope.kepMegosztas = function(){
-			$scope.keszAKep = false;
-			$scope.keszitsTobbet = false;
-			$scope.$apply();
 			
-			window.plugins.socialsharing.share("#idezet.hu - www.idezet.hu", null, $rootScope.keszKep, null);						
+			
+			
+			window.plugins.socialsharing.share("#idezet.hu - www.idezet.hu", null, $rootScope.keszKep, null, function() {
+				$scope.keszAKep = false;
+				$scope.keszitsTobbet = false;
+				$scope.$apply();
+			}, function(errormsg) {
+			});
+		
 			$rootScope.gaPlugin.trackEvent($rootScope.successHandler, $rootScope.errorHandler, $scope.userid, "Megoszt egy képet : id=" + $rootScope.editIdezet.id + ", cimkék=" + $rootScope.editIdezet.cimke, new Date(), 1);
 			
 		};
@@ -2047,14 +2052,12 @@ document.addEventListener("deviceready", onDeviceReady, false);
 				db : 1,
 				hatter : 'valamikép'					
 			});
+			
 			$scope.lastKosarIndex = $scope.kosar.length - 1;
 		
-			$scope.keszAKep = false;
-			$scope.keszitsTobbet = true;
-			
-			//$scope.setSlide(9);
 			
 			
+			$scope.setSlide(9);
 			$scope.$apply();
 			
 	
@@ -2296,8 +2299,20 @@ document.addEventListener("deviceready", onDeviceReady, false);
 						//$rootScope.imageUri = extra_canvas.toDataURL('image/jpeg');
 						
 						
-						$scope.keszAKep = true;
+					
 						$rootScope.keszKep = extra_canvas.toDataURL('image/jpeg');
+						
+			
+						window.plugins.socialsharing.share("#idezet.hu - www.idezet.hu", null, $rootScope.keszKep, null, function() {
+							alert('kész a kép');
+							$scope.keszAKep = true;
+							$scope.$apply();
+						}, function(errormsg) {
+						});
+
+						$rootScope.gaPlugin.trackEvent($rootScope.successHandler, $rootScope.errorHandler, $scope.userid, "Megoszt egy képet : id=" + $rootScope.editIdezet.id + ", cimkék=" + $rootScope.editIdezet.cimke, new Date(), 1);
+
+						
 						
 						$scope.$apply(); 
 
@@ -2835,7 +2850,8 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			
 			$scope.newformeKepEdit = false;	  				
 			$ionicSlideBoxDelegate.slide(3);
-			$scope.display('fomenu');
+			
+			 
 			
 		 
 			
@@ -3306,7 +3322,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 				$('#selectHatter').hide();
 			} else { 
 				$('#hatterLehetoseg').hide();
-				 $('#selectHatter').show();
+				$('#selectHatter').show();
 							
 			}
 
