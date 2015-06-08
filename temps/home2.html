@@ -147,7 +147,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize                                                    + 'px'
+		font-size: {{editIdezet.edit.fontSize                                                                + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize + 'px'	}};
 	}
@@ -160,7 +160,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize-5                                                    + 'px'
+		font-size: {{editIdezet.edit.fontSize-5                                                                + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize-5 + 'px'}};
 	}
@@ -184,8 +184,7 @@
 		<div id="themesDiv" style="text-align: center;margin : 5px">
 			<i ng-click="setTheme(t,$index)" ng-repeat="t in themeColors" class="icon ion-record " style="font-size: 40px;margin : 3px; color :	 {{t}}"></i>
 		</div>
-
-		<a class="item item-icon-left pink " ng-if="kosar.length > 0"  ng-click="nyitcsukMenu();setSlide(9)" > <i class="icon ion-android-cart pink"></i> Kosár </a>
+		<a class="item item-icon-left pink "   ng-click="setSlide(9)" > <i style="font-size: 40px" class="icon ion-android-cart pink"></i></a>
 		<a class="item item-icon-left pink "  ng-click="nyitcsukMenu();setSlide(4)" > <i class="icon ion-help pink"></i> Segítség </a>
 
 		<!-- <a class="item item-icon-left pink " ng-click="nevjegyShow()"  > <i class="icon ion-card pink"></i> Névjegy </a> -->
@@ -202,12 +201,10 @@
 			<button ng-if="page==8"  ng-click="setSlide(6)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
 				<i class="icon ion-arrow-left-c "></i> Blog
 			</button>
-			<button ng-if="page==3 && !nincsVissza"  ng-click="display('fomenu',true)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
+			<button ng-if="page==3 && !nincsVissza && (editIdezet.idezet != '' || editIdezet.kitol != '')"  ng-click="showHatterLehetoseg(false); display('fomenu',true)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
 				<i class="icon ion-arrow-left-c "></i>
 			</button>
-			
-			
-		
+
 			<h1  class="title " style="height: 44px;margin-top: 0px;font-family: 'Courgette', cursive;" ><img class="coloredImage"  width="150em"  src="css/idezet_logo_ekezetteljes.png" /></h1>
 			<button  ng-click="toggleMenu()" class="button button-clear button-positive pink" >
 				<i class="icon ion-gear-a  "></i>
@@ -223,10 +220,14 @@
 		</div>
 		<div class="tabs-striped tabs-bottom  hide-on-keyboard-open" ng-if="page == 3 && editIdezet.idezet != ''"  >
 			<div class="tabs tabs-icon-top"  >
-				<a class="tab-item active" ng-click="setSlide(lastPage)"  style="border: none" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i></a>
-				<md-button  class="tab-item " ></md-button>
-				<md-button  class="tab-item " ></md-button>
-				<a class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']" style="border: none" ng-click="kepetKeszit();"  > <i class="icon ion-android-share-alt" style="font-size: 40px"></i></a>
+				<a class="tab-item active" ng-click=" setSlide(lastPage);"  style="border: none" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i> <i ng-if="lastPage == 0" class="icon ion-search" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i><i ng-if="lastPage == 1" class="icon ion-ios-heart" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i><i ng-if="lastPage == 2" class="icon ion-calendar" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i> </a>
+
+				<md-button  class="tab-item transparent" ></md-button>
+				<md-button  class="tab-item transparent " ></md-button>
+				<!-- <a style="position: absolute;right: 65px;border: none" class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"   ng-click="setSlide(9)" > <i style="font-size: 40px" class="icon ion-android-cart pink"></i></a> -->
+
+				<a style="position: absolute;right: 65px;border: none" class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"   ng-click="kepetKeszit2()" > <i style="font-size: 40px" class="icon ion-ios-download pink"></i></a>
+				<a class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']" style="border: none" ng-click="kepetKeszit();"  > <i  class="icon ion-android-share-alt" style="font-size: 40px"></i></a>
 			</div>
 		</div>
 		<i ng-if="page == 0 && scrollTop > 400" ng-click="scrollToTop()" style="bottom: 50px;right: 20px;font-size: 60px;position: fixed;z-index: 800" class="icon ion-android-arrow-dropup-circle pink"></i>
@@ -659,17 +660,17 @@
 				</div>
 				<div id="szerkesztoDiv" ng-if="editIdezet.idezet != '' || editIdezet.kitol != ''"  style="text-align: center;">
 
-					<div class="fomenu tabs tabs-icon-top" style="top:10px;display: none"  >
-						<a class="tab-item active" ng-class="[editIdezet.backImage && !editIdezet.bezar ? 'disabled' : '']"  ng-click="editIdezet.megnyomtaHatter = true;display('hatter')"> <i class="icon ion-image" style="font-size: 40px"></i></a>
+					<div class="fomenu tabs tabs-icon-top" style="top:10px"  >
+						<a class="tab-item active" ng-class="[editIdezet.backImage && !editIdezet.bezar ? 'disabled' : '']"  ng-click="editIdezet.megnyomtaHatter = true;showHatterLehetoseg(true); display('hatter')"> <i class="icon ion-image" style="font-size: 40px"></i></a>
 						<a class="tab-item active" ng-class="[!editIdezet.backImage  ? 'disabled' : '']"  ng-click="setEditHeight();editIdezet.bezar = true;editIdezet.megnyomta = true ;display('szoveg')"  > <i class="icon ion-edit" style="font-size: 40px" ></i></a>
 						<a class="tab-item active"  ng-class="[!editIdezet.backImage || !editIdezet.megnyomta  ? 'disabled' : '']"  ng-click="legyenFilterScroll(); display('filter')"> <i class="icon ion-ios-color-filter" style="font-size: 40px"></i></a>
-
 					</div>
 
 					<div class="hatter tabs tabs-icon-top"  style="top:10px;display: none" >
-						
-						<a class="tab-item active"  ng-click="taloz($index)" ng-class="[folder ? 'selected' : '']" > <i class="icon ion-folder" style="font-size: 40px"></i></a>
-						<a class="tab-item active"  ng-click="fotoz($index)" ng-class="[camera ? 'selected' : '']"> <i class="icon ion-camera" style="font-size: 40px"></i></a>
+
+						<a class="tab-item active"  ng-click="stack();" ng-class="[folder ? 'selected' : '']" > <i class="icon ion-images" style="font-size: 40px"></i></a>
+						<a class="tab-item active"  ng-click="taloz();" ng-class="[folder ? 'selected' : '']" > <i class="icon ion-folder" style="font-size: 40px"></i></a>
+						<a class="tab-item active"  ng-click="fotoz();" ng-class="[camera ? 'selected' : '']"> <i class="icon ion-camera" style="font-size: 40px"></i></a>
 					</div>
 
 					<div class="hatter tabs tabs-icon-top" ng-click=";border: none"  style="top:60px;display: none">
@@ -678,17 +679,14 @@
 						</ion-scroll>
 					</div>
 
-					
+					<div class="szoveg tabs tabs-icon-top"  style="top:10px;display: none"   >
 
-					<div class="szoveg tabs tabs-icon-top"  style="top:10px;"   >
-
-						
 						<a class="tab-item active"  ng-click="display('szovegFont');legyenFontScroll()" ng-class="[font ? 'selected' : '']" style="font-size: 35px;line-height: normal"> A </a>
 						<a class="tab-item active"  ng-click="display('szovegColor');legyenSzinScroll()" ng-class="[color ? 'selected' : '']"> <i class="icon ion-android-color-palette" style="font-size: 40px"></i></a>
 
 					</div>
 
-					<div class="szoveg szovegFont szovegColor tabs"  style="top:60px;position: absolute; width: 100%;border: none" ng-if="editIdezet.megnyomta"  >
+					<div class="szoveg szovegFont szovegColor tabs"  style="top:60px;position: absolute; width: 100%;border: none;display: none" >
 						<div class="row" style="padding: 0px;text-align: center">
 							<div class="col col-80" style="padding: 0px;margin: auto auto">
 								<div class="range range-positive">
@@ -702,7 +700,7 @@
 
 					<div class="szovegFont tabs" class="tabs tabs-icon-top"   style="top:10px;display: none">
 						<div class="row" style="padding: 0px">
-							
+
 							<div class="col " style="padding: 0px; ">
 								<div class="jeloloNegyzet transparent" style="margin: auto auto"></div>
 							</div>
@@ -725,7 +723,7 @@
 
 					<div class="szovegColor tabs tabs-icon-top"  style="top:10px;display: none">
 						<div class="row" style="padding: 0px">
-							
+
 							<div class="col " style="padding: 0px; ">
 								<div class="jeloloNegyzet transparent" style="margin: auto auto"></div>
 							</div>
@@ -746,14 +744,16 @@
 
 					</div>
 
-					<div class="filter tabs tabs-icon-top"  style="top:10px;display: none">
+					<div class="filter tabs tabs-icon-top"  style="top:7px;display: none">
 						<div class="row" style="padding: 0px">
-							
-							<div class="col col-66" style="padding: 0px;position: absolute; top : 0px; right : 0px">
+							<div class="col " style="padding: 0px; ">
+								<div class="jeloloNegyzet transparent" style="margin: auto auto"></div>
+							</div>
+							<div class="col" style="padding: 0px;position: absolute; top : 0px; right : 0px">
 
 								<div class="frame frameFilter" style="height: 50px;" >
 									<ul class="slidee transparent" >
-										<li ng-class="[filterSelect == $index ? 'activeFilter' : 'filter']"  class="szinesKocka  " style="float:left ; padding: 5px; text-align: center ; "  ng-repeat="t in filters"  >
+										<li   class="szinesKocka " style="margin: 5px;margin-top: 6px;float:left ;text-align: center ; "  ng-repeat="t in filters"  >
 											<img ng-click="applyFilter($index)" src="css/filters/{{t}}.jpg"  width="40px"  height="40px"/>
 										</li>
 
@@ -765,7 +765,7 @@
 						</div>
 
 					</div>
-					
+
 					<div class="filter tabs" style="top:60px;position: absolute; width: 100%;display: none;border: none"   >
 						<div class="row" style="padding: 0px;text-align: center">
 							<div class="col col-80" style="padding: 0px;margin: auto auto">
@@ -782,7 +782,7 @@
 
 						<div id="toSize"  class="outEditDiv inner pink" style="position:relative;border : 2px dashed">
 
-							<img id="idezetHatter" class="hatter" src="{{editIdezet.backImage}}" style="max-height: 100%;max-width: 100%;width: 100%;height: 100%;"/>
+							<img id="idezetHatter" class="hatterIdezet" src="{{editIdezet.backImage}}" style="max-height: 100%;max-width: 100%;width: 100%;height: 100%;"/>
 							<div id="editDivToCanvas"  style="max-height: 100%;max-width: 100%;width: 100%;height: 100%;text-shadow: 1px 1px 0 black;position: absolute;left:0px;top:0px;">
 								<div id="editDiv" class="draggable "  style="width : 90%;margin: 5%  ;text-align: center" >
 
@@ -804,7 +804,8 @@
 
 					<div ng-class="[!editIdezet.bezar ? '' : 'hidden']"  id="valasszHatteret"  >
 						<div class="backdrop visible backdrop-loading active" style="position: absolute;top: 110px;background-color: rgba(255, 255, 255, 1); max-width: 600px;z-index: 200; ">
-							<div ng-class="[!editIdezet.backImage && !editIdezet.megnyomtaHatter ? '' : 'hidden']"   style="width: 100%"    >
+
+							<div id="selectHatter"    style="width: 100%"    >
 
 								<img src="css/selectHatter.png" class="coloredImage" width="110px" height="125px" style="position: absolute;left : 12%;"   />
 								<p class="pink" style="font-size: 25px ; width: 100px;position: absolute;top : 85px;left : 45%">
@@ -812,7 +813,7 @@
 								</p>
 							</div>
 
-							<div ng-class="[!editIdezet.backImage && editIdezet.megnyomtaHatter && hatter ? '' : 'hidden']"   style="width: 100%"    >
+							<div id="hatterLehetoseg" style="width: 100%;display: none"    >
 								<div class="row" style="float: right">
 									<div class="col">
 
@@ -1169,49 +1170,43 @@
 					</div>
 
 					<div class="row pink"  style="border-bottom: 1px solid;" >
-						<div class="col">
+						<div class="col col-30">
 							Kép
 						</div>
-						<div class="col">
+						<div class="col col-30">
 							Mennyiség
 						</div>
-						<div class="col">
+						<div class="col col-30">
 							Ár
 						</div>
-						<div class="col">
+						<div class="col col-10">
 
 						</div>
 
 					</div>
 
 					<md-list >
-						<div class="row"  ng-repeat="kep in kosar" >
-							<div class="col" style="vertical-align: middle;" >
-								<img src="{{kep.kep}}">
+						<div class="row"  ng-repeat="kep in kosar" style="text-align : center;height : 100px;line-height: 80px;margin-top: 5px" >
+							<div class="col col-30"    >
+								<img src="{{kep.kep}}" style="max-width: 70px;max-height: 70px;margin-top: 5px;">
 							</div>
 
-							<div  >
-								<div  style="text-align: center;" >
-									{{kep.db}} db
-								</div>
-								<div  style="text-align: center">
-									<button ng-click="setKosarDarabszam(kep, -1)"  class="button button-outline " style="border: none;color: black;min-width: 20px;min-height: 20px">
-										<i class="icon ion-ios-minus-outline"></i>
-									</button>
+							<div class="col col-30" style="float: right">
 
-									<button ng-click="setKosarDarabszam(kep , 1)"  class="button button-outline " style="border: none;color: black;min-width: 20px;min-height: 20px">
-										<i class="icon ion-ios-plus-outline"></i>
-									</button>
-								</div>
-							</div>
+								<span ng-click="setKosarDarabszam(kep, -1)"  style="float : left ;;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-minus-outline"></i> </span>
 
-							<div class="col" >
-								{{kep.db * kep.ar - faktor(kep.db-1) * (kep.ar * 0.1)}},-
+								<div class="pink"   style="margin : 25px 5px ;float : left ;border : 1px solid ;color: black;height: 30px;width: 30px;line-height: 30px;text-align: center"> {{kep.db}} </div>
+								
+								<span ng-click="setKosarDarabszam(kep , 1)"   style="float : left ;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-plus-outline"></i> </span>
+
+							</div> 
+
+							<div class="col col-30"  >	
+								<z  style="text-decoration: line-through;line-height: 20px;  "> {{kep.db * kep.ar}},-  </z>							
+								<z style="line-height: 20px;" >{{kep.db * kep.ar - faktor(kep.db-1) * (kep.ar * 0.1)}},-</z>
 							</div>
-							<div class="col"  >
-								<button ng-click="deleteFromKosar($index)"  class="button button-outline " style="border: none;color: black;min-width: 20px;min-height: 20px">
-									<i class="icon ion-trash-a"></i>
-								</button></h2>
+							<div class="col col-10" ng-click="deleteFromKosar($index)"   >
+								<span   style="border: none;color: black;font-size: 30px"> <i class="icon ion-trash-a"></i> </span></h2>
 							</div>
 
 						</div>
@@ -1341,33 +1336,53 @@
 			<div class="backdrop visible backdrop-loading active"></div>
 			<div class="loading-container visible active" style="padding: 0px">
 				<div class="loading" width="100%" height="100%" style="width : 100%;height: 100%; text-align: center;padding: 0px">
-					<i ng-click="keszAKepBezar()" style="float: right;font-size: 30px;margin: 5px" class="icon ion-ios-close-outline"></i>
+
+					<button ng-click="keszAKepBezar()" class="transparent" style="position: absolute; top : 0px;right : 0px; width: 80%">
+						<i style="float: right;font-size: 30px;color: white" class="icon ion-ios-close-outline"></i>
+
+					</button>
 
 					<div style="margin: 5px 10px;"   >
 						<p style="font-size: 20px">
-							Idézetes képed elkészült <i style="font-size: 30px" class="pink icon ion-android-checkmark-circle"></i>
+							Idézetes képed elkészült <i style="font-size: 30px;color: green" class=" icon ion-android-checkmark-circle"></i>
 						</p>
 						Rendeld meg
-						<k class="pink">
-							30x30
-						</k> cm-es vászonképként és díszítsd vele a lakásod, irodád.
+
+						30x30
+						cm-es vászonképként és díszítsd vele a lakásod, irodád.
 						</br>Ajándéknak is kitűnő.
 					</div>
 
-					<div style="position: relative; left: 0; top: 0;width: 80%;margin: auto">
-						<img src="css/enteriorkep/enterior.jpg" style="position: relative; top: 0; left: 0;width: 100%"/>
-						<img src="{{keszKep}}" style="position: absolute; top: 20%; left: 39.5%; width: 21%;box-shadow: 3px 3px 2px #888888;"/>
+					<div style="position: relative; left: 0; top: 20px;width: 80%; height: 30% ;margin: auto">
+						<img src="css/enteriorkep/enterior1.jpg" style="position: relative; top: 0; left: 0;height: 100%"/>
+						<img src="{{keszKep}}" style="position: absolute; top: 15%; left: 42%; width: 15%;box-shadow: 3px 3px 2px #888888;"/>
 					</div>
+					<!--  -->
 
-					<div style="margin: 5px;font-size: 20px">
-						<i class="icon ion-ios-pricetag-outline"></i> 4.990,-
-					</div>
-					<button ng-click="kepKosarba()" class="button button-outline button-positive" style="margin: 5px">
-						<i class="icon ion-android-cart"></i> Kosárba
+					<button ng-click="kepKosarba()" class="button button-outline button-balanced" style="position: absolute;bottom :80px;  left : 10%;width: 80%">
+						<div class="row" style="margin: 0px;padding: 0px">
+							<div class="col col-20" >
+								<i style="position:absolute;top: 30%;left: 10%" class="icon ion-android-cart"></i>
+							</div>
+							<div class="col col-80">
+								Kép a kosárba
+								<br />
+								<i class="icon ion-ios-pricetag-outline"></i> 4.990,-
+							</div>
+						</div>
+
 					</button>
 					<br />
-					<button ng-click="kepMegosztas()" class="button button-outline button-light" style="margin: 5px">
-						<i class="icon ion-android-share-alt"></i> Tovább a megosztáshoz
+					<button ng-click="kepMegosztas()" class="button button-outline button-light" style="position: absolute; bottom: 10px;left : 10%;width: 80%">
+
+						<div class="row" style="margin: 0px;padding: 0px">
+							<div class="col col-20">
+								<i class="icon ion-android-share-alt"></i>
+							</div>
+							<div class="col col-80">
+								Kép megosztása
+							</div>
+						</div>
 					</button>
 
 				</div>
