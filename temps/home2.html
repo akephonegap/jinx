@@ -147,7 +147,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize                                                           + 'px'
+		font-size: {{editIdezet.edit.fontSize                                                                + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize + 'px'	}};
 	}
@@ -160,7 +160,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize-5                                                           + 'px'
+		font-size: {{editIdezet.edit.fontSize-5                                                                + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize-5 + 'px'}};
 	}
@@ -184,7 +184,7 @@
 		<div id="themesDiv" style="text-align: center;margin : 5px">
 			<i ng-click="setTheme(t,$index)" ng-repeat="t in themeColors" class="icon ion-record " style="font-size: 40px;margin : 3px; color :	 {{t}}"></i>
 		</div>
-
+		<a class="item item-icon-left pink "   ng-click="setSlide(9)" > <i style="font-size: 40px" class="icon ion-android-cart pink"></i></a>
 		<a class="item item-icon-left pink "  ng-click="nyitcsukMenu();setSlide(4)" > <i class="icon ion-help pink"></i> Segítség </a>
 
 		<!-- <a class="item item-icon-left pink " ng-click="nevjegyShow()"  > <i class="icon ion-card pink"></i> Névjegy </a> -->
@@ -225,6 +225,7 @@
 				<md-button  class="tab-item transparent" ></md-button>
 				<md-button  class="tab-item transparent " ></md-button>
 				<!-- <a style="position: absolute;right: 65px;border: none" class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"   ng-click="setSlide(9)" > <i style="font-size: 40px" class="icon ion-android-cart pink"></i></a> -->
+
 				<a style="position: absolute;right: 65px;border: none" class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"   ng-click="kepetKeszit2()" > <i style="font-size: 40px" class="icon ion-ios-download pink"></i></a>
 				<a class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']" style="border: none" ng-click="kepetKeszit();"  > <i  class="icon ion-android-share-alt" style="font-size: 40px"></i></a>
 			</div>
@@ -1169,49 +1170,43 @@
 					</div>
 
 					<div class="row pink"  style="border-bottom: 1px solid;" >
-						<div class="col">
+						<div class="col col-30">
 							Kép
 						</div>
-						<div class="col">
+						<div class="col col-30">
 							Mennyiség
 						</div>
-						<div class="col">
+						<div class="col col-30">
 							Ár
 						</div>
-						<div class="col">
+						<div class="col col-10">
 
 						</div>
 
 					</div>
 
 					<md-list >
-						<div class="row"  ng-repeat="kep in kosar" >
-							<div class="col" style="vertical-align: middle;" >
-								<img src="{{kep.kep}}">
+						<div class="row"  ng-repeat="kep in kosar" style="text-align : center;height : 100px;line-height: 80px;margin-top: 5px" >
+							<div class="col col-30"    >
+								<img src="{{kep.kep}}" style="max-width: 70px;max-height: 70px;margin-top: 5px;">
 							</div>
 
-							<div  >
-								<div  style="text-align: center;" >
-									{{kep.db}} db
-								</div>
-								<div  style="text-align: center">
-									<button ng-click="setKosarDarabszam(kep, -1)"  class="button button-outline " style="border: none;color: black;min-width: 20px;min-height: 20px">
-										<i class="icon ion-ios-minus-outline"></i>
-									</button>
+							<div class="col col-30" style="float: right">
 
-									<button ng-click="setKosarDarabszam(kep , 1)"  class="button button-outline " style="border: none;color: black;min-width: 20px;min-height: 20px">
-										<i class="icon ion-ios-plus-outline"></i>
-									</button>
-								</div>
-							</div>
+								<span ng-click="setKosarDarabszam(kep, -1)"  style="float : left ;;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-minus-outline"></i> </span>
 
-							<div class="col" >
-								{{kep.db * kep.ar - faktor(kep.db-1) * (kep.ar * 0.1)}},-
+								<div class="pink"   style="margin : 25px 5px ;float : left ;border : 1px solid ;color: black;height: 30px;width: 30px;line-height: 30px;text-align: center"> {{kep.db}} </div>
+								
+								<span ng-click="setKosarDarabszam(kep , 1)"   style="float : left ;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-plus-outline"></i> </span>
+
+							</div> 
+
+							<div class="col col-30"  >	
+								<z  style="text-decoration: line-through;line-height: 20px;  "> {{kep.db * kep.ar}},-  </z>							
+								<z style="line-height: 20px;" >{{kep.db * kep.ar - faktor(kep.db-1) * (kep.ar * 0.1)}},-</z>
 							</div>
-							<div class="col"  >
-								<button ng-click="deleteFromKosar($index)"  class="button button-outline " style="border: none;color: black;min-width: 20px;min-height: 20px">
-									<i class="icon ion-trash-a"></i>
-								</button></h2>
+							<div class="col col-10" ng-click="deleteFromKosar($index)"   >
+								<span   style="border: none;color: black;font-size: 30px"> <i class="icon ion-trash-a"></i> </span></h2>
 							</div>
 
 						</div>
@@ -1358,21 +1353,21 @@
 						</br>Ajándéknak is kitűnő.
 					</div>
 
-					<div style="position: relative; left: 0; top: 0;width: 80%; height: 30% ;margin: auto">
+					<div style="position: relative; left: 0; top: 20px;width: 80%; height: 30% ;margin: auto">
 						<img src="css/enteriorkep/enterior1.jpg" style="position: relative; top: 0; left: 0;height: 100%"/>
 						<img src="{{keszKep}}" style="position: absolute; top: 15%; left: 42%; width: 15%;box-shadow: 3px 3px 2px #888888;"/>
 					</div>
 					<!--  -->
-					<div style="margin: 20px;font-size: 20px">
-						<i class="icon ion-ios-pricetag-outline"></i> 4.990,-
-					</div>
+
 					<button ng-click="kepKosarba()" class="button button-outline button-balanced" style="position: absolute;bottom :80px;  left : 10%;width: 80%">
 						<div class="row" style="margin: 0px;padding: 0px">
-							<div class="col col-20">
-								<i class="icon ion-android-cart"></i>
+							<div class="col col-20" >
+								<i style="position:absolute;top: 30%;left: 10%" class="icon ion-android-cart"></i>
 							</div>
 							<div class="col col-80">
 								Kép a kosárba
+								<br />
+								<i class="icon ion-ios-pricetag-outline"></i> 4.990,-
 							</div>
 						</div>
 

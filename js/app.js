@@ -832,9 +832,9 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
  var pushNotification;
 
 
-document.addEventListener("deviceready", onDeviceReady, false);
+//document.addEventListener("deviceready", onDeviceReady, false);
    
-	function onDeviceReady() {
+	//function onDeviceReady() {
 	
 	
 		
@@ -2037,7 +2037,25 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			}];
 			
 		$scope.deleteFromKosar = function(index){
-			$scope.kosar.splice(index, 1);
+			
+			var myPopup = $ionicPopup.show({			    
+					    title: 'Eldobás!',
+					    template: '<div style="font-family: Courgette, cursive;">Biztos törölni szeretnéd ezt a képet a kosárból?</div>',
+					    scope: $scope,
+					    buttons: [
+					          { 
+					          	text: 'Igen',
+					          	onTap: function(e) {			          
+									$scope.kosar.splice(index, 1);
+									
+				       			 }
+				       		  },
+					          { 
+					          	text: 'Nem',
+					        	type: 'button-outline button-positive',
+				       		  }
+					    ]
+				});
 		};
 		
 		$scope.kepKosarba = function(){
@@ -2056,6 +2074,17 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			$scope.lastKosarIndex = $scope.kosar.length - 1;
 		
 			
+			$scope.keszAKep = false;
+			
+			$timeout(function(){
+				var myPopup = $ionicPopup.show({			    
+					    title: 'Akció!',
+					    template: '<div style="font-family: Courgette, cursive;">Az idézetes képed a kosárba helyeztük.<br />További minden képre <k class="pink">10%</k>	kedvezményt adunk <k class="pink"> július 10 </k>-ig.<br />	Rendelj többet vagy készíts újabb képeket!</div>',			       		 				    scope: $scope,
+					    buttons: [
+					          { text: 'Rendben' }
+					    ]
+				});
+			},1000);
 			
 			$scope.setSlide(9);
 			$scope.$apply();
@@ -2287,10 +2316,6 @@ document.addEventListener("deviceready", onDeviceReady, false);
 						}
 						
 						
-						
-						
-					
-						
 						$scope.sharingImage = false;
 						
 						
@@ -2302,9 +2327,11 @@ document.addEventListener("deviceready", onDeviceReady, false);
 					
 						$rootScope.keszKep = extra_canvas.toDataURL('image/jpeg');
 						
+						$scope.keszAKep = true;
+							$scope.$apply();
 			
 						window.plugins.socialsharing.share("#idezet.hu - www.idezet.hu", null, $rootScope.keszKep, null, function() {
-							alert('kész a kép');
+							
 							$scope.keszAKep = true;
 							$scope.$apply();
 						}, function(errormsg) {
@@ -3368,10 +3395,10 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
         }else if (i == 3 && $rootScope.editIdezet.idezet.length > 5) {
 
-				
+				$scope.nincsVissza = true;
 			
 				$timeout(function() {
-
+					
 					$ionicSlideBoxDelegate.enableSlide(false);
 					
 					var cw = $('#forSize').width();
@@ -3493,7 +3520,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 	
 		
-	};    
+	//};    
      
  
 });
