@@ -505,17 +505,11 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 	};
 
 
-
-
-	
 	$scope.nyitcsukMenu = function(){
 		$ionicSideMenuDelegate.toggleRight();
 	};
 
-	
 
-
-	
 	
 	
 	$scope.idezetSend = function(){   
