@@ -8,6 +8,17 @@
 		user-select: none;
 	}
 
+	.button.button-positive {
+		background-color: {{themeColor}};
+		color: white;
+		border-color: white;
+	}
+	.button.button-positive.activated {
+		background-color: {{themeColor}};
+		color: white;
+		border-color: {{themeColor}};
+	}
+
 	.button.button-positive.button-outline {
 		border-color: {{themeColor}};
 		color: {{themeColor}};
@@ -139,6 +150,11 @@
 		color: {{themeColor}};
 	}
 
+	.stackHeader {
+		background-color: {{themeColor}};
+		border: none;
+	}
+
 	#idezet {
 		background-color: rgba(255, 255, 255, 0);
 		text-align: center;
@@ -147,7 +163,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize                                                                + 'px'
+		font-size: {{editIdezet.edit.fontSize                                                                     + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize + 'px'	}};
 	}
@@ -160,9 +176,10 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize-5                                                                + 'px'
+		font-size: {{editIdezet.edit.fontSize-5                                                                     + 'px'
 	}};
-	line-height : {{editIdezet.edit.fontSize-5 + 'px'}};
+	line-height : {{editIdezet.edit.fontSize-5 + 'px'
+	}};
 	}
 
 	.editable-wrap {
@@ -201,7 +218,7 @@
 			<button ng-if="page==8"  ng-click="setSlide(6)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
 				<i class="icon ion-arrow-left-c "></i> Blog
 			</button>
-			<button ng-if="page==3 && !nincsVissza && (editIdezet.idezet != '' || editIdezet.kitol != '')"  ng-click="showHatterLehetoseg(false); display('fomenu',true)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
+			<button id="visszaNyil" ng-if="page==3 && !nincsVissza && (editIdezet.idezet != '' || editIdezet.kitol != '')"  ng-click="showHatterLehetoseg(false); display('fomenu',true)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
 				<i class="icon ion-arrow-left-c "></i>
 			</button>
 
@@ -220,13 +237,14 @@
 		</div>
 		<div class="tabs-striped tabs-bottom  hide-on-keyboard-open" ng-if="page == 3 && editIdezet.idezet != ''"  >
 			<div class="tabs tabs-icon-top"  >
-				<a class="tab-item active" ng-click=" setSlide(lastPage);"  style="border: none" > <i class="icon ion-arrow-left-c" style="font-size: 40px"></i> <i ng-if="lastPage == 0" class="icon ion-search" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i><i ng-if="lastPage == 1" class="icon ion-ios-heart" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i><i ng-if="lastPage == 2" class="icon ion-calendar" style="font-size: 40px;position: absolute;left: 65px;top : 0px"></i> </a>
-
+				<a class="tab-item active" ng-click=" setSlide(lastPage);"  style="border: none" > <i ng-if="lastPage == 0" class="icon ion-search" style="font-size: 40px"></i><i ng-if="lastPage == 1" class="icon ion-ios-heart" style="font-size: 40px;"></i><i ng-if="lastPage == 2" class="icon ion-calendar" style="font-size: 40px"></i> </a>
+				<!-- <i class="icon ion-arrow-left-c" style="font-size: 40px"></i> -->
 				<md-button  class="tab-item transparent" ></md-button>
-				<md-button  class="tab-item transparent " ></md-button>
+				<md-button ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"  class="tab-item transparent "  ng-click="kepetKeszit2()">
+					<i style="font-size: 40px" class="icon ion-ios-download pink"></i>
+				</md-button>
 				<!-- <a style="position: absolute;right: 65px;border: none" class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"   ng-click="setSlide(9)" > <i style="font-size: 40px" class="icon ion-android-cart pink"></i></a> -->
 
-				<a style="position: absolute;right: 65px;border: none" class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"   ng-click="kepetKeszit2()" > <i style="font-size: 40px" class="icon ion-ios-download pink"></i></a>
 				<a class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']" style="border: none" ng-click="kepetKeszit();"  > <i  class="icon ion-android-share-alt" style="font-size: 40px"></i></a>
 			</div>
 		</div>
@@ -671,12 +689,6 @@
 						<a class="tab-item active"  ng-click="stack();" ng-class="[folder ? 'selected' : '']" > <i class="icon ion-images" style="font-size: 40px"></i></a>
 						<a class="tab-item active"  ng-click="taloz();" ng-class="[folder ? 'selected' : '']" > <i class="icon ion-folder" style="font-size: 40px"></i></a>
 						<a class="tab-item active"  ng-click="fotoz();" ng-class="[camera ? 'selected' : '']"> <i class="icon ion-camera" style="font-size: 40px"></i></a>
-					</div>
-
-					<div class="hatter tabs tabs-icon-top" ng-click=";border: none"  style="top:60px;display: none">
-						<ion-scroll direction="x" class="wide-as-needed" >
-							<img ng-click="editPixaImage(kep);" ng-repeat="kep in pixaImages" style="max-width: 60px;max-height: 40px" src="{{kep}}"	/>
-						</ion-scroll>
 					</div>
 
 					<div class="szoveg tabs tabs-icon-top"  style="top:10px;display: none"   >
@@ -1173,10 +1185,10 @@
 						<div class="col col-30">
 							Kép
 						</div>
-						<div class="col col-30">
+						<div class="col col-35">
 							Mennyiség
 						</div>
-						<div class="col col-30">
+						<div class="col col-25">
 							Ár
 						</div>
 						<div class="col col-10">
@@ -1186,26 +1198,39 @@
 					</div>
 
 					<md-list >
-						<div class="row"  ng-repeat="kep in kosar" style="text-align : center;height : 100px;line-height: 80px;margin-top: 5px" >
+						<div class="row"  ng-repeat="kep in kosar" style="text-align : center;height : 100px;margin-top: 5px" >
 							<div class="col col-30"    >
-								<img src="{{kep.kep}}" style="max-width: 70px;max-height: 70px;margin-top: 5px;">
+								<img src="{{kep.kep}}" style="max-width:80px;max-height: 80px;">
 							</div>
 
-							<div class="col col-30" style="float: right">
+							<div class="col col-35" style="text-align : center ;padding : 25px 0px ;">
 
-								<span ng-click="setKosarDarabszam(kep, -1)"  style="float : left ;;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-minus-outline"></i> </span>
+								<span ng-click="setKosarDarabszam(kep, -1)"  style="float : left ;margin : 3px 5px ;;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-minus-outline"></i> </span>
 
-								<div class="pink"   style="margin : 25px 5px ;float : left ;border : 1px solid ;color: black;height: 30px;width: 30px;line-height: 30px;text-align: center"> {{kep.db}} </div>
-								
-								<span ng-click="setKosarDarabszam(kep , 1)"   style="float : left ;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-plus-outline"></i> </span>
+								<div class="pink"   style="float : left ;border : 1px solid ;color: black;height: 30px;width: 30px;line-height: 30px;text-align: center">
+									{{kep.db}}
+								</div>
 
-							</div> 
+								<span ng-click="setKosarDarabszam(kep , 1)"   style="float : left ;margin : 3px 5px ;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-plus-outline"></i> </span>
 
-							<div class="col col-30"  >	
-								<z  style="text-decoration: line-through;line-height: 20px;  "> {{kep.db * kep.ar}},-  </z>							
-								<z style="line-height: 20px;" >{{kep.db * kep.ar - faktor(kep.db-1) * (kep.ar * 0.1)}},-</z>
 							</div>
-							<div class="col col-10" ng-click="deleteFromKosar($index)"   >
+
+							<div ng-if="kep.db == 1" class="col col-25" style="padding : 30px 0px ;"  >
+								<z  >
+									{{kep.db * kep.ar}},-
+								</z>
+							</div>
+
+							<div ng-if="kep.db > 1" class="col col-25" style="padding : 20px 0px ;"  >
+								<z  style="text-decoration: line-through;  ">
+									{{kep.db * kep.ar}},-
+								</z>
+								<z >
+									{{kep.db * kep.ar - faktor(kep.db-1) * (kep.ar * 0.1)}},-
+								</z>
+							</div>
+
+							<div class="col col-10"  sng-click="deleteFromKosar($index)"  style="padding : 25px 0px ;"  >
 								<span   style="border: none;color: black;font-size: 30px"> <i class="icon ion-trash-a"></i> </span></h2>
 							</div>
 
@@ -1214,7 +1239,7 @@
 					</md-list >
 
 					<button ng-click="oneMoreKep()"  class="button button-outline button-positive" style="margin: 10px">
-						<i class="icon ion-image "></i> Újabb kép készítése
+						<i class="icon ion-image "></i> Új kép készítése
 					</button>
 
 					<div class="pink" style="text-align : right;border-top: 1px solid;font-size: 20px;padding-top: 10px">
@@ -1353,9 +1378,9 @@
 						</br>Ajándéknak is kitűnő.
 					</div>
 
-					<div style="position: relative; left: 0; top: 20px;width: 80%; height: 30% ;margin: auto">
-						<img src="css/enteriorkep/enterior1.jpg" style="position: relative; top: 0; left: 0;height: 100%"/>
-						<img src="{{keszKep}}" style="position: absolute; top: 15%; left: 42%; width: 15%;box-shadow: 3px 3px 2px #888888;"/>
+					<div style="position: relative; left: 0; top: 20px;height: 40% ;margin: auto">
+						<img src="css/enteriorkep/enterior.jpg" style="position: relative; top: 0; left: 0;height: 100%"/>
+						<img src="{{keszKep}}" style="position: absolute; top: 20%; left: 40.5%; width: 18%;box-shadow: 3px 3px 2px #888888;"/>
 					</div>
 					<!--  -->
 
@@ -1473,7 +1498,9 @@
 	<div class="loading-container visible active" style="padding: 0px">
 		<div class="loading" width="100%" height="100%" style="width : 100%;height: 100%; text-align: center;padding: 0px">
 
-			<img class="coloredImage" src="{{imageUri }}" imageonload id="editImage">
+			<!--<img class="coloredImage" src="{{imageUri }}" imageonload sb-load="onImgLoad($event)" id="editImage" >-->
+
+			<img id="editImage" class="coloredImage" src="{{imageUri }}" imageonload sb-load="onImgLoad($event)"  style="width: 100%">
 
 			<div class="row" style="position: absolute;bottom : 10px;z-index: 888;font-size: 30px">
 
@@ -1488,6 +1515,33 @@
 				</div>
 
 			</div>
+
+		</div>
+	</div>
+</div>
+<div ng-if="imageStack" id="imageStack">
+	<div class="backdrop visible backdrop-loading active"></div>
+	<div class="loading-container visible active" style="padding: 0px">
+		<div class="loading" width="100%" height="100%" style="width : 100%;height: 100%; text-align: center;padding: 0px">
+			<div class="bar bar-header stackHeader" >
+				<div class="h1 title" style="color: white">
+					Kép választása
+				</div>
+				<button ng-click="imageStackClose()" class="button button-clear " style="color: white" >
+					<i class="icon ion-ios-close-outline"></i>
+				</button>
+			</div>
+			<md-content  style="height: 70em; padding-top: 40px" >
+
+				<section id="photos">
+					<img ng-click="editPixaImage(kep.megjelenit,kep.betolt);" ng-repeat="kep in pixaImages" style="width : 50%;" src="{{kep.megjelenit}}"	/>
+				</section>
+				<button ng-click="moreStack(pixaImages.length/20 + 1)" class="button button-positive moreStackButton">
+					Még több kép
+				</button>
+
+				<div style="height:50em;"></div>
+			</md-content>
 
 		</div>
 	</div>

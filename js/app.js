@@ -107,22 +107,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
         link: function(scope, element, attrs) {
                 
             element.bind('load', function() {
-                $('#editImage').cropper({ 
-					aspectRatio : 1,
-					autoCropArea : 1,
-					movable: false,
-					resizable: false,
-					strict : false,
-					dragCrop : false,            				
-					guides : false,
-					minCropBoxWidth : window.innerWidth-5
-				});
-				
-			
-				$('#selectHatter').hide();
-				$('#hatterLehetoseg').hide();
-				$('#szerkesztoDiv .tabs').hide();
-				$('.' + 'fomenu').show();
+                
 
             });
        
@@ -131,31 +116,51 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
         }
     };
 })
+
+
+.directive('sbLoad', ['$parse',
+function($parse) {
+	return {
+		restrict : 'A',
+		link : function(scope, elem, attrs) {
+			var fn = $parse(attrs.sbLoad);
+			elem.on('load', function(event) {
+				scope.$apply(function() {
+					fn(scope, {
+						$event : event
+					});
+				});
+			});
+		}
+	};
+}])
+
 .directive('scrollWatch', function($rootScope) {
-  return function(scope, elem, attr) {
-    var start = 0;
-    var threshold = 50;    
-    var raw = elem[0];
-    
-    elem.bind('scroll', function(e) {
-   	
-   	//console.log(raw.scrollTop)
-    	
-      if(raw.scrollTop - start > threshold) {      
-        $rootScope.slideHeader = true;        
-      } else {
-        $rootScope.slideHeader = false;
-        
-      }
-      if ($rootScope.slideHeaderPrevious >= raw.scrollTop - start) {
-        $rootScope.slideHeader = false;
-        
-      }
-      $rootScope.slideHeaderPrevious = raw.scrollTop - start;
-      $rootScope.$apply();
-    });
-  };
+	return function(scope, elem, attr) {
+		var start = 0;
+		var threshold = 50;
+		var raw = elem[0];
+
+		elem.bind('scroll', function(e) {
+
+			//console.log(raw.scrollTop)
+
+			if (raw.scrollTop - start > threshold) {
+				$rootScope.slideHeader = true;
+			} else {
+				$rootScope.slideHeader = false;
+
+			}
+			if ($rootScope.slideHeaderPrevious >= raw.scrollTop - start) {
+				$rootScope.slideHeader = false;
+
+			}
+			$rootScope.slideHeaderPrevious = raw.scrollTop - start;
+			$rootScope.$apply();
+		});
+	};
 })
+
 
 .directive('style', function($compile) {
 	return {
@@ -230,6 +235,12 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		$scope.keszitsTobbet = false;
 		$scope.$apply();
 	}; 
+	
+	$scope.imageStackClose = function() {
+
+		$scope.imageStack = false;
+		$scope.$apply();
+	}; 
 
 	
 	
@@ -245,6 +256,9 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		
 		}else if($scope.keszitsTobbet){
 			$scope.keszitsTobbet = false;
+			$scope.$apply();	
+		}else if($scope.imageStack){
+			$scope.imageStack = false;
 			$scope.$apply();	
 		}else{
 			var myPopup = $ionicPopup.show({			    
@@ -270,6 +284,18 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 	$scope.titles = ['Idézetek', 'Kedvencek', 'Időzitők', 'Súgó'];
 	$scope.title = $scope.titles[0];
 	$scope.data = [];
+	
+	
+	//vászonkép rendelés
+	
+	$scope.buyImageParams = {};
+	
+	
+	
+	
+	
+	
+	
 	
 	//sendIdezet scope
 	$scope.sendIdezetData = [];
@@ -826,14 +852,14 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
  var pushNotification;
 
 
-//document.addEventListener("deviceready", onDeviceReady, false);
+document.addEventListener("deviceready", onDeviceReady, false);
    
-	//function onDeviceReady() {
+	function onDeviceReady() {
 	
 	
 		
 		//ios ne csusszon szét a kép
-	    //cordova.plugins.Keyboard.disableScroll(true);
+	    cordova.plugins.Keyboard.disableScroll(true);
 		
 	
  
@@ -1521,10 +1547,17 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 				
 			
 				$scope.$apply();
+				
 				i.kedvenc = true;
+				
+				
+				
+	
+				
+				
 				$scope.kedvencek.push(i);		
 				for (index in $scope.kedvencek) {
-					$scope.kedvencek[index].backImage = null;	
+					$scope.kedvencek[index].backImage = null;					
 				}				
 				window.localStorage.setItem("kedvencek", JSON.stringify($scope.kedvencek));				
 				$rootScope.gaPlugin.trackEvent( $rootScope.successHandler, $rootScope.errorHandler, $scope.userid, "Kedvencek közé rak : id="+i.id+", cimkék="+i.cimke, new Date() , 1);
@@ -1963,6 +1996,73 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 	
 		$scope.save = function(idezet) {
 		
+			
+		
+			$scope.buyImageParams.kisKepUrl = $rootScope.imageUri;
+			$scope.buyImageParams.nagyKepUrl = $scope.imageNagyUri ;
+			$scope.buyImageParams.xKepMargin = $('#editImage').cropper("getData").x;
+			$scope.buyImageParams.yKepMargin = $('#editImage').cropper("getData").y;
+			$scope.buyImageParams.rotateKep = $('#editImage').cropper("getData").rotate;				
+			$scope.buyImageParams.keszKepWidth = $('#editImage').cropper("getData").width;
+			$scope.buyImageParams.keszKepHeight = $('#editImage').cropper("getData").height;
+				
+			/*
+			$("<img/>").attr("src", $rootScope.imageUri).load(function() {
+				s = {
+					w : this.width,
+					h : this.height
+				};
+				$scope.buyImageParams.kisKepWidth = s.w;
+				$scope.buyImageParams.kisKepHeight = s.h;
+				console.log($scope.buyImageParams);
+				 
+				
+					
+				$.ajax({
+						type : "POST",
+						url : "http://192.168.1.184/idezet.hu/createimage/vaszonkep.php",
+						data : angular.toJson($scope.buyImageParams),
+						error : function(request, error) {
+							alert('valami hiba');
+							
+						},
+						success : function(data) {
+											
+							alert('ok')				
+											
+											
+							var adatok = JSON.parse(data);					
+									
+							alert('Kész a kép '+adatok.rate);
+							
+							
+							
+							$rootScope.editIdezet.backImage = adatok.link;
+							$scope.kepEdit = false;
+							$scope.$apply(); 
+
+							 	
+
+			
+												
+							
+						}
+					});
+				
+
+				
+				
+			}); 
+			*/
+
+			
+			
+			
+			
+			
+			
+			
+		
 			var c = document.createElement("canvas");
 			var kepSzelesseg = $('#forSize').width();
 			var kepMagassag = $('#forSize').height();
@@ -1974,7 +2074,10 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			var cxt = c.getContext("2d");
 			var img = new Image();
 
+		
 			img.onload = function() {
+				
+				
 				cxt.drawImage(img, 0, 0, kepSzelesseg, kepMagassag);
 				var dataURL = c.toDataURL('image/jpeg');;
 				$rootScope.editIdezet.backImage = dataURL;
@@ -1983,15 +2086,17 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 			};
 			
+			
+			//alert($('#editImage').cropper('getImageData'))
+			
+			
+			
 			img.src = $('#editImage').cropper('getCroppedCanvas', {
 				fillColor: "#FFFFFF"
 			}).toDataURL('image/jpeg'); 
 
 			
-			$rootScope.editIdezet.fullBackImage = $('#editImage').cropper('getCroppedCanvas', {
-				fillColor : "#FFFFFF"
-			}).toDataURL('image/jpeg');
-
+			$rootScope.editIdezet.fullBackImage = img.src;
 
 		}; 
 
@@ -2150,7 +2255,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		$scope.kepetKeszit = function() {
 			$scope.sharingImage = true;
 			
-			$scope.keszKepParams = {};
+		
 			
 			
 			var kellPicikep = false;
@@ -2167,6 +2272,10 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 						
 						logo.width = 100;
 						logo.height = 30;
+						
+						var kepmeret = imageObj.width;
+						
+						alert('a kép mérete : '+imageObj.width+"x"+imageObj.width);
 
 						var extra_canvas = document.createElement("canvas");
 						extra_canvas.setAttribute('width', 600);
@@ -2321,14 +2430,15 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 					
 						$rootScope.keszKep = extra_canvas.toDataURL('image/jpeg');
 						
-						$scope.keszAKep = true;
-							$scope.$apply();
+						
 			
 						window.plugins.socialsharing.share("#idezet.hu - www.idezet.hu", null, $rootScope.keszKep, null, function() {
 							
 							$scope.keszAKep = true;
 							$scope.$apply();
+							
 						}, function(errormsg) {
+						
 						});
 
 						$rootScope.gaPlugin.trackEvent($rootScope.successHandler, $rootScope.errorHandler, $scope.userid, "Megoszt egy képet : id=" + $rootScope.editIdezet.id + ", cimkék=" + $rootScope.editIdezet.cimke, new Date(), 1);
@@ -2651,7 +2761,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 				ApplyEffects[$rootScope.filters[$scope.filterSelect]](kep, 'jpeg', function() {
 					$scope.filtering = false;
-					$('#filteredPhoto').addClass('hatter');
+					$('#filteredPhoto').addClass('hatterIdezet');
 					$('.hatter').css('filter', 'blur(' + $rootScope.editIdezet.blur + 'px)').css('webkitFilter', 'blur(' + $rootScope.editIdezet.blur + 'px)').css('mozFilter', 'blur(' + $rootScope.editIdezet.blur + 'px)').css('oFilter', 'blur(' + $rootScope.editIdezet.blur + 'px)').css('msFilter', 'blur(' + $rootScope.editIdezet.blur + 'px)');
 					$scope.$apply();
 				});
@@ -2740,6 +2850,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			
 			$rootScope.index = index;
 			$rootScope.imageUri = "data:image/jpeg;base64," + imageURI;
+			$scope.imageNagyUri = "data:image/jpeg;base64," + imageURI;
 			$scope.loadingCamera = false;
 			$scope.$apply();
 
@@ -2759,26 +2870,130 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 		
 
-		$scope.editPixaImage = function(url) {
-			$scope.kepEdit = true;
-			$("#idezetHatter").show();
+	
+	$scope.editPixaImage = function(kisurl,nagyurl) {
+		$scope.imageStack = false;
+		$scope.kepEdit = true;
+		
+		
+		
+		$("#idezetHatter").show();
 
-			$("#filteredPhoto").remove();
-			//filterkép törlése
-			var image_x = document.getElementById('filteredPhoto');
-			if (image_x != null) {
-				image_x.parentNode.removeChild(image_x);
+		$("#filteredPhoto").remove();
+		//filterkép törlése
+		var image_x = document.getElementById('filteredPhoto');
+		if (image_x != null) {
+			image_x.parentNode.removeChild(image_x);
+		}
+
+		$rootScope.editIdezet.filterIndex = 0;
+		$scope.filterSelect = 0;
+
+		$rootScope.imageUri = kisurl;
+		$scope.imageNagyUri = nagyurl;
+		
+		
+		
+	};
+
+
+	$scope.onImgLoad = function (event) {
+       
+       
+		
+		$('#selectHatter').hide();
+		$('#hatterLehetoseg').hide();
+		$('#szerkesztoDiv .tabs').hide();
+		$('.' + 'fomenu').show();
+		$('#visszaNyil').hide();
+		
+		
+		
+		$('#editImage').cropper({
+			aspectRatio : 1,
+			autoCropArea : 1,
+			movable : false,
+			resizable : false,
+			strict : false,
+			dragCrop : false,
+			guides : false,
+			minCropBoxWidth : window.innerWidth - 5,		
+			built: function () {
+			
 			}
 
-			$rootScope.editIdezet.filterIndex = 0;
-			$scope.filterSelect = 0;
-
-			
-			$rootScope.imageUri = url;
-			$scope.$apply();
-		}; 
+		});
 
 		
+		
+
+    };
+		
+		
+	
+	$scope.stack = function() {
+
+		$scope.imageStack = true;
+		
+		
+	
+		$scope.pixabayCimke = $rootScope.editIdezet.pixabayCimke;
+
+		if ($scope.lastPage == 0) {
+			$scope.pixabayCimke = $scope.searchText;
+		};
+		
+		$scope.pixabayCimke = 'szerelem';
+	
+		var USERNAME = 'lukacsisz0';
+		var API_KEY = 'a66d2574021173e56c50';
+		var URL = "http://pixabay.com/api/?username=" + USERNAME + "&key=" + API_KEY + "&q=" + encodeURIComponent($scope.pixabayCimke) + "&min_width=1920&min_height=1&lang=hu&response_group=high_resolution&image_type=photo&page=1";
+
+		$scope.pixaImages = [];
+		$http.get(URL).success(function(data) {
+
+			if (parseInt(data.totalHits) > 0) {
+				$.each(data.hits, function(i, hit) {
+					var image = {};
+					image.megjelenit = hit.webformatURL;
+					image.betolt = hit.imageURL;
+										
+					$scope.pixaImages.push(image);
+				});
+			} else {
+				console.log('No hits');
+			}
+
+		});
+
+	};	
+	
+	
+	$scope.moreStack = function(page){
+				
+		var USERNAME = 'lukacsisz0';
+		var API_KEY = 'a66d2574021173e56c50';
+		var URL = "http://pixabay.com/api/?username=" + USERNAME + "&key=" + API_KEY + "&q=" + encodeURIComponent($scope.pixabayCimke) + "&min_width=1920&min_height=1&lang=hu&response_group=high_resolution&image_type=photo&page="+page;
+
+		$http.get(URL).success(function(data) {
+
+			if (parseInt(data.totalHits) > 0) {
+				$.each(data.hits, function(i, hit) {
+					var image = {};
+					image.megjelenit = hit.webformatURL;
+					image.betolt = hit.imageURL;
+										
+					$scope.pixaImages.push(image);
+				});
+			} else {
+				console.log('No hits');
+			}
+
+		});
+		
+		
+	};
+
 	
 	$scope.taloz = function(index) {
 		$scope.loadingGallery = true;
@@ -2800,6 +3015,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			
 			$rootScope.index = index;
 			$rootScope.imageUri = "data:image/jpeg;base64," + imageURI;
+			$scope.imageNagyUri = "data:image/jpeg;base64," + imageURI;
 			$scope.loadingGallery = false;
 			$scope.$apply();
 
@@ -2824,7 +3040,13 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		
 			
 			$rootScope.editIdezet.id = idezet.id;
-			$rootScope.editIdezet.cimke = idezet.cimke;		
+			$rootScope.editIdezet.cimke = idezet.cimke;	
+				
+			var cimkek = idezet.cimke.split(' ');
+			$rootScope.editIdezet.pixabayCimke = cimkek[0];
+			
+		
+			
 			$rootScope.editIdezet.kitol = idezet.kitol;
 			
 			$rootScope.editIdezet.idezet = idezet.idezet;
@@ -2840,32 +3062,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 			
 			//get image from pixabay
 						
-			var cimkek = idezet.cimke.split(' ');
-			var pixabayCimke = cimkek[0];
-			console.log(pixabayCimke);
-
 			
-			if ($scope.lastPage == 0) {
-				pixabayCimke = $scope.searchText;
-			};
-
-			var USERNAME = 'lukacsisz0';
-			var API_KEY = 'a66d2574021173e56c50';
-			var URL = "http://pixabay.com/api/?username=" + USERNAME + "&key=" + API_KEY + "&q=" + encodeURIComponent(pixabayCimke) + "&lang=hu&min_width=1920&min_height=1920";
-
-			$scope.pixaImages = [];
-			$http.get(URL).success(function(data) {
-
-				if (parseInt(data.totalHits) > 0) {
-					$.each(data.hits, function(i, hit) {
-						$scope.pixaImages.push(hit.webformatURL);
-					});
-				} else {
-					console.log('No hits');
-				}
-
-			});
-
 			
 
 			
@@ -2914,7 +3111,11 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 		
 	
 		$scope.nosave = function(){
+		
+		
 			$scope.kepEdit = false;
+			//ha a user kiikszelte a képszerkesztést, akkor a pixabaystack maradjon
+			$scope.imageStack = true;
 		};
 	
 		$scope.rotate = function() {
@@ -3309,7 +3510,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 	$scope.display = function(mit,vissza){
 		
-
+		$('#visszaNyil').show(); 
 			
 		if ($scope.hol == "szovegFont" || $scope.hol == "szovegColor") {
 			$('#szerkesztoDiv .tabs').hide();
@@ -3514,7 +3715,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 	
 		
-	//};    
+	};    
      
  
 });
