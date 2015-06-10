@@ -2275,7 +2275,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 						
 						var kepmeret = imageObj.width;
 						
-						alert('a kép mérete : '+imageObj.width+"x"+imageObj.width);
+						//alert('a kép mérete : '+imageObj.width+"x"+imageObj.width);
 
 						var extra_canvas = document.createElement("canvas");
 						extra_canvas.setAttribute('width', 600);
