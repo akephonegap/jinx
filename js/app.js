@@ -859,7 +859,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 	
 		
 		//ios ne csusszon szét a kép
-	    cordova.plugins.Keyboard.disableScroll(true);
+	    //cordova.plugins.Keyboard.disableScroll(true);
 		
 	
  
@@ -3563,6 +3563,21 @@ document.addEventListener("deviceready", onDeviceReady, false);
 		
 		
 		if (i == 1) {
+			console.log($scope.kedvencek)
+		
+		
+			$scope.kedvencek.unshift({
+				'idezet' : 'Minden férfi életében eljön az a pillanat, amikor megmondják neki, hogy melyik nap, hány órára legyen felöltözve és megborotválkozva.',
+				'kitol' : 'Barna László Lagziguru',
+				'cimke' : 'szeret szeret szeret'
+			});
+			
+			$scope.kedvencek.unshift({
+				'idezet' : 'Anyu mindig azt mondta: Az eszed ott legyen, ahol te vagy! Tulajdonképpen ennyit elég is betartani és megtanítani a saját gyerekemnek. A többit már hozza magával, ha ott vagyok, ahol az eszem van!',
+				'kitol' : '   ',
+				'cimke' : 'szeret szeret szeret'
+			
+			});
 		
 			$(".doubleTapp").swipe("destroy");
 			$(".doubleTapp").swipe({
