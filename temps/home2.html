@@ -25,11 +25,10 @@
 	}
 
 	.toggle.toggle-positive input:checked + .track {
-	    border-color: {{themeColor}};
-	    background-color: {{themeColor}};
+		border-color: {{themeColor}};
+		background-color: {{themeColor}};
 	}
-	
-	
+
 	input:invalid {
 		border: 2px solid white;
 	}
@@ -182,7 +181,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize                                                                                           + 'px'
+		font-size: {{editIdezet.edit.fontSize                                                                                            + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize + 'px'	}};
 	}
@@ -195,7 +194,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize-5                                                                                           + 'px'
+		font-size: {{editIdezet.edit.fontSize-5                                                                                            + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize-5 + 'px'
 	}};
@@ -1373,11 +1372,6 @@
 
 							</div>
 
-
-						
-							
-							
-
 						</div>
 						<div >
 							<h2 style="margin-bottom: 10px;font-family: Courgette;text-align: center">Számlázási cím</h2>
@@ -1407,7 +1401,7 @@
 							</div>
 
 							<label class="item item-input"> <i class="icon ion-earth placeholder-icon"></i>
-								<input type="tel" style="padding: 5px;margin: 2px"
+								<input type="text" style="padding: 5px;margin: 2px"
 								name="szamlaOrszag"
 								ng-model="adatok.szamlaOrszag"
 								required
@@ -1454,10 +1448,9 @@
 								<div ng-message="required">
 									A település  megadása kötelező
 								</div>
-						
 
 							</div>
-							
+
 							<label class="item item-input"> <i class="icon ion-home placeholder-icon"></i>
 								<input type="text"  style="padding: 5px;margin: 2px"
 								name="szamlaUtcaHaz"
@@ -1473,14 +1466,8 @@
 								<div ng-message="required">
 									Az utca és a házszám megadása kötelező
 								</div>
-								
 
 							</div>
-							
-							
-						
-						
-						
 
 						</div>
 
@@ -1568,10 +1555,9 @@
 								<div ng-message="required">
 									A település megadása kötelező
 								</div>
-							
 
 							</div>
-							
+
 							<label class="item item-input"> <i class="icon ion-home placeholder-icon"></i>
 								<input type="text"  style="padding: 5px;margin: 2px"
 								name="szallitasUtcaHaz"
@@ -1587,19 +1573,11 @@
 								<div ng-message="required">
 									Az utca és a házszám megadása kötelező
 								</div>
-								
 
 							</div>
-							
-							
-						
-						
-						
 
 						</div>
 
-					
-	
 						<div style="padding: 10px">
 
 							<button ng-disabled="!myForm.$valid" ng-click="megrendelem(szallitas)"  class="button button-block button-outline button-positive" >
@@ -1655,6 +1633,20 @@
 						<div>
 							<div class="pink" style="font-family: Courgette, cursive">
 								Kép megosztása...
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-class="[kosarbaImage || '' ? '' : 'hidden']">
+			<div class="backdrop visible backdrop-loading active"></div>
+			<div class="loading-container visible active" >
+				<div class="loading" style="background-color: rgba(255, 255, 255, 1);padding: 5px 20px;width: 175px">
+					<div><img class="coloredImage" style="margin : 5px" width="35px" id="image" src="css/cordova_48.png">
+						<div>
+							<div class="pink" style="font-family: Courgette, cursive">
+								Kép kosárba helyezése...
 							</div>
 						</div>
 					</div>
@@ -1947,3 +1939,17 @@
 	</div>
 </div>
 
+<div ng-class="[rendelesAjax || '' ? '' : 'hidden']">
+	<div class="backdrop visible backdrop-loading active"></div>
+	<div class="loading-container visible active">
+		<div class="loading" style="background-color: rgba(255, 255, 255, 1);padding: 5px 20px;width: 175px">
+			<div><img class="coloredImage" style="margin : 5px" width="35px" id="image" src="css/cordova_48.png">
+				<div>
+					<div class="pink" style="font-family: Courgette, cursive">
+						Rendelés rögzítése...
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

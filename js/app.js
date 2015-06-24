@@ -868,9 +868,9 @@ function($parse) {
  var pushNotification;
 
 
-document.addEventListener("deviceready", onDeviceReady, false);
+//document.addEventListener("deviceready", onDeviceReady, false);
    
-	function onDeviceReady() {
+	//function onDeviceReady() {
 	
 	
 		
@@ -2695,7 +2695,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 		};
 		
 		$scope.kepetvesz = function() {
-			$scope.sharingImage = true;
+			$scope.kosarbaImage = true;
 			
 			$scope.keszKepParams = {};
 			
@@ -2712,18 +2712,16 @@ document.addEventListener("deviceready", onDeviceReady, false);
 					
 					logo.onload = function() {
 						
-						
-						logo.width = 100 * scale / 2;
-						logo.height = 30 *  scale / 2;
-						
+						logo.width = 100;
+						logo.height = 30;
 						
 						var kepmeret = imageObj.width;
 						
 						//alert('a kép mérete : '+imageObj.width+"x"+imageObj.width);
 
 						var extra_canvas = document.createElement("canvas");
-						extra_canvas.setAttribute('width', kepmeret);
-						extra_canvas.setAttribute('height', kepmeret);
+						extra_canvas.setAttribute('width', 600);
+						extra_canvas.setAttribute('height', 600);
 						var ctx = extra_canvas.getContext('2d');
 
 
@@ -2732,7 +2730,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 						
 
-						ctx.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height, 0, 0,  kepmeret,  kepmeret);
+						ctx.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height, 0, 0, 600, 600);
 						
 					
 						
@@ -2743,16 +2741,16 @@ document.addEventListener("deviceready", onDeviceReady, false);
 							
 										
 						
-						stackBlurCanvasRGBA(extra_canvas, 0, 0,  kepmeret,  kepmeret, $rootScope.editIdezet.blur * 3);
+						stackBlurCanvasRGBA(extra_canvas, 0, 0, 600, 600, $rootScope.editIdezet.blur * 3);
 
 						
 						
-						ctx.drawImage(logo, extra_canvas.width - logo.width, extra_canvas.height - logo.height, logo.width, logo.height);
-			
+						ctx.drawImage(logo, extra_canvas.width - 100, extra_canvas.height - 30, 100, 30);
+
 
   
 						// text illesztés canvasra
-						var scale =  kepmeret / $('#editDivToCanvas').width();
+						var scale = 600 / $('#editDivToCanvas').width();
 						var szoveg = $rootScope.editIdezet;
 						var eredetiWidth = $('#editDivToCanvas').width() * 0.9;
 						var ujWidthScale = $('#editDiv').width() / eredetiWidth;
@@ -2863,11 +2861,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 						}
 						
 						
-						
-						
-					
-						
-						$scope.sharingImage = false;
+						$scope.kosarbaImage = false;
 						
 						
 
@@ -3037,6 +3031,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 				
 			}
 			
+			$scope.rendelesAjax = true;
 			
 			
 				
@@ -3053,9 +3048,28 @@ document.addEventListener("deviceready", onDeviceReady, false);
 				success : function(data) {
 	
 					console.log(data);
-					alert('Rendelés leadva');
+					
+					
+					
+					$scope.rendelesAjax = false;
+					$scope.$apply();
+					
+				
+					   var alertPopup = $ionicPopup.alert({
+					     title: 'Sikeres rendelés!',
+					     template: '<div style="font-family: Courgette, cursive; text-align : center">Köszönjük a vásárlást!</div>',
+					  	 okText: 'Bezárás'
+					   });
+					   alertPopup.then(function(res) {
+					     $scope.setSlide(0);	
+					     $scope.buyImageParams = {};
+						 $scope.szallitas = true;			
+						 $scope.adatok = {};
+					   });
+					 
+					
 	
-					//alert(key + '. megrendelve');
+					
 	
 				}
 			}); 
@@ -3496,13 +3510,21 @@ document.addEventListener("deviceready", onDeviceReady, false);
 				var $frame = $('.frameColor');
 				var $wrap = $frame.parent();
 
+				var csuszka  = 1;
+				if (ionic.Platform.isAndroid()) {
+					csuszka = 0;
+				} else if (ionic.Platform.isIOS()) {
+					csuszka = 1;
+				}
+
+
 				var options = {
 					horizontal : 1,
 					itemNav : 'forceCentered',
 					smart : 1,
 					activateMiddle : 1,
 					activateOn : 'click',
-					touchDragging : 0,
+					touchDragging : csuszka,
 					mouseDragging : 0,
 					startAt : $rootScope.editIdezet.colorIndex || 0,
 					scrollBar : $wrap.find('.scrollbar'),
@@ -3518,18 +3540,31 @@ document.addEventListener("deviceready", onDeviceReady, false);
 					swipeStatus : function(event, phase, direction, distance, duration, fingerCount) {
 						
 						
+							
+						if (ionic.Platform.isAndroid()) {
+							if (phase == 'start') {
+								ehh = $rootScope.sly.pos.dest;
+							}
+							console.log(phase + " " + ehh);
+	
+							if (direction == 'left') {
+								$rootScope.sly.slideTo(ehh + distance);
+							} else if (direction == 'right') {
+								$rootScope.sly.slideTo(ehh - distance);
+							};
+						}else{
+							var itemIndex = $rootScope.sly.rel.centerItem;
+							
+							$rootScope.editIdezet.edit.fontColor = $rootScope.colors[itemIndex];
+							$rootScope.editIdezet.colorIndex = itemIndex;
+					
+							$("#idezetEditDiv").css('color', $rootScope.colors[itemIndex]);
+							$("#kitolEditDiv").css('color', $rootScope.colors[itemIndex]);
 						
-						if(phase == 'start'){
-							ehh = $rootScope.sly.pos.dest;
-						}
-						console.log(phase +" "+ ehh);
-						
-						if (direction == 'left') {
-							$rootScope.sly.slideTo(ehh  + distance);
-						} else if (direction == 'right') {
-							$rootScope.sly.slideTo(ehh  - distance);
-						}
-						
+						};
+
+											
+					
 		
 					},
 
@@ -3575,13 +3610,21 @@ document.addEventListener("deviceready", onDeviceReady, false);
 				var $frame = $('.frameFont');
 				var $wrap = $frame.parent();
 
+				var csuszka  = 1;
+				if (ionic.Platform.isAndroid()) {
+					csuszka = 0;
+				} else if (ionic.Platform.isIOS()) {
+					csuszka = 1;
+				}
+
+
 				var options = {
 					horizontal : 1,
 					itemNav : 'forceCentered',
 					smart : 1,
 					activateMiddle : 1,
 					activateOn : 'click',
-					touchDragging : 0,
+					touchDragging : csuszka,
 					mouseDragging : 0,
 					startAt : $rootScope.editIdezet.fontIndex || 0,
 					scrollBar : $wrap.find('.scrollbar'),
@@ -3589,7 +3632,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 					easing : 'easeOutExpo'
 				};
 
-				$rootScope.sly =  new Sly($frame, options).init();				
+				$rootScope.sly =  new Sly($frame, options).init();
 				var ehh;
 				$frame.swipe({
 					//Generic swipe handler for all directions
@@ -3597,17 +3640,28 @@ document.addEventListener("deviceready", onDeviceReady, false);
 					swipeStatus : function(event, phase, direction, distance, duration, fingerCount) {
 						
 						
+							
+						if (ionic.Platform.isAndroid()) {
+							if (phase == 'start') {
+								ehh = $rootScope.sly.pos.dest;
+							}
+							console.log(phase + " " + ehh);
+	
+							if (direction == 'left') {
+								$rootScope.sly.slideTo(ehh + distance);
+							} else if (direction == 'right') {
+								$rootScope.sly.slideTo(ehh - distance);
+							};
+						}else{
+							var itemIndex = $rootScope.sly.rel.centerItem;
+							
+							$rootScope.editIdezet.edit.fontFamily = $rootScope.fonts[itemIndex];
+							$rootScope.editIdezet.fontIndex = itemIndex;
+					
+							$("#idezetEditDiv").css("font-family","\'"+$rootScope.fonts[itemIndex]+"\'");
+							$("#kitolEditDiv").css("font-family","\'"+$rootScope.fonts[itemIndex]+"\'");
 						
-						if(phase == 'start'){
-							ehh = $rootScope.sly.pos.dest;
-						}
-						console.log(phase +" "+ ehh);
-						
-						if (direction == 'left') {
-							$rootScope.sly.slideTo(ehh  + distance);
-						} else if (direction == 'right') {
-							$rootScope.sly.slideTo(ehh  - distance);
-						}
+						};
 						
 		
 					},
@@ -3659,13 +3713,21 @@ document.addEventListener("deviceready", onDeviceReady, false);
 				var $frame = $('.frameFilter');
 				var $wrap = $frame.parent();
 
+				var csuszka  = 1;
+				if (ionic.Platform.isAndroid()) {
+					csuszka = 0;
+				} else if (ionic.Platform.isIOS()) {
+					csuszka = 1;
+				}
+
+
 				var options = {
 					horizontal : 1,
 					itemNav : 'forceCentered',
 					smart : 1,
 					activateMiddle : 1,
 					activateOn : 'click',
-					touchDragging : 0,
+					touchDragging : csuszka,
 					mouseDragging : 0,
 					startAt : $rootScope.editIdezet.filterIndex || 0,
 					scrollBar : $wrap.find('.scrollbar'),
@@ -3673,7 +3735,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 					easing : 'easeOutExpo'
 				};
 
-				$rootScope.sly =  new Sly($frame, options).init();				
+				$rootScope.sly =  new Sly($frame, options).init();
 				var ehh;
 				$frame.swipe({
 					//Generic swipe handler for all directions
@@ -3681,18 +3743,26 @@ document.addEventListener("deviceready", onDeviceReady, false);
 					swipeStatus : function(event, phase, direction, distance, duration, fingerCount) {
 						
 						
+							
+						if (ionic.Platform.isAndroid()) {
+							if (phase == 'start') {
+								ehh = $rootScope.sly.pos.dest;
+							}
+							console.log(phase + " " + ehh);
+	
+							if (direction == 'left') {
+								$rootScope.sly.slideTo(ehh + distance);
+							} else if (direction == 'right') {
+								$rootScope.sly.slideTo(ehh - distance);
+							};
+						}else{
+							var itemIndex = $rootScope.sly.rel.centerItem;
+							$rootScope.editIdezet.edit.filter = $rootScope.filters[itemIndex];
+							$rootScope.editIdezet.filterIndex = itemIndex;
 						
-						if(phase == 'start'){
-							ehh = $rootScope.sly.pos.dest;
-						}
-						console.log(phase +" "+ ehh);
+							$scope.applyFilter(itemIndex);
 						
-						if (direction == 'left') {
-							$rootScope.sly.slideTo(ehh  + distance);
-						} else if (direction == 'right') {
-							$rootScope.sly.slideTo(ehh  - distance);
-						}
-						
+						};
 		
 					},
 
@@ -4101,7 +4171,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 	
 		
-	};    
+	//};    
     
  
 });
