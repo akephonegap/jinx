@@ -2,7 +2,7 @@
 <widget id="com.fwstudio.idezet.hu" version="3.5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>idézet.hu</name>
     <preference name="permissions" value="none" />
-    <preference name="phonegap-version" value="3.7.0" />
+ 	<preference name='phonegap-version' value='cli-5.1.1' />
     <preference name="orientation" value="portrait" />
     <preference name="target-device" value="universal" />
     <preference name="fullscreen" value="true" />
@@ -40,6 +40,7 @@
     <gap:plugin name="hu.fwstudio.cordova.plugin.local-notification" version="1.0.7" />
     <gap:plugin name="nl.x-services.plugins.socialsharing" source="plugins.cordova.io" />
     <gap:plugin name="com.adobe.plugins.gaplugin" />
+    <gap:plugin name="org.crosswalk.engine" version="1.3.0" />
     <gap:plugin name="com.ionic.keyboard" version="1.0.3" />
     <gap:plugin name="com.phonegap.plugin.statusbar" version="1.1.0" />
     <gap:plugin name="org.wbt11a.canvas2imageplugin" version="0.7.1" />
@@ -54,6 +55,7 @@
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="org.apache.cordova.vibration" />
+    
     <access origin="*" />
     <engine name="android" spec="^4.0.0" />
     <engine name="ios" spec="^3.8.0" />
