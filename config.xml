@@ -2,7 +2,7 @@
 <widget id="com.fwstudio.idezet.hu teszt" version="3.5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>idézet.hu teszt</name>
     <preference name="permissions" value="none" />
-    <preference name="phonegap-version" value="3.7.0" />
+    <preference name='phonegap-version' value='cli-5.1.1' />
     <preference name="orientation" value="portrait" />
     <preference name="target-device" value="universal" />
     <preference name="fullscreen" value="true" />
