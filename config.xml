@@ -37,7 +37,7 @@
     <gap:splash gap:platform="ios" height="768" src="cordova/res/screen/ios/screen-ipad-landscape.png" width="1024" />
     <gap:splash gap:platform="ios" height="1496" src="cordova/res/screen/ios/screen-ipad-landscape-2x.png" width="2048" />
     <gap:splash gap:platform="ios" height="1136" src="cordova/res/screen/ios/screen-iphone-portrait-568h-2x.png" width="640" />
-    <gap:plugin name="hu.fwstudio.cordova.plugin.local-notification" version="1.0.7" />
+    <!-- <gap:plugin name="hu.fwstudio.cordova.plugin.local-notification" version="1.0.7" /> -->
     <gap:plugin name="nl.x-services.plugins.socialsharing" source="plugins.cordova.io" />
     <gap:plugin name="com.adobe.plugins.gaplugin" />
     <gap:plugin name="com.ionic.keyboard" version="1.0.3" />
