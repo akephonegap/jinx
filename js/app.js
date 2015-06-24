@@ -2712,8 +2712,10 @@ document.addEventListener("deviceready", onDeviceReady, false);
 					
 					logo.onload = function() {
 						
-						logo.width = 100;
-						logo.height = 30;
+						
+						logo.width = 100 * scale / 2;
+						logo.height = 30 *  scale / 2;
+						
 						
 						var kepmeret = imageObj.width;
 						
@@ -2745,8 +2747,8 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 						
 						
-						ctx.drawImage(logo, extra_canvas.width - 100, extra_canvas.height - 30, 100, 30);
-
+						ctx.drawImage(logo, extra_canvas.width - logo.width, extra_canvas.height - logo.height, logo.width, logo.height);
+			
 
   
 						// text illesztés canvasra
