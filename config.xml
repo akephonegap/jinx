@@ -55,12 +55,12 @@
     
     
     <gap:plugin name="org.apache.cordova.media" />
-    <!-- <gap:plugin name="org.apache.cordova.inappbrowser" /> -->
+    <gap:plugin name="org.apache.cordova.inappbrowser" />
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.network-information" />
     
     
-    <gap:plugin name="org.crosswalk.engine" version="1.3.0" />
+    <!-- <gap:plugin name="org.crosswalk.engine" version="1.3.0" /> -->
     <access origin="*" />
     <engine name="android" spec="^4.0.0" />
     <engine name="ios" spec="^3.8.0" />
