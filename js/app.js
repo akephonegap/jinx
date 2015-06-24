@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic','xeditable']).config(function($stateProvider, $urlRouterProvider) {
+angular.module('starter', ['ionic','xeditable','ngMessages','validation.match']).config(function($stateProvider, $urlRouterProvider) {
 
 	$stateProvider.state('home', {
 		url : '/',
@@ -31,7 +31,7 @@ angular.module('starter', ['ionic','xeditable']).config(function($stateProvider,
 
 .directive('iosDblclick', function() {
 
-	const DblClickInterval = 300;
+	const DblClickInterval = 200;
 	//milliseconds
 
 	var firstClickTime;
@@ -241,6 +241,18 @@ function($parse) {
 		$scope.imageStack = false;
 		$scope.$apply();
 	}; 
+	
+	$scope.kosarTartamClose = function() {
+
+		$scope.kosarTartam = false;
+		$scope.$apply();
+	}; 
+	$scope.kosarTartamOpen = function() {
+
+		$scope.kosarTartam = true;
+		$scope.$apply();
+	}; 
+	
 
 	
 	
@@ -259,6 +271,9 @@ function($parse) {
 			$scope.$apply();	
 		}else if($scope.imageStack){
 			$scope.imageStack = false;
+			$scope.$apply();	
+		}else if($scope.kosarTartam){
+			$scope.kosarTartam = false;
 			$scope.$apply();	
 		}else{
 			var myPopup = $ionicPopup.show({			    
@@ -289,7 +304,8 @@ function($parse) {
 	//vászonkép rendelés
 	
 	$scope.buyImageParams = {};
-	
+	$scope.szallitas = true;			
+	$scope.adatok = {};
 	
 	
 	
@@ -2006,61 +2022,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			$scope.buyImageParams.keszKepWidth = $('#editImage').cropper("getData").width;
 			$scope.buyImageParams.keszKepHeight = $('#editImage').cropper("getData").height;
 				
-			/*
-			$("<img/>").attr("src", $rootScope.imageUri).load(function() {
-				s = {
-					w : this.width,
-					h : this.height
-				};
-				$scope.buyImageParams.kisKepWidth = s.w;
-				$scope.buyImageParams.kisKepHeight = s.h;
-				console.log($scope.buyImageParams);
-				 
-				
-					
-				$.ajax({
-						type : "POST",
-						url : "http://192.168.1.184/idezet.hu/createimage/vaszonkep.php",
-						data : angular.toJson($scope.buyImageParams),
-						error : function(request, error) {
-							alert('valami hiba');
-							
-						},
-						success : function(data) {
-											
-							alert('ok')				
-											
-											
-							var adatok = JSON.parse(data);					
-									
-							alert('Kész a kép '+adatok.rate);
-							
-							
-							
-							$rootScope.editIdezet.backImage = adatok.link;
-							$scope.kepEdit = false;
-							$scope.$apply(); 
-
-							 	
-
-			
-												
-							
-						}
-					});
-				
-
-				
-				
-			}); 
-			*/
-
-			
-			
-			
-			
-			
-			
+		
 			
 		
 			var c = document.createElement("canvas");
@@ -2081,6 +2043,9 @@ document.addEventListener("deviceready", onDeviceReady, false);
 				cxt.drawImage(img, 0, 0, kepSzelesseg, kepMagassag);
 				var dataURL = c.toDataURL('image/jpeg');;
 				$rootScope.editIdezet.backImage = dataURL;
+				
+				$rootScope.imageToFilter = dataURL;
+				
 				$scope.kepEdit = false;
 				$scope.$apply();
 
@@ -2117,25 +2082,11 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			
 		};
 		
-		$scope.kosar = [{
-				kep : 'css/600x600-bananas.jpg',
-				idezet : 'sfsadfasf',
-				kitol : 'asdgasdg',
-				ar : 4990,
-				osszar : 4990,
-				db : 1,
-				hatter : 'valamikép'					
-			},{
-				kep : 'css/600x600-bananas.jpg',
-				idezet : 'sfsadfasf',
-				kitol : 'asdgasdg',
-				ar : 4990,
-				osszar : 4990,
-				db : 1,
-				hatter : 'valamikép'					
-			}];
+		$scope.kosar = [];
 			
 		$scope.deleteFromKosar = function(index){
+		
+			
 			
 			var myPopup = $ionicPopup.show({			    
 					    title: 'Eldobás!',
@@ -2224,6 +2175,8 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			if(kep.db + mennyivel >= 1){
 				kep.db += mennyivel;
 				kep.osszar = kep.db * kep.ar - $scope.faktor(kep.db-1) * (kep.ar * 0.1);
+				
+				
 				
 			} 
 		};
@@ -2740,8 +2693,376 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			}, 100);
 
 		};
+		
+		$scope.kepetvesz = function() {
+			$scope.sharingImage = true;
+			
+			$scope.keszKepParams = {};
+			
+			
+			var kellPicikep = false;
+
+			$timeout(function() {
+				var imageObj = new Image();
+
+				imageObj.onload = function() {
+					
+					var logo = new Image();
+					
+					
+					logo.onload = function() {
+						
+						logo.width = 100;
+						logo.height = 30;
+						
+						var kepmeret = imageObj.width;
+						
+						//alert('a kép mérete : '+imageObj.width+"x"+imageObj.width);
+
+						var extra_canvas = document.createElement("canvas");
+						extra_canvas.setAttribute('width', kepmeret);
+						extra_canvas.setAttribute('height', kepmeret);
+						var ctx = extra_canvas.getContext('2d');
 
 
+
+						imageObj = document.getElementById('filteredPhoto') || document.getElementById('fullImage');
+
+						
+
+						ctx.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height, 0, 0,  kepmeret,  kepmeret);
+						
+					
+						
+						if(picikep){
+							$( "#toSize" ).prepend(picikep);
+							
+						};
+							
+										
+						
+						stackBlurCanvasRGBA(extra_canvas, 0, 0,  kepmeret,  kepmeret, $rootScope.editIdezet.blur * 3);
+
+						
+						
+						ctx.drawImage(logo, extra_canvas.width - 100, extra_canvas.height - 30, 100, 30);
+
+
+  
+						// text illesztés canvasra
+						var scale =  kepmeret / $('#editDivToCanvas').width();
+						var szoveg = $rootScope.editIdezet;
+						var eredetiWidth = $('#editDivToCanvas').width() * 0.9;
+						var ujWidthScale = $('#editDiv').width() / eredetiWidth;
+						var text = "„"+szoveg.idezet+"”";
+						var marginLeft = ($('#editDiv').width() / ujWidthScale * 0.05) * scale;
+						var marginTop = ($('#editDiv').width() / ujWidthScale * 0.05) * scale;
+						var posLeft = 0;
+						var posTop = 0;
+						if ($('#editDiv').css('left') != 'auto')
+							posLeft = parseFloat($('#editDiv').css('left').replace('px', '')) * scale;
+						if ($('#editDiv').css('top') != 'auto')
+							posTop = parseFloat($('#editDiv').css('top').replace('px', '')) * scale;
+						var width = $('#editDiv').width() * scale; 
+						var maxWidth = $('#editDiv').width() * scale;
+						var height = $('#editDiv').height() * scale;
+						var fontFamily = szoveg.edit.fontFamily;
+						var fontSize = szoveg.edit.fontSize * scale + "px";
+						var fontColour = szoveg.edit.fontColor;
+						ctx.font = fontSize + " " + fontFamily;
+						ctx.textAlign = "center";
+						ctx.fillStyle = fontColour;
+						ctx.shadowColor = "black";
+						ctx.shadowOffsetX = 1;
+						ctx.shadowOffsetY = 1;
+						
+						 
+						
+
+						//idézet illesztés
+						
+						
+						
+						var szerzoSor = 0;
+					
+					
+						if (ctx.measureText(text).width < maxWidth) {
+						
+							ctx.fillText(text, 7 + posLeft + marginLeft + (width / 2), posTop + marginTop + 2 + ((0 + 1) * parseInt(fontSize, 0)));							
+							szerzoSor += 1;
+						} else {
+							var words = text.split(' '), lines = [], line = "";
+							
+							while (words.length > 0) {
+								while (ctx.measureText(words[0]).width >= maxWidth) {
+									var tmp = words[0];
+									words[0] = tmp.slice(0, -1);
+									if (words.length > 1) {
+										words[1] = tmp.slice(-1) + words[1];
+									} else {
+										words.push(tmp.slice(-1));
+									}
+								}
+								if (ctx.measureText(line + words[0]).width < maxWidth) {
+									line += words.shift() + " ";
+								} else {
+									lines.push(line);
+									line = "";
+								}
+								if (words.length === 0) {
+									lines.push(line);
+								}
+							}					
+							
+							lines.forEach(function(line, i) {
+								ctx.fillText(line, 7 + posLeft + marginLeft + (width / 2), posTop + marginTop + 2 + ((i + 1) * parseInt(fontSize, 0)));
+								szerzoSor += 1;
+							}); 
+
+						}
+
+						
+					
+						
+						//szerző illesztés
+						ujfontSize = (szoveg.edit.fontSize - 5) * scale + "px";
+						ctx.font = ujfontSize + " " + fontFamily;
+						var words = szoveg.kitol.split(' '), lines = [], line = "";
+						
+						
+						if (ctx.measureText(text).width < maxWidth) {
+
+							ctx.fillText(szoveg.kitol, 7 + posLeft + marginLeft + (width / 2), posTop + marginTop + 12 + ((szerzoSor + 0 + 1) * parseInt(fontSize, 0)));
+
+						} else {
+							while (words.length > 0) {
+								while (ctx.measureText(words[0]).width >= maxWidth) {
+									var tmp = words[0];
+									words[0] = tmp.slice(0, -1);
+									if (words.length > 1) {
+										words[1] = tmp.slice(-1) + words[1];
+									} else {
+										words.push(tmp.slice(-1));
+									}
+								}
+								if (ctx.measureText(line + words[0]).width < maxWidth) {
+									line += words.shift() + " ";
+								} else {
+									lines.push(line);
+									line = "";
+								}
+								if (words.length === 0) {
+									lines.push(line);
+								}
+							}
+							lines.forEach(function(line, i) {
+								ctx.fillText(line, 7 + posLeft + marginLeft + (width / 2), posTop + marginTop + 12 + ((szerzoSor + i + 1) * parseInt(fontSize, 0)));
+							});
+						}
+						
+						
+						
+						
+					
+						
+						$scope.sharingImage = false;
+						
+						
+
+						
+						$rootScope.imageUri = extra_canvas.toDataURL('image/jpeg');
+						
+						$("<img/>").attr("src", $rootScope.imageUri).load(function() {
+							s = {
+								w : this.width,
+								h : this.height
+							};
+							$scope.buyImageParams.kisKepWidth = s.w;
+							$scope.buyImageParams.kisKepHeight = s.h;
+							//
+							 
+							$scope.buyImageParams.idezetText = szoveg.idezet;
+							$scope.buyImageParams.idezetSzerzo = szoveg.kitol;
+							$scope.buyImageParams.idezetColor = szoveg.edit.fontColor;
+							$scope.buyImageParams.idezetFont = szoveg.edit.fontFamily;
+							$scope.buyImageParams.idezetSize = szoveg.edit.fontSize;
+							 
+						
+							 
+							 
+							$scope.buyImageParams.mobilMeret = $('#editDivToCanvas').width();
+							
+							
+							$scope.buyImageParams.textBoxSize =  $('#editDiv').width();
+							$scope.buyImageParams.textBoxMarginTop =  parseFloat($('#editDiv').css('top').replace('px', ''));
+							$scope.buyImageParams.textBoxMarginLeft =  parseFloat($('#editDiv').css('left').replace('px', ''));
+							
+							
+							$scope.buyImageParams.vaszonFilter =  $rootScope.filters[$scope.filterSelect] || 'reset' ;
+							$scope.buyImageParams.vaszonBlur =  $rootScope.editIdezet.blur;
+							
+							console.log('<!-- az elküldött adatok');
+							//console.log($scope.buyImageParams);
+							console.log('-->');
+							
+							//alert('képek a kosárba');
+							
+							
+						
+							
+							
+							
+							var vaszonKepParams = $scope.buyImageParams;
+							$scope.buyImageParams = {};
+							
+							
+							$scope.kosar.push({
+								kep : $rootScope.imageUri,
+								ar : 4990,
+								osszar : 4990,
+								db : 1,
+								vaszonKep : vaszonKepParams
+							});
+							
+							$scope.setSlide(9);
+							$scope.$apply();
+							
+							/*
+							$.ajax({
+								type : "POST",
+								url : "http://10.0.0.134/createimage/kepide.php",
+								data : angular.toJson($scope.buyImageParams),
+								error : function(request, error) {
+									alert('valami hiba');
+									console.log(request);
+									console.log(error);
+	
+								},
+								success : function(data) {
+	
+									console.log(data);	
+										
+									alert('a válasz a konzolon');
+									
+									
+									
+									var adatok = JSON.parse(data);
+									
+									console.log(adatok);
+	
+									
+	
+								}
+							});
+							*/
+			
+							
+							
+						}); 
+									
+						
+						
+					
+						$scope.$apply(); 
+
+
+					};
+
+					//ez azért kell hogy, újjra lefusson, mégha nem is változott src
+
+					if (document.getElementById('fullImage')) {
+						document.getElementById("hereAppend").removeChild(document.getElementById('fullImage'));
+					}
+					document.getElementById("hereAppend").appendChild(imageObj);
+					
+						
+					if (document.getElementById('filteredPhoto')) {
+						
+					
+						var picikep = document.getElementById('filteredPhoto');
+						$('#filteredPhoto').remove();
+						
+						$scope.keszKepParams.effekt = $rootScope.filters[$scope.filterSelect];
+						
+						ApplyEffects[$rootScope.filters[$scope.filterSelect]](imageObj, 'jpeg', function() {
+							
+							logo.src = 'css/idezet_logo_pici.png';
+						});
+
+					} else {
+						
+						logo.src = 'css/idezet_logo_pici.png';
+						
+					};
+
+
+				
+					
+					
+
+					
+
+				};
+
+				imageObj.id = 'fullImage';
+				imageObj.src = $rootScope.editIdezet.fullBackImage;
+				
+				$scope.keszKepParams.hatter = $rootScope.editIdezet.fullBackImage;
+				
+
+			}, 100);
+
+		};
+
+		$scope.megrendelem = function(szallitas) {
+			
+		
+				
+			if (szallitas) {
+				
+				
+				$scope.adatok.szallitasNev = $scope.adatok.szamlaNev;
+				$scope.adatok.szallitasOrszag = $scope.adatok.szamlaOrszag;
+				$scope.adatok.szallitasISZ = $scope.adatok.szamlaISZ;
+				$scope.adatok.szallitasTelepules = $scope.adatok.szamlaTelepules;
+				$scope.adatok.szallitasUtcaHaz = $scope.adatok.szamlaUtcaHaz;
+				
+				var vegOsszeg = 0;	
+				$.each($scope.kosar, function(index, value) {
+					vegOsszeg += value.osszar;
+				}); 
+				$scope.adatok.vegOsszeg = vegOsszeg;
+				
+			}
+			
+			
+			
+				
+			$.ajax({
+				type : "POST",
+				url : "http://10.0.0.134/createimage/kepide.php",
+				data :  angular.toJson({'kepek' : $scope.kosar,'rendeles' : $scope.adatok}),
+				error : function(request, error) {
+					alert('valami hiba');
+					console.log(request);
+					console.log(error);
+	
+				},
+				success : function(data) {
+	
+					console.log(data);
+					alert('Rendelés leadva');
+	
+					//alert(key + '. megrendelve');
+	
+				}
+			}); 
+ 			
+			
+			
+		
+		};
+		
 		
 		$scope.changeBlur= function() {
        		console.log($rootScope.editIdezet.blur);       		
@@ -2756,74 +3077,30 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			$scope.filterSelect = index;
 			
 			
+			$('#idezetHatter').attr('src', $rootScope.filteredImages[$scope.filterSelect + 1]);
+			
+			
+			$scope.filtering = false;
+			
+			/*
 			$timeout(function() {
 				var kep = document.getElementById('idezetHatter');
 
 				ApplyEffects[$rootScope.filters[$scope.filterSelect]](kep, 'jpeg', function() {
-					$scope.filtering = false;
+					
 					$('#filteredPhoto').addClass('hatterIdezet');
 					$('.hatter').css('filter', 'blur(' + $rootScope.editIdezet.blur + 'px)').css('webkitFilter', 'blur(' + $rootScope.editIdezet.blur + 'px)').css('mozFilter', 'blur(' + $rootScope.editIdezet.blur + 'px)').css('oFilter', 'blur(' + $rootScope.editIdezet.blur + 'px)').css('msFilter', 'blur(' + $rootScope.editIdezet.blur + 'px)');
 					$scope.$apply();
 				});
 			}, 500); 
+*/
 
-			$rootScope.gaPlugin.trackEvent( $rootScope.successHandler, $rootScope.errorHandler, $scope.userid, "Filtert alkalmaz : "+$rootScope.filters[$scope.filterSelect], new Date() , 1);
-		 
+			//$rootScope.gaPlugin.trackEvent( $rootScope.successHandler, $rootScope.errorHandler, $scope.userid, "Filtert alkalmaz : "+$rootScope.filters[$scope.filterSelect], new Date() , 1);
+		 	
 			 
 		};
 		
-			
-		$rootScope.filtersFunctions = [
 	
-		function(callback) {//normál pipa
-			
-			Caman('#fullImage', function() {					
-				this.vintage();
-				this.render(function(){
-					alert('mehet');
-					callback();
-				});
-			});
-	
-		},
-	
-		function(callback) {//grayscale(1) pipa
-			texture = canvasFiltered.texture(document.getElementById('fullImage'));
-			canvasFiltered.draw(texture).hueSaturation(0, -1).update();
-			callback();
-		},
-		function(callback) {//sepia(1) pipa
-			texture = canvasFiltered.texture(document.getElementById('fullImage'));
-			canvasFiltered.draw(texture).draw(texture).sepia(1).update();
-			callback();
-		},
-		function(callback) {//saturate(4) pipa
-			texture = canvasFiltered.texture(document.getElementById('fullImage'));
-			canvasFiltered.draw(texture).hueSaturation(0, 0.65).update();
-			callback();
-		},
-		function(callback) {//hue-rotate(90deg) pipa
-			texture = canvasFiltered.texture(document.getElementById('fullImage'));
-			canvasFiltered.draw(texture).hueSaturation(0.50, 0).brightnessContrast(0.1, 0.1).update();
-			callback();
-		},
-	
-		function(callback) {//brightness(.5) pipa
-			texture = canvasFiltered.texture(document.getElementById('fullImage'));
-			canvasFiltered.draw(texture).brightnessContrast(-0.5, -0.3).update();
-			callback();
-		},
-		function(callback) {//contrast(3) pipa
-			texture = canvasFiltered.texture(document.getElementById('fullImage'));
-			canvasFiltered.draw(texture).brightnessContrast(0, 0.75).update();
-			callback();
-		},
-		function(callback) {//contrast(1.4) saturate(1.8) sepia(.6) pipa
-			texture = canvasFiltered.texture(document.getElementById('fullImage'));
-			canvasFiltered.draw(texture).brightnessContrast(0, 0.35).hueSaturation(0, 0.32).sepia(0.6).update();
-			callback();
-		}]; 
-
 
 
 
@@ -2943,7 +3220,42 @@ document.addEventListener("deviceready", onDeviceReady, false);
 			$scope.pixabayCimke = $scope.searchText;
 		};
 		
-		$scope.pixabayCimke = 'szerelem';
+		//$scope.pixabayCimke = 'szerelem';
+		$scope.stackInput = $scope.pixabayCimke;
+		
+	
+		var USERNAME = 'lukacsisz0';
+		var API_KEY = 'a66d2574021173e56c50';
+		var URL = "http://pixabay.com/api/?username=" + USERNAME + "&key=" + API_KEY + "&q=" + encodeURIComponent($scope.pixabayCimke) + "&min_width=1920&min_height=1&lang=hu&response_group=high_resolution&image_type=photo&page=1";
+
+		$scope.pixaImages = [];
+		$http.get(URL).success(function(data) {
+
+			if (parseInt(data.totalHits) > 0) {
+				$.each(data.hits, function(i, hit) {
+					var image = {};
+					image.megjelenit = hit.webformatURL;
+					image.betolt = hit.imageURL;
+										
+					$scope.pixaImages.push(image);
+				});
+			} else {
+				console.log('No hits');
+			}
+
+		});
+
+	};	
+	
+	$scope.keresStack = function(stackinput) {
+
+		
+		
+		
+	
+		$scope.pixabayCimke = stackinput;
+
+		
 	
 		var USERNAME = 'lukacsisz0';
 		var API_KEY = 'a66d2574021173e56c50';
@@ -3053,7 +3365,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 						
 			$rootScope.editIdezet.edit.fontColor  =  $rootScope.editIdezet.edit.fontColor || 'black';
 			
-			//$rootScope.editIdezet.backImage = "js/effects/bokeh-stars.png" 
+			//$rootScope.editIdezet.backImage = "css/enteriorkep/enterior.jpg" 
 						
 				
 			$scope.lastPage = $scope.page;
@@ -3145,6 +3457,10 @@ document.addEventListener("deviceready", onDeviceReady, false);
 	
 	
 	$rootScope.filters = [];
+	
+	
+	
+	
 	$rootScope.filters.push('reset');
 	$rootScope.filters.push('sumie');
 	$rootScope.filters.push('fluor'); 
@@ -3153,6 +3469,17 @@ document.addEventListener("deviceready", onDeviceReady, false);
 	$rootScope.filters.push('memphis');
 	$rootScope.filters.push('lotus');
 	$rootScope.filters.push('phykos');
+	
+	$rootScope.filters.push('filter0');
+	$rootScope.filters.push('filter1');
+	$rootScope.filters.push('filter2');
+	$rootScope.filters.push('filter3');
+	$rootScope.filters.push('filter4');
+	$rootScope.filters.push('filter5');
+	$rootScope.filters.push('filter6');
+	$rootScope.filters.push('filter7');
+	$rootScope.filters.push('filter8');
+	$rootScope.filters.push('filter9');
 
  
 
@@ -3324,6 +3651,9 @@ document.addEventListener("deviceready", onDeviceReady, false);
 		
 			$timeout(function() {
 
+			
+				
+				
 				var $frame = $('.frameFilter');
 				var $wrap = $frame.parent();
 
@@ -3379,14 +3709,57 @@ document.addEventListener("deviceready", onDeviceReady, false);
 					$rootScope.editIdezet.edit.filter = $rootScope.filters[itemIndex];
 					$rootScope.editIdezet.filterIndex = itemIndex;
 					
-
+					$scope.applyFilter(itemIndex);
 					// 'load'
 
 				}); 
+				
+				
+				$('#filterekLoading').show();
+			
+				$scope.$apply();
+					
+				$rootScope.filteredImages = [];
+	
+				$rootScope.filteredImages.push($('#idezetHatter').attr('src'));
+				
+				
+				var kep = document.getElementById('idezetHatter');
+				var amitVisszaKellRakni = kep.src;
+				
+				kep.src = $rootScope.imageToFilter;
+	
+				var i = 0;
+				while (i < $rootScope.filters.length) {
+					var filter = $rootScope.filters[i];
+	
+					
+	
+					ApplyEffects[filter](kep, 'jpeg', function() {
+	
+						$rootScope.filteredImages.push($('#filteredPhoto').attr('src'));
+						$('#' + filter).attr("src", $('#filteredPhoto').attr('src'));
+						i++;
+	
+					});
+	
+				}
+	
+				kep.src = amitVisszaKellRakni;
+				$('#idezetHatter').show();
+				
+				$('#filteredPhoto').hide();
+				
+				
+				//szűrőkbetölése felirat levétele..
+				
+				
+				$('#filterekLoading').hide();
+				
+				
 
-
-
-
+				
+				
 			}, 10);
 
 
@@ -3563,22 +3936,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 		
 		
 		if (i == 1) {
-			console.log($scope.kedvencek)
-		
-		
-			$scope.kedvencek.unshift({
-				'idezet' : 'Minden férfi életében eljön az a pillanat, amikor megmondják neki, hogy melyik nap, hány órára legyen felöltözve és megborotválkozva.',
-				'kitol' : 'Barna László Lagziguru',
-				'cimke' : 'szeret szeret szeret'
-			});
 			
-			$scope.kedvencek.unshift({
-				'idezet' : 'Anyu mindig azt mondta: Az eszed ott legyen, ahol te vagy! Tulajdonképpen ennyit elég is betartani és megtanítani a saját gyerekemnek. A többit már hozza magával, ha ott vagyok, ahol az eszem van!',
-				'kitol' : '   ',
-				'cimke' : 'szeret szeret szeret'
-			
-			});
-		
 			$(".doubleTapp").swipe("destroy");
 			$(".doubleTapp").swipe({
 				tap: function(){},
@@ -3605,7 +3963,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
         }else if (i == 3 && $rootScope.editIdezet.idezet.length > 5) {
 
-				$scope.nincsVissza = true;
+				//$scope.nincsVissza = true;
 			
 				$timeout(function() {
 					
@@ -3714,12 +4072,23 @@ document.addEventListener("deviceready", onDeviceReady, false);
 		}else if(i == 8){
 			$ionicSlideBoxDelegate.enableSlide(false);
 		}else if(i == 9){
-			$ionicSlideBoxDelegate.enableSlide(false);
+			$ionicSlideBoxDelegate.enableSlide(false);		
+		}else if(i == 10){
+			
+			
+			$('#rendelesScroll').animate({
+				scrollTop : 0
+			}, '200', 'swing', function() {
+
+			}); 
+
 			
 			
 		}  else {
 			
 			$ionicSlideBoxDelegate.enableSlide(true);
+			
+			
 			
 			
 		}
@@ -3731,7 +4100,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 	
 		
 	};    
-     
+    
  
 });
 

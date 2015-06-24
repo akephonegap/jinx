@@ -19,6 +19,25 @@
 		border-color: {{themeColor}};
 	}
 
+	* {
+		box-shadow: none;
+		outline: none;
+	}
+
+	.toggle.toggle-positive input:checked + .track {
+	    border-color: {{themeColor}};
+	    background-color: {{themeColor}};
+	}
+	
+	
+	input:invalid {
+		border: 2px solid white;
+	}
+
+	.invalid {
+		border: 2px solid red;
+	}
+
 	.button.button-positive.button-outline {
 		border-color: {{themeColor}};
 		color: {{themeColor}};
@@ -163,7 +182,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize                                                                     + 'px'
+		font-size: {{editIdezet.edit.fontSize                                                                                           + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize + 'px'	}};
 	}
@@ -176,7 +195,7 @@
 		overflow: visible;
 		color: {{editIdezet.edit.fontColor}};
 		font-family: {{editIdezet.edit.fontFamily}};
-		font-size: {{editIdezet.edit.fontSize-5                                                                     + 'px'
+		font-size: {{editIdezet.edit.fontSize-5                                                                                           + 'px'
 	}};
 	line-height : {{editIdezet.edit.fontSize-5 + 'px'
 	}};
@@ -221,6 +240,9 @@
 			<button id="visszaNyil" ng-if="page==3 && !nincsVissza && (editIdezet.idezet != '' || editIdezet.kitol != '')"  ng-click="showHatterLehetoseg(false); display('fomenu',true)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
 				<i class="icon ion-arrow-left-c "></i>
 			</button>
+			<button ng-if="page==10"   ng-click="setSlide(9)" class="button button-clear button-positive pink"  style="font-family: 'Courgette'">
+				<i class="icon ion-arrow-left-c "></i>
+			</button>
 
 			<h1  class="title " style="height: 44px;margin-top: 0px;font-family: 'Courgette', cursive;" ><img class="coloredImage"  width="150em"  src="css/idezet_logo_ekezetteljes.png" /></h1>
 			<button  ng-click="toggleMenu()" class="button button-clear button-positive pink" >
@@ -238,10 +260,17 @@
 		<div class="tabs-striped tabs-bottom  hide-on-keyboard-open" ng-if="page == 3 && editIdezet.idezet != ''"  >
 			<div class="tabs tabs-icon-top"  >
 				<a class="tab-item active" ng-click=" setSlide(lastPage);"  style="border: none" > <i ng-if="lastPage == 0" class="icon ion-search" style="font-size: 40px"></i><i ng-if="lastPage == 1" class="icon ion-ios-heart" style="font-size: 40px;"></i><i ng-if="lastPage == 2" class="icon ion-calendar" style="font-size: 40px"></i> </a>
-				<!-- <i class="icon ion-arrow-left-c" style="font-size: 40px"></i> -->
-				<md-button  class="tab-item transparent" ></md-button>
-				<md-button ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"  class="tab-item transparent "  ng-click="kepetKeszit2()">
-					<i style="font-size: 40px" class="icon ion-ios-download pink"></i>
+				<!-- <i class="icon ion-arrow-left-c" style="font-size: 40px"></i>
+
+				<md-button ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"  class="tab-item transparent "  ng-click="kepetKeszit3()">
+				<i style="font-size: 40px" class="icon ion-beer pink"></i>
+				</md-button><md-button ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"  class="tab-item transparent "  ng-click="kepetKeszit2()">
+				<i style="font-size: 40px" class="icon ion-ios-download pink"></i>
+				</md-button>
+				-->
+				<md-button class="tab-item pulse"></md-button>
+				<md-button style="border: none" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"  class="tab-item transparent "  ng-click="kepetvesz()">
+					<i style="font-size: 40px" class="icon ion-android-cart pink"></i>
 				</md-button>
 				<!-- <a style="position: absolute;right: 65px;border: none" class="tab-item pulse" ng-class="[!editIdezet.backImage || !editIdezet.bezar ? 'disabled' : 'active']"   ng-click="setSlide(9)" > <i style="font-size: 40px" class="icon ion-android-cart pink"></i></a> -->
 
@@ -710,7 +739,7 @@
 						</div>
 					</div>
 
-					<div class="szovegFont tabs" class="tabs tabs-icon-top"   style="top:10px;display: none">
+					<div class="szovegFont tabs" class="tabs tabs-icon-top"   style="top:10px;display: none;border: none">
 						<div class="row" style="padding: 0px">
 
 							<div class="col " style="padding: 0px; ">
@@ -757,16 +786,18 @@
 					</div>
 
 					<div class="filter tabs tabs-icon-top"  style="top:7px;display: none">
-						<div class="row" style="padding: 0px">
+
+						<div id="filterekDiv"  class="row" style="padding: 0px;" >
 							<div class="col " style="padding: 0px; ">
 								<div class="jeloloNegyzet transparent" style="margin: auto auto"></div>
 							</div>
 							<div class="col" style="padding: 0px;position: absolute; top : 0px; right : 0px">
 
 								<div class="frame frameFilter" style="height: 50px;" >
-									<ul class="slidee transparent" >
+
+									<ul  class="slidee transparent"  >
 										<li   class="szinesKocka " style="margin: 5px;margin-top: 6px;float:left ;text-align: center ; "  ng-repeat="t in filters"  >
-											<img ng-click="applyFilter($index)" src="css/filters/{{t}}.jpg"  width="40px"  height="40px"/>
+											<img id="{{t}}"  src="{{editIdezet.backImage}}"  width="40px"  height="40px"/>
 										</li>
 
 									</ul>
@@ -776,6 +807,10 @@
 
 						</div>
 
+					</div>
+
+					<div class="filter tabs tabs-icon-top" id="filterekLoading" class="fomenu tabs tabs-icon-top"  style="text-align: center;padding: 0px;top:7px;height : 55px;z-index: 800;display: none" >
+						Szűrők betöltése...
 					</div>
 
 					<div class="filter tabs" style="top:60px;position: absolute; width: 100%;display: none;border: none"   >
@@ -815,7 +850,7 @@
 					</div>
 
 					<div ng-class="[!editIdezet.bezar ? '' : 'hidden']"  id="valasszHatteret"  >
-						<div class="backdrop visible backdrop-loading active" style="position: absolute;top: 110px;background-color: rgba(255, 255, 255, 1); max-width: 600px;z-index: 200; ">
+						<div class="backdrop visible backdrop-loading active" style="position: absolute;top: 90px;background-color: rgba(255, 255, 255, 1); max-width: 600px;z-index: 200; ">
 
 							<div id="selectHatter"    style="width: 100%"    >
 
@@ -827,18 +862,21 @@
 
 							<div id="hatterLehetoseg" style="width: 100%;display: none"    >
 								<div class="row" style="float: right">
-									<div class="col">
-
+									<div class="col col-33">
+										<img src="css/selectBackground.png"  class="coloredImage" width="30px" height="80x"  />
+										<p class="pink" style="width: 200px ;font-size: 23px ;text-align: center ;left: -60px;top : -10px;position: relative">
+											Képek
+										</p>
 									</div>
-									<div class="col">
+									<div class="col col-33">
 										<img src="css/selectBackground.png"  class="coloredImage" width="50px" height="120x"  />
-										<p class="pink" style="width: 200px ;font-size: 23px ;text-align: center ;left: -50px;top : -10px;position: relative">
+										<p class="pink" style="width: 200px ;font-size: 23px ;text-align: center ;left: -60px;top : -10px;position: relative">
 											Saját album
 										</p>
 									</div>
-									<div class="col">
+									<div class="col col-33">
 										<img  src="css/selectBackground.png" class="coloredImage" width="70px" height="160px"  />
-										<p  class="pink" style="width: 200px ;font-size: 23px ;text-align: center;left: -55px;top : -10px;position: relative">
+										<p  class="pink" style="width: 200px ;font-size: 23px ;text-align: center;left: -60px;top : -10px;position: relative">
 											Fotókészítés
 										</p>
 									</div>
@@ -1174,7 +1212,7 @@
 			<!-- ez a 9. slide, kosár -->
 			<ion-slide class="blogBejegyzes"  >
 
-				<md-content class="blogBejegyzes"  style="height: 70em;padding: 10px;padding-top: 10px; text-align: center" >
+				<md-content class="blogBejegyzes"  style="height: 70em;padding: 0px;padding-top: 10px; text-align: center" >
 
 					<div >
 						<h2 style="margin-bottom: 10px;font-family: Courgette;text-align: center">Kosár</h2>
@@ -1185,10 +1223,10 @@
 						<div class="col col-30">
 							Kép
 						</div>
-						<div class="col col-35">
+						<div class="col col-40">
 							Mennyiség
 						</div>
-						<div class="col col-25">
+						<div class="col col-20">
 							Ár
 						</div>
 						<div class="col col-10">
@@ -1200,28 +1238,30 @@
 					<md-list >
 						<div class="row"  ng-repeat="kep in kosar" style="text-align : center;height : 100px;margin-top: 5px" >
 							<div class="col col-30"    >
-								<img src="{{kep.kep}}" style="max-width:80px;max-height: 80px;">
+								<img ng-click="kosarTartamOpen()" src="{{kep.kep}}" style="max-width:80px;max-height: 80px;">
 							</div>
 
-							<div class="col col-35" style="text-align : center ;padding : 25px 0px ;">
+							<div class="col col-40" style="text-align : center ;padding : 25px 0px ;">
+								<div style="width: 100px;height: 80px;margin: auto">
+									<span ng-click="setKosarDarabszam(kep, -1)"  style="float : left ;margin : 3px 5px ;;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-minus-outline"></i> </span>
 
-								<span ng-click="setKosarDarabszam(kep, -1)"  style="float : left ;margin : 3px 5px ;;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-minus-outline"></i> </span>
+									<div class="pink"   style="float : left ;border : 1px solid ;color: black;height: 30px;width: 30px;line-height: 30px;text-align: center">
+										{{kep.db}}
+									</div>
 
-								<div class="pink"   style="float : left ;border : 1px solid ;color: black;height: 30px;width: 30px;line-height: 30px;text-align: center">
-									{{kep.db}}
+									<span ng-click="setKosarDarabszam(kep , 1)"   style="float : left ;margin : 3px 5px ;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-plus-outline"></i> </span>
+
 								</div>
 
-								<span ng-click="setKosarDarabszam(kep , 1)"   style="float : left ;margin : 3px 5px ;border: none;color: black;font-size: 25px"> <i class="icon ion-ios-plus-outline"></i> </span>
-
 							</div>
 
-							<div ng-if="kep.db == 1" class="col col-25" style="padding : 30px 0px ;"  >
+							<div ng-if="kep.db == 1" class="col col-20" style="padding : 30px 0px ;"  >
 								<z  >
 									{{kep.db * kep.ar}},-
 								</z>
 							</div>
 
-							<div ng-if="kep.db > 1" class="col col-25" style="padding : 20px 0px ;"  >
+							<div ng-if="kep.db > 1" class="col col-20" style="padding : 20px 0px ;"  >
 								<z  style="text-decoration: line-through;  ">
 									{{kep.db * kep.ar}},-
 								</z>
@@ -1230,7 +1270,7 @@
 								</z>
 							</div>
 
-							<div class="col col-10"  sng-click="deleteFromKosar($index)"  style="padding : 25px 0px ;"  >
+							<div class="col col-10"  ng-click="deleteFromKosar($index)"  style="padding : 25px 0px ;"  >
 								<span   style="border: none;color: black;font-size: 30px"> <i class="icon ion-trash-a"></i> </span></h2>
 							</div>
 
@@ -1238,14 +1278,336 @@
 
 					</md-list >
 
-					<button ng-click="oneMoreKep()"  class="button button-outline button-positive" style="margin: 10px">
-						<i class="icon ion-image "></i> Új kép készítése
-					</button>
-
 					<div class="pink" style="text-align : right;border-top: 1px solid;font-size: 20px;padding-top: 10px">
-						Összesen : {{kosar | sumOfTwoValues:'db':'osszar'}},-
+
+						<div class="row pink"  style="border-bottom: 1px solid;" >
+							<div class="col col-30" style="text-align: left">
+								Összesen
+							</div>
+							<div class="col col-40" style="text-align: center">
+								{{kosar | sumOfTwoValues:'db':'db'}} db
+							</div>
+							<div class="col col-30">
+								{{kosar | sumOfTwoValues:'db':'osszar'}},-
+							</div>
+
+						</div>
+					</div>
+					<div style="padding: 10px">
+
+						<button ng-click="oneMoreKep()"  class="button button-block button-outline button-positive" >
+							<i class="icon ion-image "></i> Új kép készítése
+						</button>
+						<button ng-click="setSlide(10)"  class="button button-block button-outline button-positive" >
+							<i class="icon ion-ios-compose " ></i> Tovább a megrendeléshez
+						</button>
 					</div>
 
+					<div style="height:50em;"></div>
+				</md-content>
+			</ion-slide>
+
+			<!-- ez a 10. slide, szállitási adatok -->
+			<ion-slide class="blogBejegyzes"  >
+
+				<md-content id="rendelesScroll" class="blogBejegyzes"  style="height: 70em;padding: 0px;padding-top: 10px; text-align: center" >
+
+					<form name="myForm">
+						<div >
+							<h2 style="margin-bottom: 10px;font-family: Courgette;text-align: center">Személyes adatok</h2>
+
+						</div>
+
+						<div class="list list-inset">
+							<label class="item item-input"> <i class="icon ion-person placeholder-icon"></i>
+								<input type="text" style="padding: 5px;margin: 2px"
+								name="szemelyesNev"
+								ng-model="adatok.nev"
+								ng-minlength="5"
+								ng-maxlength="30"
+								required
+								placeholder="Név" />
+							</label>
+							<div ng-show="myForm.szemelyesNev.$touched" ng-messages="myForm.szemelyesNev.$error" style="color:red" role="alert">
+								<div ng-message="required">
+									A név megadása kötelező
+								</div>
+								<div ng-message="minlength">
+									A név túl rövid
+								</div>
+								<div ng-message="maxlength">
+									A név túl hosszú
+								</div>
+							</div>
+
+							<label class="item item-input"> <i class="icon ion-android-call placeholder-icon"></i>
+								<input type="tel" style="padding: 5px;margin: 2px"
+								name="szemelyesTelefon"
+								ng-model="adatok.tel"
+								required
+								placeholder="Telefonszám" />
+							</label>
+							<div ng-show="myForm.szemelyesTelefon.$touched" ng-messages="myForm.szemelyesTelefon.$error" style="color:red" role="alert">
+								<div ng-message="required">
+									A telefonszám megadása kötelező
+								</div>
+							</div>
+
+							<label class="item item-input"> <i class="icon ion-email placeholder-icon"></i>
+								<input type="email" class="unsubmited" style="padding: 5px;margin: 2px"
+								name="szemelyesEmail"
+								ng-model="adatok.email"
+								required
+								placeholder="Email"
+
+								/>
+							</label>
+							<div ng-show="myForm.szemelyesEmail.$touched" ng-messages="myForm.szemelyesEmail.$error" style="color:red" role="alert">
+
+								<div ng-message="required">
+									Az email megadása kötelező
+								</div>
+								<div ng-message="email">
+									Az email formátuma nem megfelelő
+								</div>
+
+							</div>
+
+
+						
+							
+							
+
+						</div>
+						<div >
+							<h2 style="margin-bottom: 10px;font-family: Courgette;text-align: center">Számlázási cím</h2>
+
+						</div>
+
+						<div class="list list-inset">
+							<label class="item item-input"> <i class="icon ion-person placeholder-icon"></i>
+								<input type="text" style="padding: 5px;margin: 2px"
+								name="szamlaNev"
+								ng-model="adatok.szamlaNev"
+								ng-minlength="5"
+								ng-maxlength="30"
+								required
+								placeholder="Név" />
+							</label>
+							<div ng-show="myForm.szamlaNev.$touched" ng-messages="myForm.szamlaNev.$error" style="color:red" role="alert">
+								<div ng-message="required">
+									A név megadása kötelező
+								</div>
+								<div ng-message="minlength">
+									A név túl rövid
+								</div>
+								<div ng-message="maxlength">
+									A név túl hosszú
+								</div>
+							</div>
+
+							<label class="item item-input"> <i class="icon ion-earth placeholder-icon"></i>
+								<input type="tel" style="padding: 5px;margin: 2px"
+								name="szamlaOrszag"
+								ng-model="adatok.szamlaOrszag"
+								required
+								placeholder="Ország" />
+							</label>
+							<div ng-show="myForm.szamlaOrszag.$touched" ng-messages="myForm.szamlaOrszag.$error" style="color:red" role="alert">
+								<div ng-message="required">
+									Az ország megadása kötelező
+								</div>
+							</div>
+
+							<label class="item item-input"> <i class="icon ion-home placeholder-icon"></i>
+								<input type="number" class="unsubmited" style="padding: 5px;margin: 2px"
+								name="szamlaISZ"
+								ng-model="adatok.szamlaISZ"
+								required
+								placeholder="Irányitószám"
+
+								/>
+							</label>
+							<div ng-show="myForm.szamlaISZ.$touched" ng-messages="myForm.szamlaISZ.$error" style="color:red" role="alert">
+
+								<div ng-message="required">
+									Az irányitószám megadása kötelező
+								</div>
+								<div ng-message="number">
+									Az irányitószám csak számokat tartalmazhat
+								</div>
+
+							</div>
+
+							<label class="item item-input"> <i class="icon ion-home placeholder-icon"></i>
+								<input type="text"  style="padding: 5px;margin: 2px"
+								name="szamlaTelepules"
+								ng-model="adatok.szamlaTelepules"
+								required
+								placeholder="Település"
+
+								/>
+							</label>
+
+							<div ng-show="myForm.szamlaTelepules.$touched" ng-messages="myForm.szamlaTelepules.$error" style="color:red" role="alert">
+
+								<div ng-message="required">
+									A település  megadása kötelező
+								</div>
+						
+
+							</div>
+							
+							<label class="item item-input"> <i class="icon ion-home placeholder-icon"></i>
+								<input type="text"  style="padding: 5px;margin: 2px"
+								name="szamlaUtcaHaz"
+								ng-model="adatok.szamlaUtcaHaz"
+								required
+								placeholder="Utca, házszám"
+
+								/>
+							</label>
+
+							<div ng-show="myForm.szamlaTelepules.$touched" ng-messages="myForm.szamlaTelepules.$error" style="color:red" role="alert">
+
+								<div ng-message="required">
+									Az utca és a házszám megadása kötelező
+								</div>
+								
+
+							</div>
+							
+							
+						
+						
+						
+
+						</div>
+
+						<li class="item item-toggle" style="border: none">
+							A szállítási cím is ez
+							<label class="toggle toggle-positive" >
+								<input ng-model="szallitas"  type="checkbox">
+								<div class="track">
+									<div class="handle"></div>
+								</div> </label>
+						</li>
+
+						<div ng-if="!szallitas" >
+							<h2 style="margin-bottom: 10px;font-family: Courgette;text-align: center">Szállítási cím</h2>
+
+						</div>
+
+						<div ng-if="!szallitas" class="list list-inset">
+							<label class="item item-input"> <i class="icon ion-person placeholder-icon"></i>
+								<input type="text" style="padding: 5px;margin: 2px"
+								name="szallitasNev"
+								ng-model="adatok.szallitasNev"
+								ng-minlength="5"
+								ng-maxlength="30"
+								required
+								placeholder="Név" />
+							</label>
+							<div ng-show="myForm.szallitasNev.$touched" ng-messages="myForm.szallitasNev.$error" style="color:red" role="alert">
+								<div ng-message="required">
+									A név megadása kötelező
+								</div>
+								<div ng-message="minlength">
+									A név túl rövid
+								</div>
+								<div ng-message="maxlength">
+									A név túl hosszú
+								</div>
+							</div>
+
+							<label class="item item-input"> <i class="icon ion-earth placeholder-icon"></i>
+								<input type="tel" style="padding: 5px;margin: 2px"
+								name="szallitasOrszag"
+								ng-model="adatok.szallitasOrszag"
+								required
+								placeholder="Ország" />
+							</label>
+							<div ng-show="myForm.szallitasOrszag.$touched" ng-messages="myForm.szallitasOrszag.$error" style="color:red" role="alert">
+								<div ng-message="required">
+									Az ország megadása kötelező
+								</div>
+							</div>
+
+							<label class="item item-input"> <i class="icon ion-home placeholder-icon"></i>
+								<input type="number" class="unsubmited" style="padding: 5px;margin: 2px"
+								name="szallitasISZ"
+								ng-model="adatok.szallitasISZ"
+								required
+								placeholder="Irányitószám"
+
+								/>
+							</label>
+							<div ng-show="myForm.szallitasISZ.$touched" ng-messages="myForm.szallitasISZ.$error" style="color:red" role="alert">
+
+								<div ng-message="required">
+									Az irányitószám megadása kötelező
+								</div>
+								<div ng-message="number">
+									Az irányitószám csak számokat tartalmazhat
+								</div>
+
+							</div>
+
+							<label class="item item-input"> <i class="icon ion-home placeholder-icon"></i>
+								<input type="text"  style="padding: 5px;margin: 2px"
+								name="szallitasTelepules"
+								ng-model="adatok.szallitasTelepules"
+								required
+								placeholder="Település"
+
+								/>
+							</label>
+
+							<div ng-show="myForm.szallitasTelepules.$touched" ng-messages="myForm.szallitasTelepules.$error" style="color:red" role="alert">
+
+								<div ng-message="required">
+									A település megadása kötelező
+								</div>
+							
+
+							</div>
+							
+							<label class="item item-input"> <i class="icon ion-home placeholder-icon"></i>
+								<input type="text"  style="padding: 5px;margin: 2px"
+								name="szallitasUtcaHaz"
+								ng-model="adatok.szallitasUtcaHaz"
+								required
+								placeholder="Utca, házszám"
+
+								/>
+							</label>
+
+							<div ng-show="myForm.szallitasTelepules.$touched" ng-messages="myForm.szallitasTelepules.$error" style="color:red" role="alert">
+
+								<div ng-message="required">
+									Az utca és a házszám megadása kötelező
+								</div>
+								
+
+							</div>
+							
+							
+						
+						
+						
+
+						</div>
+
+					
+	
+						<div style="padding: 10px">
+
+							<button ng-disabled="!myForm.$valid" ng-click="megrendelem(szallitas)"  class="button button-block button-outline button-positive" >
+								<i class="icon ion-checkmark " ></i> Megrendelem
+							</button>
+						</div>
+
+					</form>
 					<div style="height:50em;"></div>
 				</md-content>
 			</ion-slide>
@@ -1531,14 +1893,52 @@
 					<i class="icon ion-ios-close-outline"></i>
 				</button>
 			</div>
-			<md-content  style="height: 70em; padding-top: 40px" >
+
+			<form>
+				<div class="item item-input-inset pink"  style="margin-top : 40px;padding : 0px;">
+					<label class="item-input-wrapper" style="padding: 0px;border: none;background-color: white">
+						<input id="stackInput" ng-model="stackInput"    style="margin-left: 10px;border: 0px;width: 100%" type="text" placeholder="Keresőszó" >
+					</label>
+					<button type="submit" class="button button-outline button-positive button-keres" ng-click="keresStack(stackInput)">
+						<i ng-if="!keresLoading" class="icon ion-search "></i>
+					</button>
+
+				</div>
+			</form>
+
+			<md-content  style="height: 70em; margin-top: 0x" >
 
 				<section id="photos">
 					<img ng-click="editPixaImage(kep.megjelenit,kep.betolt);" ng-repeat="kep in pixaImages" style="width : 50%;" src="{{kep.megjelenit}}"	/>
 				</section>
-				<button ng-click="moreStack(pixaImages.length/20 + 1)" class="button button-positive moreStackButton">
+				<button ng-click="moreStack(pixaImages.length/20 + 1)" class="button button-positive moreStackButton" style="margin-top: 20px">
 					Még több kép
 				</button>
+
+				<div style="height:50em;"></div>
+			</md-content>
+
+		</div>
+	</div>
+</div>
+
+<div ng-if="kosarTartam" id="kosarTartam">
+	<div class="backdrop visible backdrop-loading active"></div>
+	<div class="loading-container visible active" style="padding: 0px">
+		<div class="loading" width="100%" height="100%" style="width : 100%;height: 100%; text-align: center;padding: 0px">
+			<div class="bar bar-header stackHeader" >
+				<div class="h1 title" style="color: white">
+					Kosár tartalma
+				</div>
+				<button ng-click="kosarTartamClose()" class="button button-clear " style="color: white" >
+					<i class="icon ion-ios-close-outline"></i>
+				</button>
+			</div>
+			<md-content  style="height: 70em; padding-top: 50px" >
+
+				<section>
+					<img  ng-repeat="kep in kosar" style="width : 100%;" src="{{kep.kep}}"	/>
+				</section>
 
 				<div style="height:50em;"></div>
 			</md-content>
